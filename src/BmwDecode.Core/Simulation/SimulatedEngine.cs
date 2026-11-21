@@ -85,6 +85,11 @@ public sealed class SimulatedEngine : IDiagnosticEngine, ISgbdInspector
                 return Result(sgbd, "FA", job, args, sw, [Set(("BR", "E84"), ("JOB_STATUS", "OKAY"))]);
             }
 
+            if (sgbd.Equals("E89X", StringComparison.OrdinalIgnoreCase))
+            {
+                return Result(sgbd, "E89X", job, args, sw, Functional(job.ToUpperInvariant()));
+            }
+
             if (sgbd.Equals("UTILITY", StringComparison.OrdinalIgnoreCase))
             {
                 var utility = job.ToUpperInvariant() switch
@@ -146,6 +151,34 @@ public sealed class SimulatedEngine : IDiagnosticEngine, ISgbdInspector
         // Not disposing _bus: in-flight jobs on other pages may still release it.
         _connected = false;
         return ValueTask.CompletedTask;
+    }
+
+    /// <summary>E89X functional broadcast: every fitted ECU answers with its variant SGBD (as ISTA sees it).</summary>
+    private IReadOnlyList<ResultSet> Functional(string job)
+    {
+        var catalogue = Catalog.VehicleCatalog.Default.Find("E84");
+        var sets = new List<ResultSet>();
+        foreach (var ecu in _ecus.Values)
+        {
+            var def = catalogue?.Ecus.FirstOrDefault(e => e.Groups.Contains(ecu.Group, StringComparer.OrdinalIgnoreCase));
+            if (def is null)
+            {
+                continue;
+            }
+
+            var adr = def.Address.ToString("X2", System.Globalization.CultureInfo.InvariantCulture);
+            sets.Add(job switch
+            {
+                "IDENT_FUNKTIONAL" => Set(("ECU_ADR", adr), ("ECU_GROBNAME", def.Abbreviation), ("ID_SG_ADR", (long)def.Address),
+                    ("ECU_NAME", def.Description), ("ECU_SGBD", ecu.Variant), ("ECU_GRUPPE", ecu.Group),
+                    ("ID_BMW_NR", ecu.PartNumber), ("ID_LIEF_TEXT", ecu.Supplier), ("ID_DATUM", "14.09.2009"), ("JOB_STATUS", "OKAY")),
+                "FS_LESEN_FUNKTIONAL" => Set(("ECU_ADR", adr), ("ECU_GROBNAME", def.Abbreviation), ("ID_SG_ADR", (long)def.Address),
+                    ("F_ANZ", (long)ecu.Faults.Count), ("JOB_STATUS", "OKAY")),
+                _ => Set(("JOB_STATUS", "ERROR_ECU_SERVICE_NOT_SUPPORTED")),
+            });
+        }
+
+        return sets;
     }
 
     private SimEcu? Find(string sgbd) =>

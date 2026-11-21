@@ -178,3 +178,52 @@ public class TypeKeyDatabaseTests
         Assert.Contains(id.Details.Sources, s => s.StartsWith("VIN from CAS"));
     }
 }
+
+public class IstaHistoryTests
+{
+    [Fact]
+    public void Ista_session_files_are_read_and_merged_per_vin()
+    {
+        var dir = Directory.CreateTempSubdirectory("bmwdecode_ista");
+        File.WriteAllText(Path.Combine(dir.FullName, "RG_META_WBAVN32000VL5314820261121131911.xml"), """
+            <?xml version="1.0" encoding="utf-8"?><TransactionMetaData><VIN17>WBAVN32000VL53148</VIN17>
+            <EndDate>2026-11-21T13:25:29+03:00</EndDate><BasicFeatures><Ereihe>E84</Ereihe><Karosserie>SAV</Karosserie>
+            <VerkaufsBezeichnung>X1 sDrive20d</VerkaufsBezeichnung><Motor>N47</Motor><Getriebe>MECH</Getriebe><Land>EUR</Land>
+            <Lenkung>RL</Lenkung><Modelljahr>2010</Modelljahr><Modellmonat>03</Modellmonat><TypeCode>VN32</TypeCode></BasicFeatures></TransactionMetaData>
+            """);
+        File.WriteAllText(Path.Combine(dir.FullName, "RG_TRANS_WBAVN32000VL5314820261121131911.xml"), """
+            <?xml version="1.0" encoding="utf-8"?><Vehicle><VIN17>WBAVN32000VL53148</VIN17><Typ>VN32</Typ><Ereihe>E84</Ereihe>
+            <MainSeriesSgbd>E89X</MainSeriesSgbd><BNType>BN2000</BNType><GenericMotor><EngineLabel1>N47D20O0</EngineLabel1></GenericMotor>
+            <Hubraum>20</Hubraum><Antrieb>RWD</Antrieb><ProductionDate>2010-03-01T00:00:00</ProductionDate></Vehicle>
+            """);
+
+        var cars = IstaHistory.Load([dir.FullName]);
+
+        var car = Assert.Single(cars);
+        Assert.Equal("VN32", car.TypeKey);
+        Assert.Equal("X1 sDrive20d", car.Model);
+        Assert.Equal("N47D20O0", car.EngineCode);
+        Assert.Equal("2.0 L", car.Displacement);
+        Assert.Equal("RWD", car.Drive);
+        Assert.Equal("E89X", car.MainSgbd);
+        Assert.Equal(new DateOnly(2010, 3, 1), car.Production);
+        dir.Delete(true);
+    }
+
+    [Fact]
+    public async Task Vin_from_ista_history_picks_the_chassis()
+    {
+        var record = new IstaVehicleRecord(BmwDecode.Core.Simulation.SimulatedEngine.DemoVin, "ZZ99", "E91", "Touring test", "N47", null, null, null, null, null,
+            null, null, null, "E89X", "BN2000", DateTimeOffset.Now, "x");
+        var sim = new BmwDecode.Core.Simulation.SimulatedEngine(fast: true);
+        await sim.ConnectAsync(new ConnectionSettings { Kind = InterfaceKind.Demo });
+        var db = await TypeKeyDatabase.LoadAsync(null, null, default, [record]);
+
+        var id = await new BmwDecode.Core.Services.VehicleIdentifier(sim, db).IdentifyAsync(VehicleCatalog.Default.Find("E84"));
+
+        Assert.Equal("E91", id.Series); // VIN wins over the (demo) vehicle order that says E84
+        Assert.Equal("VIN (ISTA history)", id.SeriesSource);
+        Assert.Equal("ZZ99", db.Find("ZZ99")?.TypeKey);
+        Assert.NotNull(db.FindVin(BmwDecode.Core.Simulation.SimulatedEngine.DemoVin[^7..]));
+    }
+}

@@ -119,6 +119,24 @@ public sealed partial class VehicleViewModel : PageViewModel
 
         // Model: car data (when this is the connected car) + type key database.
         var details = isConnectedCar ? car.Details : VehicleDetails.Empty;
+        var seen = typeKeys.FindVin(d.Vin ?? d.ShortVin);
+        if (seen is not null)
+        {
+            details = details with
+            {
+                TypeKey = details.TypeKey ?? seen.TypeKey,
+                Model = details.Model ?? seen.Model,
+                Engine = details.Engine ?? seen.EngineCode ?? seen.Engine,
+                Gearbox = details.Gearbox ?? seen.Gearbox,
+                Drive = details.Drive ?? seen.Drive,
+                Displacement = details.Displacement ?? seen.Displacement,
+                Body = details.Body ?? seen.Body,
+                Market = details.Market ?? seen.Market,
+                Steering = details.Steering ?? seen.Steering,
+                ProductionDate = details.ProductionDate ?? seen.Production,
+            };
+        }
+
         var typeKey = details.TypeKey ?? d.TypeKey;
         var tk = typeKeys.Find(typeKey);
         if (tk is not null)
@@ -131,7 +149,7 @@ public sealed partial class VehicleViewModel : PageViewModel
         }
 
         ModelRows.Clear();
-        var seriesText = (isConnectedCar ? car.Series : null) ?? tk?.Series;
+        var seriesText = seen?.Series ?? (isConnectedCar ? car.Series : null) ?? tk?.Series;
         if (seriesText is not null)
         {
             ModelRows.Add(new("Series", SeriesNames.Describe(seriesText)));
@@ -159,13 +177,18 @@ public sealed partial class VehicleViewModel : PageViewModel
             Sources.Add(s);
         }
 
+        if (seen is not null)
+        {
+            Sources.Insert(0, $"VIN identified by ISTA on this PC ({seen.SeenAt:yyyy-MM-dd}) – factory specification");
+        }
+
         if (tk is not null && !Sources.Any(s => s.Contains(tk.Source, StringComparison.OrdinalIgnoreCase)))
         {
             Sources.Add($"Type key {tk.TypeKey} from {tk.Source}");
         }
 
         DecodedSeries = _session.Catalog.Find(seriesText);
-        Headline = tk?.Model is { } model
+        Headline = (seen?.Model ?? tk?.Model) is { } model
             ? $"{SeriesNames.Describe(seriesText ?? "?")} · {model}"
             : seriesText is not null ? SeriesNames.Describe(seriesText) : d.IsValid ? "BMW – model not in the local type key list" : null;
 

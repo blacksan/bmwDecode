@@ -15,6 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Offline German -> English tables for SGBD texts. -->
+    <EmbeddedResource Include="Translation\glossary.tsv" LogicalName="BmwDecode.Core.Translation.glossary.tsv" />
+    <EmbeddedResource Include="Translation\phrases.tsv" LogicalName="BmwDecode.Core.Translation.phrases.tsv" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="BmwDecode.Core.Tests" />
   </ItemGroup>
 

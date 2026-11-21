@@ -1,4 +1,7 @@
+using System.Windows.Threading;
 using BmwDecode.App.Services;
+using BmwDecode.Core.Diagnostics;
+using BmwDecode.Core.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BmwDecode.App.ViewModels;
@@ -33,7 +36,49 @@ public sealed partial class MainViewModel : ObservableObject
             OnPropertyChanged(nameof(VehicleText));
             OnPropertyChanged(nameof(IsConnected));
             OnPropertyChanged(nameof(IsDemo));
+            OnPropertyChanged(nameof(BatteryText));
+            OnPropertyChanged(nameof(IgnitionText));
+            OnPropertyChanged(nameof(IgnitionOn));
         };
+
+        // Battery and ignition under Settings: refreshed while connected and no scan/live poll is using the bus.
+        _supplyTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+        _supplyTimer.Tick += async (_, _) => await RefreshSupplyAsync();
+        _supplyTimer.Start();
+    }
+
+    private readonly DispatcherTimer _supplyTimer;
+    private bool _refreshingSupply;
+
+    public string BatteryText => Session.IsConnected ? Session.Supply?.BatteryText ?? "…" : "—";
+
+    public string IgnitionText => Session.IsConnected ? Session.Supply?.IgnitionText ?? "…" : "—";
+
+    public bool? IgnitionOn => Session.IsConnected ? Session.Supply?.IgnitionOn : null;
+
+    private async Task RefreshSupplyAsync()
+    {
+        if (_refreshingSupply || !Session.IsConnected || Session.IsBusy || Session.Engine is not { } engine)
+        {
+            return;
+        }
+
+        _refreshingSupply = true;
+        try
+        {
+            Session.Supply = await new VehicleIdentifier(engine).ReadSupplyAsync();
+        }
+        catch (DiagnosticException)
+        {
+            // Interface busy or gone: try again on the next tick.
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            _refreshingSupply = false;
+        }
     }
 
     public Navigator Navigator { get; }

@@ -35,6 +35,7 @@
                                 <Run Text="{Binding Ecu.AddressHex, Mode=OneWay}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontWeight="Normal" FontSize="12" />
                             </TextBlock>
                             <TextBlock Text="{Binding Detail}" Style="{StaticResource Caption}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+                            <TextBlock Text="{Binding Category}" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
                         </StackPanel>
                         <Border Grid.Column="2" CornerRadius="9" MinWidth="18" Padding="6,1" VerticalAlignment="Center"
                                 Background="{DynamicResource SystemFillColorCriticalBrush}"
@@ -135,9 +136,9 @@
                                 <StackPanel>
                                     <TextBlock Text="{Binding SelectedFault.Text, TargetNullValue='Select a fault to see its environmental conditions'}" Style="{StaticResource SectionTitle}" FontSize="14" />
                                     <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,6">
-                                        <Run Text="{Binding SelectedFault.PresentText, Mode=OneWay}" />
+                                        <Run Text="{Binding SelectedFault.PresentDisplay, Mode=OneWay}" />
                                         <Run Text="  " />
-                                        <Run Text="{Binding SelectedFault.WarningText, Mode=OneWay}" />
+                                        <Run Text="{Binding SelectedFault.WarningDisplay, Mode=OneWay}" />
                                     </TextBlock>
                                     <TextBlock Text="{Binding DetailSummary}" Style="{StaticResource Caption}" Margin="0,0,0,6"
                                                Visibility="{Binding DetailSummary, Converter={StaticResource NullToVisibility}}" />
@@ -190,6 +191,111 @@
                         <TextBlock Grid.Row="1" Text="Info memory is empty or not supported by this module." Style="{StaticResource PageSubtitle}"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    Visibility="{Binding InfoEntries.Count, Converter={StaticResource ZeroToVisibility}}" />
+                    </Grid>
+                </TabItem>
+
+                <!-- Jobs & coding -->
+                <TabItem Header="Jobs &amp; coding">
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="330" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.ColumnSpan="3" Margin="0,0,0,8">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Load jobs" Command="{Binding LoadJobsCommand}" Margin="0,0,8,0" />
+                                <Button Command="{Binding BackupCodingCommand}" Margin="0,0,8,0"
+                                        ToolTip="Runs every coding read job (C_*_LESEN) and saves the results to a file">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource Icon}" Text="&#xE74E;" FontSize="14" Margin="0,0,8,0" />
+                                        <TextBlock Text="Back up coding" />
+                                    </StackPanel>
+                                </Button>
+                                <TextBox Text="{Binding JobFilter, UpdateSourceTrigger=PropertyChanged}" Width="200" ToolTip="Filter jobs" />
+                            </StackPanel>
+                            <TextBlock Text="{Binding ModuleJobStatus}" Style="{StaticResource Caption}" Margin="0,6,0,0"
+                                       Visibility="{Binding ModuleJobStatus, Converter={StaticResource NullToVisibility}}" />
+                        </StackPanel>
+
+                        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ModuleJobsView}" SelectedItem="{Binding SelectedModuleJob}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+                            <ListBox.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Margin="4,10,0,4" FontWeight="SemiBold" Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}">
+                                                <Run Text="{Binding Name, Mode=OneWay}" />
+                                                <Run Text="{Binding ItemCount, Mode=OneWay, StringFormat='({0})'}" FontWeight="Normal" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListBox.GroupStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,1">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}" FontFamily="Cascadia Mono, Consolas" FontSize="12" />
+                                            <TextBlock Text="  writes" FontSize="11" Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                                       Visibility="{Binding IsWriting, Converter={StaticResource BoolToVisibility}}" />
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Comment}" Style="{StaticResource Caption}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="290" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <Grid Grid.Row="1" Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Style="{StaticResource Card}" Padding="14,10">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding SelectedModuleJob.Name, TargetNullValue='Select a job'}" Style="{StaticResource SectionTitle}" FontFamily="Cascadia Mono, Consolas" />
+                                    <TextBlock Text="{Binding SelectedModuleJob.Category}" Style="{StaticResource Caption}" />
+                                    <TextBlock Text="{Binding ModuleJobComment}" Style="{StaticResource Value}" Margin="0,6,0,6" />
+                                    <ItemsControl ItemsSource="{Binding ModuleJobArguments}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Style="{StaticResource Caption}" Margin="0,1">
+                                                    <Run Text="arg" Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                                                    <Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold" />
+                                                    <Run Text="{Binding Type, Mode=OneWay, StringFormat='({0})'}" />
+                                                    <Run Text="{Binding Comment, Mode=OneWay}" />
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                            <DockPanel Grid.Row="1" Margin="0,0,0,8">
+                                <Button DockPanel.Dock="Right" Style="{DynamicResource AccentButtonStyle}" Command="{Binding RunModuleJobCommand}" Margin="8,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource Icon}" Text="&#xE768;" FontSize="14" Margin="0,0,8,0" />
+                                        <TextBlock Text="Run" />
+                                    </StackPanel>
+                                </Button>
+                                <TextBox Text="{Binding ModuleJobArgs, UpdateSourceTrigger=PropertyChanged}" FontFamily="Cascadia Mono, Consolas"
+                                         ToolTip="Arguments separated by ';'" />
+                            </DockPanel>
+                            <DataGrid Grid.Row="2" ItemsSource="{Binding ModuleJobResults}" AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Set" Binding="{Binding Set}" Width="44" />
+                                    <DataGridTextColumn Header="Result" Binding="{Binding Name}" Width="*" FontFamily="Cascadia Mono, Consolas" />
+                                    <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="2*" />
+                                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
                     </Grid>
                 </TabItem>
 

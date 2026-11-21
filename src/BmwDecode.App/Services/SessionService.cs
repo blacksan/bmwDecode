@@ -100,14 +100,35 @@ public sealed partial class SessionService : ObservableObject
     {
         var inspector = EcuPathLocator.IsValid(_settings.Current.EcuPath) ? FileInspector : (ISgbdInspector)_demoInspector;
         var csvStamp = System.IO.File.Exists(TypeKeyCsvPath) ? System.IO.File.GetLastWriteTimeUtc(TypeKeyCsvPath).Ticks : 0;
-        var stamp = $"{_settings.Current.EcuPath}|{inspector.GetType().Name}|{csvStamp}";
+        var istaStamp = IstaStamp();
+        var stamp = $"{_settings.Current.EcuPath}|{inspector.GetType().Name}|{csvStamp}|{istaStamp}";
         if (_typeKeys is null || _typeKeysStamp != stamp)
         {
-            _typeKeys = await TypeKeyDatabase.LoadAsync(inspector, TypeKeyCsvPath, cancellationToken);
+            // Cars ISTA identified on this PC (plain XML session files) teach us VINs and type keys.
+            var ista = await Task.Run(() => IstaHistory.Load(), cancellationToken);
+            _typeKeys = await TypeKeyDatabase.LoadAsync(inspector, TypeKeyCsvPath, cancellationToken, ista);
             _typeKeysStamp = stamp;
         }
 
         return _typeKeys;
+    }
+
+    private static long IstaStamp()
+    {
+        long newest = 0;
+        foreach (var folder in IstaHistory.DefaultFolders().Where(System.IO.Directory.Exists))
+        {
+            try
+            {
+                newest = Math.Max(newest, System.IO.Directory.GetLastWriteTimeUtc(folder).Ticks);
+            }
+            catch (Exception)
+            {
+                // unreadable folder: ignore
+            }
+        }
+
+        return newest;
     }
 
     public async Task ConnectAsync(ConnectionSettings settings, CancellationToken cancellationToken)

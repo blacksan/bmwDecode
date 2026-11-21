@@ -10,6 +10,7 @@ namespace BmwDecode.App.ViewModels;
 public sealed record ModuleListItem(EcuDefinition Ecu, string? Variant, EcuScanState State, int FaultCount)
 {
     public string Caption => $"{Ecu.Abbreviation}";
+    public string Category => $"{Ecu.Priority:00} · {EcuPriority.Category(Ecu.Abbreviation, Ecu.Address)}";
     public string Detail => Variant is null ? Ecu.Description : $"{Ecu.Description} · {Variant}";
     public string Badge => State switch
     {
@@ -117,21 +118,21 @@ public sealed partial class ModulesViewModel : PageViewModel
 
         if (_session.LastReport is { } report && report.Series == _session.Series?.Series)
         {
-            foreach (var r in report.Results.Where(r => r.IsFitted).OrderBy(r => r.Ecu.Address))
+            foreach (var r in report.Results.Where(r => r.IsFitted).OrderBy(r => r.Ecu.Priority).ThenBy(r => r.Ecu.Address))
             {
                 Items.Add(new ModuleListItem(r.Ecu, r.Variant, r.State, r.FaultList.Count));
             }
 
-            Hint = $"{Items.Count} modules found by the last quick test.";
+            Hint = $"{Items.Count} modules – {report.DiscoveryNote ?? "from the last quick test"}. Ranked by importance.";
         }
         else if (_session.Series is { } series)
         {
-            foreach (var e in series.Ecus.GroupBy(e => e.PrimaryGroup).Select(g => g.First()))
+            foreach (var e in series.Ecus.GroupBy(e => e.PrimaryGroup).Select(g => g.First()).OrderBy(e => e.Priority).ThenBy(e => e.Address))
             {
                 Items.Add(new ModuleListItem(e, null, EcuScanState.Pending, 0));
             }
 
-            Hint = $"All {Items.Count} module slots of the {series.Series}. Run a quick test to list only the fitted ones.";
+            Hint = $"Not scanned yet – showing all {Items.Count} possible modules of the {series.Series}. Connect and the list fills with what the car reports.";
         }
 
         SelectedItem = Items.FirstOrDefault(i => i.Ecu.Key == selectedKey);

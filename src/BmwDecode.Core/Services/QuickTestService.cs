@@ -36,6 +36,9 @@ public sealed record QuickTestReport(
     IReadOnlyList<EcuScanResult> Results,
     bool WasCancelled)
 {
+    /// <summary>How the module list was obtained ("reported by the car via E89X" or "probed 66 slots").</summary>
+    public string? DiscoveryNote { get; init; }
+
     public IEnumerable<EcuScanResult> Fitted => Results.Where(r => r.IsFitted);
     public int FaultCount => Results.Sum(r => r.FaultList.Count);
 }
@@ -47,6 +50,9 @@ public sealed record QuickTestOptions
 
     /// <summary>Restrict the scan to these ECU keys (EcuDefinition.Key). Null = all.</summary>
     public IReadOnlySet<string>? OnlyKeys { get; init; }
+
+    /// <summary>Ask the car for its ECU list first (IDENT_FUNKTIONAL). Falls back to probing every slot.</summary>
+    public bool UseDiscovery { get; init; } = true;
 }
 
 /// <summary>INPA/ISTA style quick test: identify every ECU of the chassis and read its fault memory.</summary>
@@ -67,12 +73,50 @@ public sealed class QuickTestService
         var results = new List<EcuScanResult>();
         var cancelled = false;
 
-        // Several catalogue entries can share an address (e.g. FZD/RLS on 0x56): scan each group once.
-        var ecus = series.Ecus
-            .Where(e => options.OnlyKeys is null || options.OnlyKeys.Contains(e.Key))
-            .GroupBy(e => e.PrimaryGroup, StringComparer.OrdinalIgnoreCase)
-            .Select(g => g.First())
-            .ToList();
+        // 1) Let the car report its modules (BN2000 functional ident). 2) Otherwise probe every catalogue slot.
+        var known = new Dictionary<string, (string Variant, IReadOnlyList<IdentItem> Ident)>(StringComparer.OrdinalIgnoreCase);
+        List<EcuDefinition> ecus;
+        string note;
+        IReadOnlyList<DiscoveredEcu> discovered = [];
+        if (options.UseDiscovery && options.OnlyKeys is null && series.MainSgbd is { } mainSgbd)
+        {
+            discovered = await new ModuleDiscovery(_engine).DiscoverAsync(mainSgbd, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (discovered.Count > 0)
+        {
+            ecus = [];
+            foreach (var d in discovered)
+            {
+                var def = series.Ecus.FirstOrDefault(e => d.Group is not null && e.Groups.Contains(d.Group, StringComparer.OrdinalIgnoreCase))
+                          ?? series.Ecus.FirstOrDefault(e => e.Address == d.Address)
+                          ?? new EcuDefinition(d.Address, d.Abbreviation, [d.Group ?? d.Variant ?? $"0x{d.Address:X2}"]);
+                if (ecus.Any(e => e.Key == def.Key))
+                {
+                    def = new EcuDefinition(d.Address, d.Abbreviation, [d.Group ?? d.Variant ?? $"0x{d.Address:X2}"]);
+                }
+
+                ecus.Add(def);
+                if (d.Variant is not null)
+                {
+                    known[def.Key] = (d.Variant, d.Ident);
+                }
+            }
+
+            note = $"{ecus.Count} modules reported by the car ({series.MainSgbd} functional ident)";
+        }
+        else
+        {
+            // Several catalogue entries can share an address (e.g. FZD/RLS on 0x56): scan each group once.
+            ecus = series.Ecus
+                .Where(e => options.OnlyKeys is null || options.OnlyKeys.Contains(e.Key))
+                .GroupBy(e => e.PrimaryGroup, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g.First())
+                .ToList();
+            note = $"probed {ecus.Count} module slots of the {series.Series}";
+        }
+
+        ecus = ecus.OrderBy(e => e.Priority).ThenBy(e => e.Address).ToList();
 
         foreach (var ecu in ecus)
         {
@@ -91,7 +135,9 @@ public sealed class QuickTestService
             EcuScanResult result;
             try
             {
-                result = await ScanEcuAsync(ecu, options, cancellationToken).ConfigureAwait(false);
+                result = known.TryGetValue(ecu.Key, out var k)
+                    ? await ScanEcuAsync(ecu, options, cancellationToken, k.Variant, k.Ident).ConfigureAwait(false)
+                    : await ScanEcuAsync(ecu, options, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -107,15 +153,20 @@ public sealed class QuickTestService
             }
         }
 
-        return new QuickTestReport(series.Series, vehicle, started, DateTimeOffset.Now - started, results, cancelled);
+        return new QuickTestReport(series.Series, vehicle, started, DateTimeOffset.Now - started, results, cancelled)
+        {
+            DiscoveryNote = note,
+        };
     }
 
-    public async Task<EcuScanResult> ScanEcuAsync(EcuDefinition ecu, QuickTestOptions options, CancellationToken cancellationToken)
+    public async Task<EcuScanResult> ScanEcuAsync(EcuDefinition ecu, QuickTestOptions options, CancellationToken cancellationToken,
+        string? knownVariant = null, IReadOnlyList<IdentItem>? knownIdent = null)
     {
-        string? variant = null;
+        // A variant reported by the functional ident needs no group identification.
+        string? variant = knownVariant;
         DiagnosticException? lastError = null;
 
-        foreach (var group in ecu.Groups)
+        foreach (var group in knownVariant is null ? ecu.Groups : [])
         {
             try
             {
@@ -138,11 +189,11 @@ public sealed class QuickTestService
             return new EcuScanResult(ecu, EcuScanState.NotFitted, Error: lastError?.Message);
         }
 
-        IReadOnlyList<IdentItem>? ident = null;
+        IReadOnlyList<IdentItem>? ident = knownIdent is { Count: > 0 } ? knownIdent : null;
         IReadOnlyList<FaultEntry>? faults = null;
         string? error = null;
 
-        if (options.ReadIdent)
+        if (options.ReadIdent && ident is null)
         {
             try
             {

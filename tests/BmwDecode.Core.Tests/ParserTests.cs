@@ -128,3 +128,23 @@ public class ParserTests
         Assert.False(JobSafety.IsPotentiallyDestructive("_JOBS"));
     }
 }
+
+public class JobCategoryTests
+{
+    [Fact]
+    public void Jobs_are_grouped_by_purpose()
+    {
+        Assert.Equal(JobCategories.Faults, JobCategories.Of("FS_LESEN_DETAIL"));
+        Assert.Equal(JobCategories.Coding, JobCategories.Of("C_C_LESEN"));
+        Assert.Equal(JobCategories.Coding, JobCategories.Of("_COD_LESEN"));
+        Assert.Equal(JobCategories.Actuators, JobCategories.Of("STEUERN_E_LUEFTER"));
+        Assert.Equal(JobCategories.Adaptations, JobCategories.Of("ABGLEICH_PROGRAMMIEREN_IMA"));
+        Assert.Equal(JobCategories.Adaptations, JobCategories.Of("CBS_RESET"));
+        Assert.Equal(JobCategories.Status, JobCategories.Of("STATUS_MOTORTEMPERATUR"));
+        Assert.Equal(JobCategories.Ident, JobCategories.Of("IDENT"));
+        Assert.Equal(JobCategories.Programming, JobCategories.Of("FLASH_LOESCHEN"));
+        Assert.Equal(JobCategories.Session, JobCategories.Of("DIAGNOSE_ENDE"));
+        Assert.True(JobCategories.IsCodingRead("C_FA_LESEN"));
+        Assert.False(JobCategories.IsCodingRead("C_C_SCHREIBEN"));
+    }
+}

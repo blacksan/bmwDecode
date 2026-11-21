@@ -191,6 +191,12 @@ public sealed partial class OverviewViewModel : PageViewModel
             _session.Info($"Connected: {_session.EngineName}");
             await IdentifyCoreAsync(cancellationToken);
         });
+
+        // Identified from the VIN: go straight on and list the modules the car reports.
+        if (IsConnected && _settings.Current.AutoScanOnConnect)
+        {
+            QuickTest();
+        }
     }
 
     private bool CanDisconnect() => IsConnected && !IsWorking && !_session.IsBusy;
@@ -229,15 +235,32 @@ public sealed partial class OverviewViewModel : PageViewModel
         _session.Supply = new SupplyStatus(vehicle.BatteryMillivolts, vehicle.IgnitionOn);
         _session.Vehicle = vehicle;
 
-        // Switch profile when the car belongs to a different family (e.g. E60 vs E89X), or for DS2 cars whose
-        // families are shared. Within a BN2000 family keep the user's choice: on swapped cars (an E84 with an E90 CAS)
-        // the CAS reports the donor's chassis.
+        // Pick the chassis profile from the VIN. A series that came from the VIN (ISTA history / type key) always wins;
+        // one that only came from the vehicle order switches across families, because a swapped CAS (an E90 CAS in an
+        // E84) reports its donor's order.
         if (vehicle.Series is { } detected && _session.Catalog.Find(detected) is { } series &&
-            !series.Series.Equals(_session.Series?.Series, StringComparison.OrdinalIgnoreCase) &&
-            (series.IsDs2 || _session.Series?.IsDs2 != false ||
-             !string.Equals(series.Family, _session.Series?.Family, StringComparison.OrdinalIgnoreCase)))
+            !series.Series.Equals(_session.Series?.Series, StringComparison.OrdinalIgnoreCase))
         {
-            _session.Series = series;
+            var fromVin = vehicle.SeriesSource?.Contains("VIN", StringComparison.OrdinalIgnoreCase) == true;
+            if (fromVin || series.IsDs2 || _session.Series?.IsDs2 != false ||
+                !string.Equals(series.Family, _session.Series?.Family, StringComparison.OrdinalIgnoreCase))
+            {
+                _session.Series = series;
+                _session.Info($"Chassis profile set to {series.DisplayName} ({vehicle.SeriesSource}).");
+            }
+        }
+        else if (vehicle.Series is null)
+        {
+            // Nothing identified the chassis: ask which main-series SGBD the car answers to (E89X, E60, E70, E65).
+            var current = _session.Series;
+            var candidates = new[] { current?.MainSgbd }.OfType<string>().Concat(ModuleDiscovery.AllMainSgbds);
+            var (main, ecus) = await new ModuleDiscovery(engine).DiscoverAnyAsync(candidates, cancellationToken);
+            if (main is not null && !string.Equals(current?.MainSgbd, main, StringComparison.OrdinalIgnoreCase) &&
+                _session.Catalog.ESeries.FirstOrDefault(x => x.MainSgbd == main) is { } family)
+            {
+                _session.Series = family;
+                _session.Warn($"VIN did not identify the chassis; {ecus.Count} modules answer to {main}, using the {family.Series} profile. Change it if needed.");
+            }
         }
 
         StatusText = vehicle.Vin is null

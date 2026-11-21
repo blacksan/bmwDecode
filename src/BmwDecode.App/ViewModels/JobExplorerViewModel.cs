@@ -122,9 +122,10 @@ public sealed partial class JobExplorerViewModel : PageViewModel
             }
 
             LoadedName = file.IsGroup ? $"{file.Name} → {description.Name}" : description.Name;
+            var tr = Core.Translation.Translator.Current;
             foreach (var j in description.Jobs)
             {
-                Jobs.Add(j);
+                Jobs.Add(j with { Comment = tr.Translate(j.Comment) });
             }
 
             StatusText = $"{description.Name}: {Jobs.Count} jobs.";
@@ -168,7 +169,13 @@ public sealed partial class JobExplorerViewModel : PageViewModel
             var details = await _inspector!.DescribeJobAsync(VariantName, job.Name);
             if (ReferenceEquals(SelectedJob, job))
             {
-                JobDetails = details;
+                var tr = Core.Translation.Translator.Current;
+                JobDetails = details with
+                {
+                    Comment = tr.Translate(details.Comment),
+                    Arguments = details.Arguments.Select(a => a with { Comment = tr.Translate(a.Comment) }).ToList(),
+                    Results = details.Results.Select(r => r with { Comment = tr.Translate(r.Comment) }).ToList(),
+                };
             }
         }
         catch (Exception ex)

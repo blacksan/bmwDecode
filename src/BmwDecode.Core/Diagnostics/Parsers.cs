@@ -9,7 +9,11 @@ public sealed record FaultEntry
     /// <summary>BMW fault location number (F_ORT_NR), shown in hex like INPA/ISTA (e.g. 4A2E).</summary>
     public required long Code { get; init; }
 
+    /// <summary>Fault description, translated to English when translation is on.</summary>
     public required string Text { get; init; }
+
+    /// <summary>Description exactly as the SGBD has it (usually German).</summary>
+    public string? OriginalText { get; init; }
     public string? Symptom { get; init; }
     public string? PresentText { get; init; }
     public string? WarningText { get; init; }
@@ -46,6 +50,11 @@ public sealed record FaultEntry
             _ => FaultParser.InterpretPresent(PresentText) ?? FaultTypes.Select(FaultParser.InterpretPresent).FirstOrDefault(v => v is not null),
         },
     };
+
+    /// <summary>Present / warning texts for display (translated). The raw German stays in PresentText for interpretation.</summary>
+    public string? PresentDisplay => Translation.Translator.Current.TranslateOrNull(PresentText);
+
+    public string? WarningDisplay => Translation.Translator.Current.TranslateOrNull(WarningText);
 
     public bool? WarningLampOn => WarningCode switch
     {
@@ -97,11 +106,15 @@ public static partial class FaultParser
                 .OfType<string>()
                 .ToList();
 
+            var tr = Translation.Translator.Current;
+            var original = Clean(set.Text("F_ORT_TEXT"));
+            var symptom = Clean(set.Text("F_SYMPTOM_TEXT"));
             faults.Add(new FaultEntry
             {
                 Code = code.Value,
-                Text = Clean(set.Text("F_ORT_TEXT")) ?? "(no description in SGBD)",
-                Symptom = Clean(set.Text("F_SYMPTOM_TEXT")) ?? (types.Count > 0 ? string.Join("; ", types) : null),
+                Text = original is null ? "(no description in SGBD)" : tr.Translate(original),
+                OriginalText = original,
+                Symptom = symptom is not null ? tr.Translate(symptom) : types.Count > 0 ? string.Join("; ", types.Select(tr.Translate)) : null,
                 FaultTypes = types,
                 PresentBit = set.ContainsKey("F_VORHANDEN_NR") ? null : set.Long("F_VORHANDEN"),
                 PresentText = Clean(set.Text("F_VORHANDEN_TEXT")),
@@ -144,7 +157,7 @@ public static partial class FaultParser
 
             foreach (var i in indices)
             {
-                var name = Clean(set.Text($"F_UW{i}_TEXT")) ?? $"Condition {i}";
+                var name = Clean(set.Text($"F_UW{i}_TEXT")) is { } n ? Translation.Translator.Current.Translate(n) : $"Condition {i}";
                 var value = set.TryGetValue($"F_UW{i}_WERT", out var v) ? v.Display : string.Empty;
                 var unit = Clean(set.Text($"F_UW{i}_EINH"));
                 conditions.Add(new EnvironmentCondition(name, value, unit is "-" ? null : unit));
@@ -167,7 +180,7 @@ public static partial class FaultParser
             .Distinct()
             .Order()
             .Select(i => new EnvironmentCondition(
-                Clean(raw.GetValueOrDefault($"F_UW{i}_TEXT")) ?? $"Condition {i}",
+                Clean(raw.GetValueOrDefault($"F_UW{i}_TEXT")) is { } n ? Translation.Translator.Current.Translate(n) : $"Condition {i}",
                 raw.GetValueOrDefault($"F_UW{i}_WERT") ?? string.Empty,
                 Clean(raw.GetValueOrDefault($"F_UW{i}_EINH")) is { } u && u != "-" ? u : null))
             .ToList();
@@ -227,7 +240,7 @@ public static partial class FaultParser
                 values.Add(new LiveValue(
                     result.Job,
                     key,
-                    Humanize(stem),
+                    Translation.Translator.Current.Translate(Humanize(stem)),
                     value.Display,
                     unit is "-" ? null : unit,
                     value.Kind is ResultKind.Integer or ResultKind.Real ? value.AsDouble : null));
@@ -353,5 +366,5 @@ public static class IdentLabels
     };
 
     public static string For(string key) =>
-        s_labels.TryGetValue(key, out var label) ? label : FaultParser.Humanize(key);
+        s_labels.TryGetValue(key, out var label) ? label : Translation.Translator.Current.Translate(FaultParser.Humanize(key));
 }

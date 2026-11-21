@@ -175,7 +175,7 @@ public sealed partial class QuickTestViewModel : PageViewModel
             Done = report.Results.Count;
             StatusText = report.WasCancelled
                 ? $"Cancelled after {Done} of {Total}. {Found} modules found, {FaultTotal} faults."
-                : $"Done in {report.Duration.TotalSeconds:0} s: {Found} modules found, {FaultTotal} faults.";
+                : $"Done in {report.Duration.TotalSeconds:0} s: {Found} modules found, {FaultTotal} faults – {report.DiscoveryNote}.";
             _session.Info(StatusText);
         }
         catch (OperationCanceledException)

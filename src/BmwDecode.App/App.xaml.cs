@@ -34,6 +34,12 @@ public partial class App : Application
 
         var settings = _services.GetRequiredService<SettingsStore>();
         settings.Load();
+
+        // Offline German -> English translation of SGBD texts; translations.tsv lets the user correct any line.
+        var translator = BmwDecode.Core.Translation.Translator.CreateDefault(
+            System.IO.Path.Combine(SettingsStore.Folder, "translations.tsv"));
+        translator.Enabled = settings.Current.TranslateTexts;
+        BmwDecode.Core.Translation.Translator.Current = translator;
         _services.GetRequiredService<ThemeService>().Apply(settings.Current.Theme);
 
         var window = new MainWindow { DataContext = _services.GetRequiredService<MainViewModel>() };

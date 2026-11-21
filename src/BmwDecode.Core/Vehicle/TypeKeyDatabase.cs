@@ -29,9 +29,15 @@ public sealed class TypeKeyDatabase
     public const string CsvHeader = "type_key,series,model,engine,drive,gearbox,displacement,body,power,steering,doors,market,production";
 
     private readonly Dictionary<string, TypeKeyInfo> _byKey;
+    private readonly Dictionary<string, IstaVehicleRecord> _byVin = new(StringComparer.OrdinalIgnoreCase);
 
-    private TypeKeyDatabase(IEnumerable<TypeKeyInfo> entries, IReadOnlyList<string> sources)
+    private TypeKeyDatabase(IEnumerable<TypeKeyInfo> entries, IReadOnlyList<string> sources, IEnumerable<IstaVehicleRecord>? vehicles = null)
     {
+        foreach (var v in vehicles ?? [])
+        {
+            _byVin[v.Vin] = v;
+        }
+
         _byKey = new Dictionary<string, TypeKeyInfo>(StringComparer.OrdinalIgnoreCase);
         foreach (var e in entries)
         {
@@ -50,7 +56,24 @@ public sealed class TypeKeyDatabase
     public TypeKeyInfo? Find(string? typeKey) =>
         typeKey is { Length: 4 } && _byKey.TryGetValue(typeKey, out var info) ? info : null;
 
-    public static async Task<TypeKeyDatabase> LoadAsync(ISgbdInspector? inspector, string? csvPath, CancellationToken cancellationToken = default)
+    /// <summary>Cars ISTA identified on this PC, by full VIN or short (last 7) VIN.</summary>
+    public IstaVehicleRecord? FindVin(string? vin)
+    {
+        if (string.IsNullOrWhiteSpace(vin))
+        {
+            return null;
+        }
+
+        var v = vin.Trim();
+        return _byVin.TryGetValue(v, out var r) ? r
+            : v.Length == 7 ? _byVin.Values.FirstOrDefault(x => x.Vin.EndsWith(v, StringComparison.OrdinalIgnoreCase))
+            : null;
+    }
+
+    public int KnownVehicles => _byVin.Count;
+
+    public static async Task<TypeKeyDatabase> LoadAsync(ISgbdInspector? inspector, string? csvPath, CancellationToken cancellationToken = default,
+        IReadOnlyList<IstaVehicleRecord>? istaVehicles = null)
     {
         var entries = new List<TypeKeyInfo>();
         var sources = new List<string>();
@@ -68,6 +91,13 @@ public sealed class TypeKeyDatabase
             }
         }
 
+        if (istaVehicles is { Count: > 0 })
+        {
+            var fromIsta = istaVehicles.Where(v => v.TypeKey is { Length: 4 }).Select(IstaHistory.ToTypeKeyInfo).ToList();
+            entries.AddRange(fromIsta);
+            sources.Add($"ISTA session history ({istaVehicles.Count} vehicles)");
+        }
+
         if (!string.IsNullOrWhiteSpace(csvPath) && File.Exists(csvPath))
         {
             using var reader = new StreamReader(csvPath);
@@ -76,7 +106,7 @@ public sealed class TypeKeyDatabase
             sources.Add($"{Path.GetFileName(csvPath)} ({csv.Count} type keys)");
         }
 
-        return new TypeKeyDatabase(entries, sources);
+        return new TypeKeyDatabase(entries, sources, istaVehicles);
     }
 
     /// <summary>FZGIDENT GM_TEXTE: GMTYP, TYP, BR, VERK, MOTOR, ANTR, GETR, HUBR, KAROS, LEIST, LENK, TUER, LAND, REIHE.</summary>

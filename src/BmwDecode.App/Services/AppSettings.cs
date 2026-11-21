@@ -23,6 +23,12 @@ public sealed class AppSettings
     public int LiveIntervalMs { get; set; } = 500;
     public bool EdiabasTrace { get; set; }
     public bool ReadIdentInQuickTest { get; set; } = true;
+
+    /// <summary>Translate German SGBD texts to English (offline tables).</summary>
+    public bool TranslateTexts { get; set; } = true;
+
+    /// <summary>After connecting: identify the car from its VIN and scan the modules it reports.</summary>
+    public bool AutoScanOnConnect { get; set; } = true;
     public Dictionary<string, List<string>> LiveSelections { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 }
 
@@ -99,7 +105,12 @@ public static class EcuPathLocator
 {
     public static string? Detect()
     {
-        var candidates = new List<string>();
+        var candidates = new List<string>
+        {
+            // Installed by the bmwDecode setup (bundled or copied from INPA/ISTA): self-contained, preferred.
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "bmwDecode", "Ecu"),
+            Path.Combine(AppContext.BaseDirectory, "Ecu"),
+        };
 
         // EDIABAS sets EDIABAS_PATH / adds its Bin folder to PATH on install.
         if (Environment.GetEnvironmentVariable("EDIABAS_PATH") is { Length: > 0 } ediabasPath)
@@ -119,6 +130,7 @@ public static class EcuPathLocator
         {
             candidates.Add($@"{drive}\EDIABAS\Ecu");
             candidates.Add($@"{drive}\EC-Apps\ISTA\Ecu");
+            candidates.Add($@"{drive}\Program Files\BMW\ISPI\TRIC\ISTA\Ecu");
             candidates.Add($@"{drive}\Rheingold\Ecu");
             candidates.Add($@"{drive}\ISTA\Ecu");
         }

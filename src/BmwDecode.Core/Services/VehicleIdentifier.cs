@@ -225,6 +225,43 @@ public sealed partial class VehicleIdentifier
             }
         }
 
+        // ---- The VIN decides the chassis when we know it (ISTA history or type key): a swapped CAS can carry a
+        //      donor's vehicle order, but the VIN is the car's identity ----
+        if (_typeKeys.FindVin(vin) is { } seen)
+        {
+            details = details with
+            {
+                TypeKey = details.TypeKey ?? seen.TypeKey,
+                Model = details.Model ?? seen.Model,
+                Gearbox = details.Gearbox ?? seen.Gearbox,
+                Drive = details.Drive ?? seen.Drive,
+                Displacement = details.Displacement ?? seen.Displacement,
+                Body = details.Body ?? seen.Body,
+                Market = details.Market ?? seen.Market,
+                Steering = details.Steering ?? seen.Steering,
+                ProductionDate = details.ProductionDate ?? seen.Production,
+            };
+            if (NormalizeSeries(seen.Series) is { } vinSeries)
+            {
+                if (series is not null && !series.Equals(vinSeries, StringComparison.OrdinalIgnoreCase))
+                {
+                    sources.Add($"Vehicle order reports {series}, VIN belongs to {vinSeries} – using the VIN");
+                }
+
+                series = vinSeries;
+                seriesSource = "VIN (ISTA history)";
+            }
+
+            sources.Add($"VIN known from ISTA session {seen.SeenAt:yyyy-MM-dd} (factory build: {seen.Model ?? seen.Series}, {seen.EngineCode ?? seen.Engine})");
+        }
+
+        var typeKeySeries = NormalizeSeries(_typeKeys.Find(vin is { Length: 17 } ? vin[3..7] : null)?.Series);
+        if (typeKeySeries is not null && seriesSource != "VIN (ISTA history)")
+        {
+            series = typeKeySeries;
+            seriesSource = "VIN type key";
+        }
+
         // ---- Type key: local database first (FZGIDENT tables + the user's typekeys.csv), then FZGIDENT jobs ----
         if (_typeKeys.Find(details.TypeKey) is { } known)
         {

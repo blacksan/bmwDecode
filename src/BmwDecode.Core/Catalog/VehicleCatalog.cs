@@ -13,6 +13,9 @@ public sealed record EcuDefinition(int Address, string Abbreviation, IReadOnlyLi
 
     public string Description => EcuNames.Describe(Abbreviation);
 
+    /// <summary>1 = most important (engine), then transmission, brakes, airbag... See <see cref="EcuPriority"/>.</summary>
+    public int Priority => EcuPriority.Rank(Abbreviation, Address);
+
     /// <summary>Stable key used for de-duplication and settings.</summary>
     public string Key => $"{Address:X2}:{PrimaryGroup}";
 }
@@ -30,6 +33,12 @@ public sealed record SeriesDefinition(string Series, string Family, string BusTy
 
     /// <summary>ZCS SGBD that reads the coding key on DS2 cars (ZCS_E36, ZCS_E39, ZCS_ALL...).</summary>
     public string? IdentSgbd => Family.StartsWith("ZCS", StringComparison.OrdinalIgnoreCase) ? Family : IsDs2 ? "ZCS_ALL" : null;
+
+    /// <summary>
+    /// Main-series SGBD with functional jobs (IDENT_FUNKTIONAL, FS_LESEN_FUNKTIONAL): E89X, E60, E65, E70...
+    /// Lets the car itself report which modules are fitted. Null for DS2 cars.
+    /// </summary>
+    public string? MainSgbd { get; init; }
 
     public string Generation => IsDs2 ? "DS2 / K-line" : BusType == "BN2000" ? "BN2000 / D-CAN" : BusType;
 
@@ -102,6 +111,9 @@ public sealed class VehicleCatalog
             // Prefer the car variant; merge ECUs of all variants so nothing is missed.
             var main = variants.FirstOrDefault(v => (string?)v.Element("BL") == "BMWPKW") ?? variants[0];
             var family = (string?)main.Element("BS") ?? (string?)main.Element("MS") ?? series;
+            var ms = ((string?)main.Element("MS"))?.Trim();
+            // VehicleSeries uses E060/E065/E070; the SGBD files are E60.PRG, E65.PRG, E70.PRG (E89X stays).
+            var mainSgbd = ms is { Length: 4 } && ms[1] == '0' && char.IsDigit(ms[2]) ? ms[0] + ms[2..] : ms;
             var busType = (string?)main.Element("BT") ?? string.Empty;
 
             var ecus = new Dictionary<string, EcuDefinition>(StringComparer.OrdinalIgnoreCase);
@@ -115,7 +127,10 @@ public sealed class VehicleCatalog
             }
 
             result.Add(new SeriesDefinition(series, family, busType,
-                ecus.Values.OrderBy(e => e.Address).ThenBy(e => e.Abbreviation, StringComparer.Ordinal).ToList()));
+                ecus.Values.OrderBy(e => e.Address).ThenBy(e => e.Abbreviation, StringComparer.Ordinal).ToList())
+            {
+                MainSgbd = busType == "BN2000" && !string.IsNullOrWhiteSpace(mainSgbd) ? mainSgbd : null,
+            });
         }
 
         AddClassicSeries(result);

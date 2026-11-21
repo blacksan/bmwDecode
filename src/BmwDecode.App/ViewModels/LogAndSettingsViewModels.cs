@@ -99,6 +99,8 @@ public sealed partial class SettingsViewModel : PageViewModel
         _selectedTheme = s.Theme;
         _liveIntervalMs = s.LiveIntervalMs;
         _ediabasTrace = s.EdiabasTrace;
+        _translateTexts = s.TranslateTexts;
+        _autoScan = s.AutoScanOnConnect;
         SeriesOptions = [.. VehicleCatalog.Default.ESeries.Select(x => x.Series)];
         _defaultSeries = s.DefaultSeries;
     }
@@ -121,6 +123,33 @@ public sealed partial class SettingsViewModel : PageViewModel
 
     [ObservableProperty]
     private string _defaultSeries;
+
+    [ObservableProperty]
+    private bool _translateTexts;
+
+    [ObservableProperty]
+    private bool _autoScan;
+
+    public string TranslationInfo
+    {
+        get
+        {
+            var t = Core.Translation.Translator.Current;
+            return $"{t.PhraseCount:N0} phrases and {t.WordCount:N0} words built in. Correct any text in translations.tsv " +
+                   "(German<TAB>English per line) in the settings folder; restart to apply.";
+        }
+    }
+
+    public string IstaInfo
+    {
+        get
+        {
+            var cars = Core.Vehicle.IstaHistory.Load();
+            return cars.Count == 0
+                ? "No ISTA session files found. When ISTA has identified a car on this PC, its VIN, type key and model are reused here."
+                : $"{cars.Count} car(s) known from ISTA sessions: " + string.Join(", ", cars.Take(5).Select(c => $"{c.Vin[^7..]} {c.Model ?? c.Series}"));
+        }
+    }
 
     public bool EcuValid => EcuPathLocator.IsValid(EcuPath);
 
@@ -200,6 +229,14 @@ public sealed partial class SettingsViewModel : PageViewModel
     partial void OnEdiabasTraceChanged(bool value) => Persist(s => s.EdiabasTrace = value);
 
     partial void OnDefaultSeriesChanged(string value) => Persist(s => s.DefaultSeries = value);
+
+    partial void OnTranslateTextsChanged(bool value)
+    {
+        Persist(s => s.TranslateTexts = value);
+        Core.Translation.Translator.Current.Enabled = value;
+    }
+
+    partial void OnAutoScanChanged(bool value) => Persist(s => s.AutoScanOnConnect = value);
 
     private void Persist(Action<AppSettings> change)
     {

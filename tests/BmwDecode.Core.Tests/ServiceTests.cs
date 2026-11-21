@@ -45,12 +45,42 @@ public class ServiceTests
         Assert.Equal(3, dde.FaultList.Count);
         Assert.Equal("7 811 571", dde.PartNumber);
 
-        // The demo car is a RWD conversion: no transfer case.
-        Assert.Equal(EcuScanState.NotFitted, report.Results.Single(r => r.Ecu.PrimaryGroup == "D_VGSG").State);
+        // Modules come from the car's own functional ident and are ranked: engine, gearbox, brakes first.
+        Assert.StartsWith("14 modules reported by the car", report.DiscoveryNote);
+        Assert.Equal(new[] { "D_MOTOR", "D_EGS", "D_DSC" }, report.Results.Take(3).Select(r => r.Ecu.PrimaryGroup).ToArray());
+        // The demo car is a RWD conversion: no transfer case, so it is not even listed.
+        Assert.DoesNotContain(report.Results, r => r.Ecu.PrimaryGroup == "D_VGSG");
         Assert.Equal(EcuScanState.NoFaults, report.Results.Single(r => r.Ecu.PrimaryGroup == "D_KLIMA").State);
         Assert.False(report.WasCancelled);
         Assert.Equal(8, report.FaultCount);
         Assert.Contains(progress, p => p.State == EcuScanState.Scanning);
+    }
+
+    [Fact]
+    public async Task Probing_mode_still_finds_modules_when_the_car_cannot_report_them()
+    {
+        await using var engine = await ConnectedDemoAsync();
+        var report = await new QuickTestService(engine).RunAsync(VehicleCatalog.Default.Find("E84")!, VehicleIdentity.Unknown,
+            new QuickTestOptions { UseDiscovery = false });
+
+        Assert.StartsWith("probed", report.DiscoveryNote);
+        Assert.Equal(EcuScanState.NotFitted, report.Results.Single(r => r.Ecu.PrimaryGroup == "D_VGSG").State);
+        Assert.Equal(8, report.FaultCount);
+    }
+
+    [Fact]
+    public void Modules_are_ranked_engine_gearbox_brakes_airbag()
+    {
+        Assert.Equal(1, EcuPriority.Rank("DME/DDE"));
+        Assert.Equal(2, EcuPriority.Rank("EGS"));
+        Assert.Equal(3, EcuPriority.Rank("DSC"));
+        Assert.Equal(4, EcuPriority.Rank("ACSM"));
+        Assert.Equal(5, EcuPriority.Rank("CAS"));
+        Assert.Equal(1, EcuPriority.Rank("UNKNOWN", 0x12));
+        Assert.True(EcuPriority.Rank("CCC") > EcuPriority.Rank("KOMBI"));
+        Assert.Equal("E89X", VehicleCatalog.Default.Find("E84")!.MainSgbd);
+        Assert.Equal("E60", VehicleCatalog.Default.Find("E61")!.MainSgbd);
+        Assert.Null(VehicleCatalog.Default.Find("E46")!.MainSgbd);
     }
 
     [Fact]

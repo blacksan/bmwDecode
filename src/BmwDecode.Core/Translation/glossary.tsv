@@ -1,0 +1,6001 @@
+# German -> English glossary for BMW SGBD texts (generic automotive vocabulary).
+aa	AA
+aad	aad
+aah	aah
+aav	aav
+ab	from
+abbiegelicht	cornering light
+abblenden	dip
+abblendlicht	low beam
+abbruch	abort
+abbtriebsdrehzahl	output speed
+abc	ABC
+abd	abd
+abe	abe
+aber	but
+abf	abf
+abgas	exhaust gas
+abgasdifferenzdrucksensor	exhaust gas differential pressure sensor
+abgasdruck	exhaust pressure
+abgasdrucksensor	exhaust pressure sensor
+abgasgegendruck	exhaust back pressure
+abgasgegendruckfuehler	exhaust back pressure sensor
+abgasgegendrucksensor	exhaust back pressure sensor
+abgasintervall	exhaust interval
+abgasklappe	exhaust flap
+abgasrelevant	exhaust-relevant
+abgasrelevante	exhaust-relevant
+abgasrelevanter	exhaust-relevant
+abgasrueckfuehr	EGR
+abgasrueckfuehrsteller	EGR actuator
+abgasrückführ	EGR
+abgasrückführkühler	EGR cooler
+abgasrückführrate	exhaust gas recirculation rate
+abgasrückführraten	exhaust gas recirculation rates
+abgasrückführsteller	EGR actuator
+abgasrückführungsventil	exhaust gas recirculation valve
+abgasrückführventil	EGR valve
+abgasschädigend	harmful to exhaust system
+abgassystem	exhaust system
+abgastemp	exhaust temperature
+abgastemperatur	exhaust gas temperature
+abgastemperaturfuehler	exhaust gas temperature sensor
+abgastemperaturregler	exhaust gas temperature controller
+abgastemperatursensor	exhaust gas temperature sensor
+abgastemperatursignalen	exhaust gas temperature signals
+abgasverschl	exhaust blockage
+abgebrochen	aborted
+abgefallen	dropped
+abgeglichen	calibrated
+abgelaufen	expired
+abgelegt	stored
+abgelehnt	rejected
+abgenommen	removed
+abgeschaltet	switched off
+abgeschickt	sent
+abgeschlossen	completed
+abgesichert	protected
+abgesteckt	disconnected
+abgleich	calibration
+abgleichdaten	calibration data
+abgleichleitung	calibration line
+abgleichstrom	calibration current
+abic	abic
+abkühlung	cooling
+ablage	storage
+ablauf	sequence
+abluftklappenansteuerung	exhaust flap activation
+above	above
+abriss	break-off
+abs	ABS
+abschaltbar	switchable off
+abschalten	switch off
+abschaltpfad	shutdown path
+abschaltpfadtest	shutdown path test
+abschaltszenario	shutdown scenario
+abschaltung	shutdown
+abschaltvektor	shutdown vector
+abschaltventil	shut-off valve
+abschaltverhinderer	shutdown inhibitor
+absicherung	safeguarding
+absolut	absolute
+absolutdruck	absolute pressure
+absolutdrucksensor	absolute pressure sensor
+absolute	absolute
+absolutzeit	absolute time
+abspeicherung	storage
+absperrventil	shut-off valve
+abstand	distance
+abstandsmeldung	distance warning
+abstellen	shut off
+abstellzeit	shut-off time
+abtrieb	output
+abtriebsdrehzahl	output speed
+abtriebsdrehzahlsensor	output speed sensor
+abweichung	deviation
+abweichungen	deviations
+ac	AC
+acan	acan
+acb	ACB
+acc	ACC
+access	access
+accm	accm
+acf	acf
+achse	axle
+ack	ack
+aclnx	ACLNX
+aclny	ACLNY
+acpd	ACPD
+acquisition	acquisition
+acsm	ACSM
+act	ACT
+activation	activation
+active	active
+actn	actn
+actual	actual
+actuator	actuator
+actvn	actvn
+ad	AD
+adapt	adapt
+adaptiert	adapted
+adaptierte	adapted
+adaption	adaptation
+adaptionen	adaptations
+adaptionsfaktor	adaptation factor
+adaptionswert	adaptation value
+adaptionswerte	adaptation values
+adaptive	adaptive
+adaptiver	adaptive
+adc	ADC
+add	add
+added	added
+additiv	additive
+additive	additive
+address	address
+adernschluss	wire short
+adernschluß	wire short
+adf	adf
+adjustment	adjustment
+adpt	adpt
+adresse	address
+adressierter	addressed
+adressierungstest	addressing test
+ads	ADS
+adv	adv
+ae	AE
+aenderung	change
+aep	aep
+aeph	AEPH
+aerius	aerius
+af	AF
+afs	AFS
+after	after
+agb	agb
+aggregat	unit
+agr	EGR
+ah	AH
+ahl	ahl
+ahm	AHM
+ahv	AHV
+aic	AIC
+aim	aim
+air	air
+airbag	airbag
+airbagfrontsensor	front airbag sensor
+airbagsensor	airbag sensor
+airmass	air mass
+akf	akf
+akks	accumulators
+aks	AKS
+akt	akt
+aktion	action
+aktiv	active
+aktive	active
+aktiven	active
+aktiver	active
+aktives	active
+aktivierbar	activatable
+aktiviert	activated
+aktivierung	activation
+aktivierungsfehler	activation fault
+aktivierungstest	activation test
+aktivierungszeiten	activation times
+aktivitaet	activity
+aktivlenkung	active steering
+aktivsitz	active seat
+aktivtank	active tank
+aktivtankheizung	active tank heating
+aktor	actuator
+aktorspannung	actuator voltage
+aktorspannungsmessung	actuator voltage measurement
+aktualisierung	update
+aktuator	actuator
+aktuatoransteuerung	actuator activation
+aktuell	current
+aktuelle	current
+aktuellen	current
+aktueller	current
+aktuelles	current
+akustik	acoustics
+akustische	acoustic
+akzentleuchte	accent light
+akzeptiert	accepted
+al	AL
+alarm	alarm
+alarmauslöser	alarm trigger
+alarmspeicher	alarm memory
+albbf	ALBBF
+albfa	ALBFA
+albv	ALBV
+alc	ALC
+alert	alert
+alg	alg
+algo	algo
+algorithm	algorithm
+algorithmus	algorithm
+aliv	alive
+alive	alive
+alivecounter	alive counter
+aliveprüfung	alive check
+alivezaehler	alive counter
+all	all
+alle	all
+aller	of all
+allg	general
+allgemein	general
+allgemeine	general
+allgemeiner	general
+allowed	allowed
+allrad	all-wheel drive
+als	as
+alterung	aging
+am	on
+amp	amp
+amplifier	amplifier
+amplitude	amplitude
+an	on
+analog	analog
+analoger	analog
+analogport	analog port
+analogsignal	analog signal
+analogwert	analog value
+and	and
+anderer	other
+anf	REQ
+anfahrerkennung	start-off detection
+anfahrkupplung	starting clutch
+anfang	start
+anforderer	requester
+anforderung	request
+anfrage	request
+ang	ANG
+angefordert	requested
+angeforderte	requested
+angefordertes	requested
+angelernt	taught in
+angeschlossen	connected
+angesprochen	addressed
+angesteckt	plugged in
+angesteuert	activated
+angesteuerten	activated
+angezogen	tightened
+angle	angle
+anhaenger	trailer
+anhalten	stop
+anhaltend	sustained
+anhänger	trailer
+anhängermodul	trailer module
+anlasser	starter
+anlasserbetrieb	starter operation
+anlasserfreigabe	starter enable
+anlasssperr	starter lock
+ansaugluft	intake air
+ansauglufttemperatur	intake air temperature
+ansauglufttemperatursensor	intake air temperature sensor
+anschl	connection
+anschlaege	stops
+anschlag	stop
+anschlaglernen	stop learning
+anschlagposition	stop position
+anschluss	connection
+anschläge	stops
+ansprechverhalten	response behaviour
+ansprechzeit	response time
+ansteuerbaustein	activation module
+ansteuerbeginn	activation start
+ansteuerdauer	activation duration
+ansteuerdauerkorrektur	activation duration correction
+ansteuersignal	activation signal
+ansteuerspannung	activation voltage
+ansteuerung	activation
+ansteuerungsfehler	activation fault
+answer	answer
+anteil	share
+antenna	antenna
+antenne	antenna
+antennen	antennas
+antennenfuß	antenna base
+antrieb	drive
+antriebsstrang	drivetrain
+antriebstrang	drivetrain
+antwort	response
+antwortet	responds
+anwender	user
+anzahl	number
+anzeige	display
+anziehen	tighten
+apdc	apdc
+api	API
+apix	APIX
+apm	APM
+app	app
+appl	APPL
+application	application
+applikation	application
+applikations	application
+applikationssoftware	application software
+applizierbarer	applicable
+apply	apply
+apv	apv
+ar	ar
+arbeitet	works
+arbeitsbereich	operating range
+area	area
+arming	arming
+array	array
+ars	ARS
+as	as
+asa	ASA
+asc	ASC
+asd	ASD
+ase	ase
+asic	ASIC
+ask	ASK
+asp	ASP
+asr	ASR
+assistent	assistant
+asw	ASW
+at	at
+atc	ATC
+atic	ATIC
+atl	ATL
+atmosphaerendruckfuehler	atmospheric pressure sensor
+atmosphärendruck	atmospheric pressure
+auc	AUC
+audio	audio
+audiobedienteil	audio control unit
+audioquelle	audio source
+auf	on
+aufgeladenem	charged
+aufgestellt	set up
+aufgetreten	occurred
+aufgrund	due to
+aufheizphase	warm-up phase
+aufleuchten	illumination
+auflösung	resolution
+aufprallsensor	impact sensor
+aufrollstrammer	retractor tensioner
+aufstarten	start up
+aufstartfehler	start-up fault
+aufstarttest	start-up test
+auftreten	occurrence
+aus	off
+ausfall	failure
+ausgabe	output
+ausgang	output
+ausgangssignal	output signal
+ausgangsspannung	output voltage
+ausgangstastverhältnis	output duty cycle
+ausgefallen	failed
+ausgeführt	performed
+ausgegebener	output
+ausgelegt	designed
+ausgeloest	triggered
+ausgelöst	triggered
+ausgeschaltet	switched off
+ausgleichsbehälter	expansion tank
+auslass	exhaust
+auslassnockenwelle	exhaust camshaft
+auslassnockenwellenflanke	exhaust camshaft edge
+auslassnockenwellensensor	exhaust camshaft sensor
+auslassspreizung	exhaust cam spread
+auslassventil	exhaust valve
+auslaß	outlet
+auslesen	read out
+ausloesung	triggering
+auslösung	triggering
+ausnahmefehler	exception error
+ausreichend	sufficient
+ausschalten	switch off
+ausschwingzeit	decay time
+aussen	outside
+aussenspiegel	exterior mirror
+aussentemperatur	outside temperature
+ausser	except
+ausserhalb	outside
+aussetzer	misfire
+aussetzererkennung	misfire detection
+aussetzerkennung	misfire detection
+aussgangsspannung	output voltage
+ausstattung	equipment
+austausch	replacement
+auswahl	selection
+auswertebaustein	evaluation module
+auswerteelektronik	evaluation electronics
+auswerteschaltung	evaluation circuit
+auswertung	evaluation
+auswirkung	effect
+autarkiekondensator	autarky capacitor
+authentisierung	authentication
+auto	auto
+autoadressierung	auto addressing
+automatenstrammer	automatic tensioner
+automatik	automatic
+automatikgetriebe	automatic transmission
+automatischer	automatic
+autosar	AUTOSAR
+auwp	auwp
+aux	AUX
+auxiliary	auxiliary
+außen	outside
+außenspiegel	exterior mirror
+außentemperatur	outside temperature
+außentemperatursensor	outside temperature sensor
+außerhalb	outside
+av	AV
+available	available
+avanos	avanos
+avl	AVL
+aw	aw
+awake	awake
+awl	AWL
+ax	AX
+axial	axial
+ay	AY
+ba	BA
+back	back
+background	background
+backlight	backlight
+backup	backup
+bah	bah
+band	band
+bandende	band end
+bandendetest	end-of-band test
+bank	bank
+bankausfall	bank failure
+bar	bar
+based	based
+basis	base
+basissoftware	base software
+bat	BAT
+batt	batt
+batterie	battery
+batteriealterung	battery aging
+batterieladeeinheit	battery charging unit
+batterieleitung	battery line
+batterieleitungsdiagnose	battery line diagnosis
+batterieloser	battery-less
+batterieplus	battery positive
+batteriesensor	battery sensor
+batteriespannng	battery voltage
+batteriespannung	battery voltage
+batterietemperatur	battery temperature
+batteriezustandserkennung	battery condition detection
+batterieüberwachung	battery monitoring
+battery	battery
+baustein	component
+bauteil	component
+bauteileschutz	component protection
+bauteilschutz	component protection
+bax	BAX
+bb	BB
+bbh	bbh
+bbs	bbs
+bbv	bbv
+bc	BC
+bcc	BCC
+bce	bce
+bcu	BCU
+bd	BD
+bda	bda
+bdb	bdb
+bdc	BDC
+bdd	bdd
+be	BE
+bea	bea
+beabsichtigte	intended
+beabsichtigter	intended
+beam	beam
+beb	beb
+bec	BEC
+bed	bed
+bedarfsorientierten	demand-based
+bedarfsorientierter	demand-based
+bedieneinheit	operating unit
+bedienelement	control element
+bedienschalter	control switch
+bedientaster	control button
+bedienteil	control panel
+bedienung	operation
+bedingung	condition
+beeinflusst	influenced
+beendet	ended
+befas	befas
+befehl	command
+befüll	filling
+beginn	start
+begrenzt	limited
+begrenzung	limitation
+begrenzungslicht	marker lamp
+beho	beho
+behobenem	rectified
+bei	at
+beide	both
+beiden	both
+beider	both
+beif	beif
+beifahrer	passenger
+beifahrerairbag	passenger airbag
+beifahrerseite	passenger side
+beifahrersitz	passenger seat
+beifahrerspiegel	passenger-side mirror
+beifahrertuer	passenger door
+beifahrertür	passenger door
+beiklappen	fold in
+beim	when
+bekommt	receives
+beladehilfe	loading aid
+beladen	loaded
+beleuchtung	lighting
+below	below
+belüftung	ventilation
+belüftungstemperatur	ventilation temperature
+benötigt	required
+berechnet	calculated
+berechnete	calculated
+berechnetem	calculated
+berechneter	calculated
+berechnetes	calculated
+berechnung	calculation
+bereich	range
+bereiches	range
+bereichs	range
+bereichsfehler	range fault
+bereichsueberschreitung	range exceedance
+bereichsunter	range undershoot
+bereichsverletzung	range violation
+bereichsüberprüfung	range check
+bereichsüberschreitung	range exceedance
+bereit	ready
+bereits	already
+beschl	accel.
+beschlagsensor	fogging sensor
+beschleunigung	acceleration
+beschleunigungsaufnehmer	acceleration pickup
+beschleunigungsdaten	acceleration data
+beschleunigungsgeführte	acceleration-guided
+beschleunigungsmesser	accelerometer
+beschleunigungssensor	acceleration sensor
+beschleunigungsüberwachung	acceleration monitoring
+bestaet	confirmation
+bestanden	passed
+bestromt	energized
+bestromter	energized
+bestromung	energization
+betaetigt	actuated
+betankung	refueling
+betrieb	operation
+betriebsart	operating mode
+betriebsbereich	operating range
+betriebsbereit	ready for operation
+betriebsbereitschaft	operational readiness
+betriebsgüte	operating quality
+betriebsmodus	operating mode
+betriebsspannung	operating voltage
+betriebsstrategie	operating strategy
+betriebsstundenzaehler	operating hour counter
+betriebssystem	operating system
+betriebstemperatur	operating temperature
+betriebszustand	operating state
+between	between
+betätigt	actuated
+betätigung	actuation
+bewegung	movement
+bez	ref.
+bezogen	related
+bezug	reference
+bezugsmarkengeber	reference mark sensor
+bezüglich	regarding
+bf	BF
+bfd	bfd
+bfh	BFH
+bfs	BFS
+bft	BFT
+bfth	BFTH
+bh	bh
+bi	bi
+binning	binning
+binär	binary
+binäres	binary
+bis	to
+bist	are
+bit	bit
+bitcodiert	bit-coded
+bite	BITE
+bits	bits
+bitserielle	bit-serial
+bk	bk
+bl	bl
+blau	blue
+bld	bld
+bleibt	remains
+blendfreies	glare-free
+blind	blind
+blindheit	blindness
+blinken	flashing
+blinker	indicator
+blinklicht	flashing light
+blinkrichtung	indicator direction
+blitzleuchte	hazard light
+blk	blk
+block	block
+blockiert	blocked
+blockierung	blocking
+blocks	blocks
+blow	blow
+bls	BLS
+blsh	blsh
+blsl	blsl
+blt	BLT
+bluetooth	Bluetooth
+blöcke	blocks
+bms	BMS
+bmscomcscalvtstcomerr	BMS communication CSC alive test comm error
+bmscomcscautnbalcomerr	BMS communication CSC autonomous balancing comm error
+bmscomcscbalcomerr	BMS communication CSC balancing comm error
+bmscomcscledcomerr	BMS communication CSC LED comm error
+bmscomcscshdncomerr	BMS communication CSC shutdown comm error
+bmscomcscstrtcfgcomerr	BMS communication CSC start config comm error
+bmscomcscstrtnrmcomerr	BMS communication CSC start normal comm error
+bmscomcsctempcomerr	BMS communication CSC temperature comm error
+bmscomcsctemptout	BMS communication CSC temperature timeout
+bmscomcscvltgcomerr	BMS communication CSC voltage comm error
+bmscomcscvltgtout	BMS communication CSC voltage timeout
+bmsk	bmsk
+bmw	BMW
+bn	BN
+board	board
+body	body
+boil	boil
+boost	boost
+booster	booster
+boostertimeout	booster timeout
+boosterzeitfenster	booster time window
+boot	boot
+bordnetz	vehicle electrical system
+bordnetzspannung	vehicle electrical system voltage
+bordnetzstrom	onboard network current
+bordnetzunterstützung	onboard network support
+bordnetzüberwachung	onboard power supply monitoring
+bordspannung	onboard voltage
+bos	BOS
+bosch	Bosch
+botschaft	message
+botschaften	messages
+botschafts	message
+botschaftsausfall	message loss
+botschaftsfehler	message fault
+botschaftsfolgezähler	message sequence counter
+botschaftslaenge	message length
+botschaftsueberwachung	message monitoring
+botschaftszaehler	message counter
+botschaftsüberwachung	message monitoring
+box	box
+boxluefter	box fan
+boxlüfter	box fan
+bpa	BPA
+bpcm	BPCM
+brake	brake
+branch	branch
+bras	BRAS
+break	break
+breitbandlambdasonde	wideband lambda sensor
+brems	brake
+bremsaktuator	brake actuator
+bremsanforderung	brake request
+bremsassistent	brake assist
+bremsbelagsensor	brake pad sensor
+bremsbelagverschleiss	brake pad wear
+bremsdruck	brake pressure
+bremse	brake
+bremsenstatus	brake status
+bremskraftverstaerker	brake booster
+bremskraftverstärker	brake booster
+bremskraftverstärkung	brake boost
+bremslichschalter	brake light switch
+bremslicht	brake light
+bremslichtschalter	brake light switch
+bremslichttestschalter	brake light test switch
+bremsmoment	braking torque
+bremspedal	brake pedal
+bremspedalstellung	brake pedal position
+bremspedalwegsensor	brake pedal travel sensor
+bremsschalter	brake switch
+bremsscheiben	brake discs
+bremssignal	brake signal
+bremssignale	brake signals
+bremssystem	brake system
+bremstestschalter	brake test switch
+bremsung	braking
+bremsunterdruck	brake vacuum
+bremsunterdruckpumpe	brake vacuum pump
+bremsunterdrucksensor	brake vacuum sensor
+brenndauer	burn duration
+brennluftgebläse	combustion air blower
+brennraumdrucksensor	combustion chamber pressure sensor
+bridge	bridge
+brig	BRIG
+brksys	brksys
+broadcast	broadcast
+brp	BRP
+brtorq	BRTORQ
+brücke	bridge
+bs	bs
+bsd	BSD
+bss	bss
+bsw	BSW
+bt	BT
+bth	bth
+bts	BTS
+buck	buck
+buckle	buckle
+buffer	buffer
+bufferkondensator	buffer capacitor
+bufferspannungsmessung	buffer voltage measurement
+build	build
+bus	bus
+busfehler	bus fault
+busoff	bus off
+button	button
+by	by
+bypass	bypass
+bypassklappe	bypass flap
+bypassventil	bypass valve
+byte	byte
+bytes	bytes
+bzgl	regarding
+bzw	or
+ca	CA
+caa	caa
+cable	cable
+cabrf	CABRF
+cabrio	convertible
+caf	caf
+cah	cah
+calculation	calculation
+calibration	calibration
+calid	calid
+call	call
+cam	cam
+camera	camera
+camshaft	camshaft
+can	CAN
+cana	CAN A
+canb	CAN B
+canif	CANIF
+cannm	cannm
+cannot	cannot
+cansm	cansm
+car	car
+carb	carb
+card	card
+cas	CAS
+case	case
+cat	cat
+catalyst	catalyst
+cb	CB
+cbs	CBS
+cc	CC
+ccc	CCC
+ccd	CCD
+cce	cce
+ccm	CCM
+cctr	CCTR
+cd	CD
+cda	CDA
+cdb	CDB
+cdc	cdc
+cdkagrf	cdkagrf
+cdkakre	cdkakre
+cdkanws	cdkanws
+cdkanwse	cdkanwse
+cdkatnv	cdkatnv
+cdkats	cdkats
+cdkbsdd	cdkbsdd
+cdkcacc	cdkcacc
+cdkcana	cdkcana
+cdkcanb	cdkcanb
+cdkcars	cdkcars
+cdkcas	cdkcas
+cdkccas	cdkccas
+cdkcge	cdkcge
+cdkchdev	cdkchdev
+cdkcihka	cdkcihka
+cdkcins	cdkcins
+cdkcpwml	cdkcpwml
+cdkcszl	cdkcszl
+cdkcvvt	cdkcvvt
+cdkdgen	cdkdgen
+cdkdgenbs	cdkdgenbs
+cdkdhdmte	cdkdhdmte
+cdkdibs	cdkdibs
+cdkdk	cdkdk
+cdkdmmve	cdkdmmve
+cdkdmpme	cdkdmpme
+cdkdmtk	cdkdmtk
+cdkdmtknm	cdkdmtknm
+cdkdvan	cdkdvan
+cdkdvcan	cdkdvcan
+cdkdvee	cdkdvee
+cdkdvef	cdkdvef
+cdkdvefo	cdkdvefo
+cdkdvel	cdkdvel
+cdkdven	cdkdven
+cdkdver	cdkdver
+cdkdvest	cdkdvest
+cdkdveu	cdkdveu
+cdkdveuw	cdkdveuw
+cdkdvev	cdkdvev
+cdkdvffs	cdkdvffs
+cdkdvfrs	cdkdvfrs
+cdkdvfsg	cdkdvfsg
+cdkdvlrn	cdkdvlrn
+cdkdvovl	cdkdvovl
+cdkdvpla	cdkdvpla
+cdkdvpmn	cdkdvpmn
+cdkdvste	cdkdvste
+cdkdvulv	cdkdvulv
+cdkdvuse	cdkdvuse
+cdkdwa	cdkdwa
+cdkdylsu	cdkdylsu
+cdkdzku	CDKDZKU
+cdkels	cdkels
+cdkenws	cdkenws
+cdkenwse	cdkenwse
+cdkets	cdkets
+cdkev	CDKEV
+cdkevle	CDKEVLE
+cdkfp	cdkfp
+cdkfpv	cdkfpv
+cdkfrao	cdkfrao
+cdkfrau	cdkfrau
+cdkfrst	cdkfrst
+cdkglfe	cdkglfe
+cdkhboost	CDKHBOOST
+cdkhdev	CDKHDEV
+cdkhdevea	cdkhdevea
+cdkhdeveb	cdkhdeveb
+cdkhdevh	CDKHDEVH
+cdkhdevl	CDKHDEVL
+cdkhelsu	cdkhelsu
+cdkhsh	cdkhsh
+cdkhshe	cdkhshe
+cdkhsv	cdkhsv
+cdkhsve	cdkhsve
+cdkhsvsa	cdkhsvsa
+cdkiclsu	cdkiclsu
+cdkkat	cdkkat
+cdkkose	cdkkose
+cdkkpe	cdkkpe
+cdkkrnt	cdkkrnt
+cdkkrof	cdkkrof
+cdkks	CDKKS
+cdklash	cdklash
+cdklavh	cdklavh
+cdkldp	cdkldp
+cdklsh	cdklsh
+cdklsuia	cdklsuia
+cdklsuip	cdklsuip
+cdklsuks	cdklsuks
+cdklsv	cdklsv
+cdklsvv	cdklsvv
+cdkluea	cdkluea
+cdkmd	CDKMD
+cdkmle	cdkmle
+cdkoezs	cdkoezs
+cdkpddss	cdkpddss
+cdkph	CDKPH
+cdkpllsu	cdkpllsu
+cdkpoels	cdkpoels
+cdkrkat	cdkrkat
+cdkrkaz	cdkrkaz
+cdkslpe	cdkslpe
+cdksls	cdksls
+cdkslv	cdkslv
+cdkslve	cdkslve
+cdksue	cdksue
+cdktes	cdktes
+cdktesg	cdktesg
+cdkteve	cdkteve
+cdkths	cdkths
+cdktka	cdktka
+cdktoens	cdktoens
+cdkueta	cdkueta
+cdkufmv	cdkufmv
+cdkufnc	cdkufnc
+cdkufrlip	cdkufrlip
+cdkufspsc	cdkufspsc
+cdkulsu	cdkulsu
+cdkurram	cdkurram
+cdkurrom	cdkurrom
+cdkurrst	cdkurrst
+cdkvat	cdkvat
+cdkvvte	cdkvvte
+cdkwca	cdkwca
+cdkwfs	cdkwfs
+cdkx	CDKX
+cdkzz	cdkzz
+cdm	cdm
+cdtev	cdtev
+cdtmd	cdtmd
+ce	CE
+cea	cea
+cec	cec
+ced	ced
+celsius	Celsius
+cem	cem
+center	center
+centerlock	centerlock
+cf	CF
+cfgstatus	cfgstatus
+cg	CG
+ch	CH
+challenge	challenge
+champ	champ
+channel	channel
+charge	charge
+charger	charger
+check	check
+checkcontrol	Check Control
+checkpatterntest	check pattern test
+checks	checks
+checksum	checksum
+checksumme	checksum
+checksummen	checksums
+checksummenfehler	checksum error
+checksummentest	checksum test
+chg	chg
+chge	chge
+chgng	change
+chip	chip
+chiptemperatur	chip temperature
+chk	chk
+chksm	chksm
+chksum	checksum
+ci	ci
+cic	cic
+cid	CID
+cilc	CILC
+cim	CIM
+circuit	circuit
+cis	CIS
+cj	CJ
+cl	CL
+clamp	clamp
+classification	classification
+clctr	CLCTR
+client	client
+clo	clo
+clock	clock
+close	close
+closed	closed
+clsy	clsy
+clt	CLT
+cltprts	cltprts
+clu	CLU
+cluster	cluster
+clutch	clutch
+cnv	CNV
+cnvlyr	CNVLYR
+co	CO
+coach	coach
+cod	cod
+code	code
+coded	coded
+codierdaten	coding data
+codierdatenfehler	coding data error
+codierdatentransaktion	coding data transaction
+codierfehler	coding error
+codierpruefstempel	coding test stamp
+codiert	coded
+codierung	coding
+codierungswert	coding value
+coding	coding
+codo	codo
+cog	COG
+coil	coil
+cold	cold
+column	column
+com	COM
+combox	combox
+comm	COMM
+command	command
+common	common
+communication	communication
+comp	COMP
+compare	compare
+comparison	comparison
+component	component
+con	CON
+condition	condition
+config	config
+configuration	configuration
+connected	connected
+connection	connection
+conti	Conti
+control	control
+controller	controller
+controllers	controllers
+converter	converter
+cool	cool
+coolant	coolant
+cooler	cooler
+cooling	cooling
+coor	coor
+cootd	cootd
+cop	cop
+coprozessor	coprocessor
+core	core
+correction	correction
+corrupted	corrupted
+cos	COS
+cosi	cosi
+cosinus	cosine
+cosinuswert	cosine value
+cou	COU
+could	could
+counter	counter
+cpc	cpc
+cpld	CPLD
+cpu	CPU
+cpug	CPUG
+cr	CR
+cradle	cradle
+crankshaft	crankshaft
+crash	crash
+crashabschaltung	crash shutdown
+crc	CRC
+crctlacc	crctlacc
+critical	critical
+cross	cross
+crossing	crossing
+crs	CRS
+crsh	CRSH
+cruise	cruise
+cs	CS
+csa	CSA
+csc	CSC
+csi	CSI
+csm	CSM
+csov	csov
+ct	CT
+ctm	ctm
+ctr	CTR
+curr	curr
+current	current
+curtain	curtain
+curtainairbag	curtain airbag
+cut	cut
+cvm	CVM
+cvn	CVN
+cvt	CVT
+cwp	CWP
+cy	CY
+cycle	cycle
+cylinder	cylinder
+da	DA
+dab	DAB
+daboard	daboard
+dac	DAC
+dach	roof
+dachbewegung	roof movement
+dachpaket	roof package
+dachposition	roof position
+dad	dad
+dae	dae
+daempfer	damper
+daf	daf
+das	the
+data	data
+datei	file
+daten	data
+datenablage	data storage
+datenbereich	data range
+datenfehler	data error
+datenkommunikationsfehler	data communication error
+datenleitung	data line
+datensatz	data set
+datenschnittstelle	data interface
+datenspeicher	data memory
+datenuebertragung	data transmission
+datenübertragung	data transmission
+datum	date
+dauer	duration
+dauerbetätigung	continuous actuation
+dauerhaft	permanent
+dauerhafte	permanent
+dauernd	continuous
+dauerregelung	continuous control
+dauert	lasts
+db	DB
+dbc	dbc
+dbd	dbd
+dbe	dbe
+dbf	dbf
+dc	DC
+dca	dca
+dcb	dcb
+dcc	DCC
+dcd	dcd
+dcdc	DCDC
+dce	dce
+dcf	dcf
+dcrn	dcrn
+dcsw	dcsw
+dd	DD
+dda	dda
+ddb	ddb
+ddc	DDC
+ddd	ddd
+dde	DDE
+de	DE
+deaktiviert	deactivated
+deaktivierung	deactivation
+deaktivierungsfehler	deactivation fault
+deb	deb
+debug	debug
+dec	dec
+dee	dee
+def	DEF
+default	default
+defaultfehler	default fault
+defaultwert	default value
+defect	defect
+defective	defective
+defekt	defective
+defekte	defective
+defekter	defective
+defektes	defective
+definiert	defined
+definierten	defined
+degradation	degradation
+dejustage	misalignment
+deleted	deleted
+delta	delta
+dem	the
+den	the
+denox	DeNOx
+der	the
+des	the
+descent	descent
+design	design
+desired	desired
+detail	detail
+detect	detect
+detected	detected
+detection	detection
+detektiert	detected
+detektierter	detected
+deutlich	clearly
+dev	dev
+deviation	deviation
+device	device
+df	DF
+dfa	DFA
+dfb	dfb
+dfc	DFC
+dfes	DFES
+dff	dff
+dfp	DFP
+dh	dh
+dia	dia
+diag	diag
+diagnose	diagnosis
+diagnoseadresse	diagnostic address
+diagnoseinformation	diagnostic information
+diagnosemaster	diagnosis master
+diagnosemodus	diagnostic mode
+diagnoserückmeldung	diagnostic response
+diagnosestatus	diagnostic status
+diagnosewert	diagnostic value
+diagnosis	diagnosis
+diagnostic	diagnostic
+dibs	DIBS
+did	did
+die	the
+diebstahlwarnanlage	alarm system
+dienst	service
+dienste	services
+dies	this
+dieseleintrag	diesel entry
+diesem	this
+dif	dif
+diff	diff
+difference	difference
+differential	differential
+differenz	difference
+differenzdruck	differential pressure
+differenzdrucksensor	differential pressure sensor
+digital	digital
+digitalausgang	digital output
+digitaleingang	digital input
+digitaler	digital
+dimmung	dimming
+diode	diode
+disa	DISA
+disable	disable
+disabled	disabled
+disconnect	disconnect
+disconnected	disconnected
+disk	disk
+disp	DISP
+display	display
+displayhinterleuchtung	display backlighting
+distance	distance
+diumpr	diumpr
+diversen	various
+diversitaeres	diverse
+diversity	diversity
+diversitäres	diverse
+dk	DK
+dkad	dkad
+dkg	DKG
+dkp	DKP
+dlc	DLC
+dm	DM
+dma	DMA
+dme	DME
+dmer	dmer
+dmex	DMEX
+dmp	dmp
+dmtl	DMTL
+does	does
+dombeschleunigung	dome acceleration
+door	door
+doppelfehler	double fault
+doppelte	double
+dosierleitungsheizung	dosing line heating
+dosierpumpe	dosing pump
+dosierung	dosing
+dosierventil	metering valve
+dosing	dosing
+down	down
+downstream	downstream
+dr	dr
+drallklappe	swirl flap
+drallklappen	swirl flaps
+drallklappensteller	swirl flap actuator
+drdy	DRDY
+drdysen	drdysen
+drehgeber	rotary encoder
+drehknopf	rotary knob
+drehmoment	torque
+drehmomentanforderung	torque request
+drehmomenteingriff	torque intervention
+drehmomentüberwachung	torque monitoring
+drehrate	rotation rate
+drehraten	rotation rates
+drehratensensor	yaw rate sensor
+drehrichtung	direction of rotation
+drehrichtungserkennung	rotation direction detection
+drehwinkelsensor	rotation angle sensor
+drehzahl	engine speed
+drehzahlabweichung	speed deviation
+drehzahlanforderung	speed request
+drehzahlbegrenzung	speed limitation
+drehzahlbereich	speed range
+drehzahlfuehler	speed sensor
+drehzahlgeber	speed sensor
+drehzahlschwelle	speed threshold
+drehzahlsensor	speed sensor
+drehzahlsignal	speed signal
+drehzahlüberwachung	speed monitoring
+drei	three
+drift	drift
+driftfehler	drift fault
+dritte	third
+drive	drive
+drivelogic	drivelogic
+driver	driver
+drls	DRL
+drm	drm
+drossel	throttle
+drosselklappe	throttle valve
+drosselklappen	throttle valves
+drosselklappenadaption	throttle adaptation
+drosselklappenpotentiometer	throttle potentiometer
+drosselklappenpotenziometer	throttle potentiometer
+drosselklappenpoti	throttle pot
+drosselklappenregler	throttle controller
+drosselklappensensor	throttle position sensor
+drosselklappensteller	throttle actuator
+drosselklappenwinkel	throttle angle
+drs	DRS
+drsay	drsay
+drserrno	drserrno
+drspsip	drspsip
+dru	dru
+druck	pressure
+druckabfall	pressure drop
+druckaufbau	pressure build-up
+druckaufbauzeit	pressure build-up time
+druckbeaufschlagt	pressurized
+druckgeregelt	pressure-controlled
+druckgradient	pressure gradient
+druckkompensation	pressure compensation
+druckleitung	pressure line
+druckmatte	pressure mat
+druckmaximum	pressure maximum
+druckmaximums	pressure maximum
+druckregelung	pressure control
+druckregelventil	pressure control valve
+druckregler	pressure regulator
+druckschalter	pressure switch
+drucksensor	pressure sensor
+drucksensoren	pressure sensors
+drucksensorsignal	pressure sensor signal
+druckspeicher	accumulator
+drucksteller	pressure actuator
+drucksteuerventil	pressure control valve
+drucksteuerventile	pressure control valves
+druckstufe	pressure stage
+drucktank	pressure tank
+druckwert	pressure value
+drv	DRV
+ds	DS
+dsc	DSC
+dsm	DSM
+dsp	DSP
+dsw	dsw
+dt	DT
+dtc	DTC
+dtcm	DTCM
+due	due
+dummy	dummy
+dummyfehler	dummy fault
+dump	dump
+dur	dur
+durch	through
+durchgefuehrt	carried out
+durchgeführt	performed
+durchsatz	throughput
+during	during
+duty	duty
+dv	DV
+dvd	DVD
+dwa	DWA
+dws	dws
+dxc	DXC
+dyn	dyn
+dynamic	dynamic
+dynamik	dynamics
+dynamiktest	dynamics test
+dynamikwert	dynamics value
+dynamisch	dynamic
+dynamische	dynamic
+dynamischen	dynamic
+dynamischer	dynamic
+dynamisierung	dynamization
+dynmc	DYNMC
+dämpfer	damper
+dämpfung	damping
+ea	EA
+eaa	eaa
+eab	eab
+eac	EAC
+eb	EB
+eba	EBA
+ebene	level
+ebvlh	ebvlh
+ec	EC
+ecba	ECBA
+ecc	ECC
+ecd	ecd
+ece	ece
+ecm	ECM
+eco	ECO
+ecop	ECOP
+ect	ECT
+ecu	ECU
+ecum	ECUM
+ecuma	ECUMA
+ed	ED
+edc	EDC
+edck	edck
+edh	EDH
+edme	edme
+eds	EDS
+ee	EE
+eea	eea
+eeb	eeb
+eee	eee
+eeecu	eeecu
+eeh	eeh
+eep	EEP
+eeprom	EEPROM
+ees	ees
+ef	EF
+efb	efb
+efc	EFC
+efe	efe
+eff	eff
+effektiv	effective
+effektive	effective
+effizienz	efficiency
+effv	EFFV
+efh	efh
+egas	eGas
+egcp	EGCP
+egr	EGR
+egrcpmpy	egrcpmpy
+egs	EGS
+egspm	egspm
+eh	EH
+ehb	EHB
+ehc	EHC
+eigendiagnose	self-diagnosis
+eigendiagnosewert	self-diagnosis value
+eigenlenkverhalten	self-steering behaviour
+ein	on
+einbaulage	installation position
+einbauort	installation location
+einblasventil	injection valve
+eine	a
+einem	one
+einen	one
+einer	one
+eines	one
+einfachfehler	single fault
+eingang	input
+einganggroessen	input variables
+eingangsdrehzahl	input speed
+eingangsgrößen	input variables
+eingangssignal	input signal
+eingangsspannung	input voltage
+eingangswert	input value
+eingefroren	frozen
+eingelegt	engaged
+eingelernt	learned
+eingeschränkt	restricted
+eingeschränkte	restricted
+eingestellt	set
+eingetragen	entered
+eingriff	intervention
+einheit	unit
+einheiten	units
+einklappen	fold in
+einklemmschutz	anti-pinch protection
+einklemmschutzalgorithmus	anti-pinch algorithm
+einklemmschutzleiste	anti-pinch strip
+einlass	intake
+einlassnockenwelle	intake camshaft
+einlassnockenwellensensor	intake camshaft sensor
+einlassspreizung	intake cam spread
+einlassventil	intake valve
+einlassventilmodell	intake valve model
+einlaß	inlet
+einlegen	engage
+einlernen	teach in
+einlernvorgang	teach-in procedure
+einsatz	use
+einschaltdauer	duty cycle
+einschalten	switch on
+einschlafen	falling asleep
+einschlafkoordinator	sleep coordinator
+einschwingen	settling
+einseitig	one-sided
+einspritzabschaltung	injection cut-off
+einspritzmenge	injection quantity
+einspritzmengenbegrenzung	injection quantity limitation
+einspritzmengenüberwachung	injection quantity monitoring
+einspritzmodi	injection modes
+einspritzmodus	injection mode
+einspritzpumpe	injection pump
+einspritzung	injection
+einspritzungen	injections
+einspritzungsabschaltung	injection cut-off
+einspritzventil	injection valve
+einspritzventile	injection valves
+einspritzzeit	injection time
+einspurmodell	single-track model
+einstreuung	interference coupling
+eintrag	entry
+eject	eject
+ekat	ekat
+ekk	EKK
+ekmv	EKMV
+ekp	EKP
+el	el
+elab	elab
+eld	eld
+electric	electric
+electrical	electrical
+electronic	electronic
+electronics	electronics
+elektr	elec
+elektrisch	electrical
+elektrische	electrical
+elektrischen	electrical
+elektrischer	electrical
+elektrisches	electrical
+elektro	electro
+elektrochrom	electrochromic
+elektroluefter	electric fan
+elektrolüfter	electric fan
+elektromagnetische	electromagnetic
+elektromaschine	electric machine
+elektromaschinen	electric machines
+elektromotor	electric motor
+elektromotorströme	electric motor currents
+elektron	electron
+elektronik	electronics
+elektronikfehler	electronics fault
+elektroniktemperatur	electronics temperature
+elektronische	electronic
+elektronisches	electronic
+elmosh	ELMOSH
+elsv	ELSV
+elup	ELUP
+elv	ELV
+em	EM
+eme	EME
+emergency	emergency
+emf	EMF
+emfang	reception
+emission	emission
+emissionsverschlechternd	emission-degrading
+emissionverschlechterung	emission deterioration
+eml	EML
+empf	reception
+empfaenger	receiver
+empfang	reception
+empfangen	receive
+empfangene	received
+empfangenen	received
+empfangsfehler	reception error
+empfindlichkeit	sensitivity
+empfindlichkeits	sensitivity
+empfänger	receiver
+empfängerbaustein	receiver module
+empfängerknoten	receiver node
+empi	EMPI
+empty	empty
+ems	EMS
+emulation	emulation
+en	en
+enable	enable
+end	end
+endanschlag	end stop
+endbeschlagstrammer	end fitting tensioner
+enddruck	final pressure
+ende	end
+endlage	end position
+endposition	end position
+endstufe	output stage
+endstufen	output stages
+endstufenfehler	output stage fault
+endstufenfreigabe	output stage enable
+endstufentemperatur	output stage temperature
+energ	energy
+energie	energy
+energieerzeugung	energy generation
+energiereserve	energy reserve
+energiesparmode	energy saving mode
+energiesparmodus	energy saving mode
+energieverbrauch	energy consumption
+energieverbrauchsmessung	energy consumption measurement
+energy	energy
+eng	eng
+engine	engine
+engmg	engmg
+enhanced	enhanced
+enhsrcmaxt	enhsrcmaxt
+enhsrcmint	enhsrcmint
+enstufe	stage
+entdeckt	detected
+entfrostung	defrosting
+entladeenergie	discharge energy
+entladekreis	discharge circuit
+entladen	discharge
+entladezeitabweichung	discharge time deviation
+entladezeitregelung	discharge time control
+entladung	discharge
+entladungsfehler	discharge fault
+entlastungsrelais	relief relay
+entlüftungsschlauch	vent hose
+entnahmeventil	withdrawal valve
+entprellphase	debounce phase
+entprellt	debounced
+entprellung	debouncing
+entprellzähler	debounce counter
+entriegeln	unlock
+entspricht	corresponds to
+entwicklung	development
+env	env
+envc	envc
+envi	envi
+eol	EOL
+epb	EPB
+epbi	EPBI
+eprom	EPROM
+eps	EPS
+eq	eq
+equ	equ
+er	ER
+erase	erase
+erc	erc
+ereignisfehler	event fault
+erfasster	detected
+erfolglos	unsuccessful
+erfolgreich	successful
+erfolgt	takes place
+erforderlich	required
+erfuellt	fulfilled
+erfüllt	fulfilled
+ergebnis	result
+ergekennung	result identification
+erhalten	received
+erhoeht	increased
+erhöhender	increasing
+erhöhte	increased
+erkannt	detected
+erkannte	detected
+erkannter	detected
+erkennt	detects
+erkennung	detection
+erlaubt	allowed
+erlaubte	allowed
+erlaubten	permitted
+ermittelt	determined
+err	ERR
+erregerstrom	excitation current
+erreichen	reach
+erreicht	reached
+errm	errm
+errmgr	errmgr
+error	error
+errorcode	error code
+errormode	error mode
+errors	errors
+ersatzmassnahme	substitute measure
+ersatzreaktion	substitute response
+ersatzwert	substitute value
+erstadaption	initial adaptation
+erwartet	expected
+erwartete	expected
+erwarteter	expected
+erweitert	extended
+erweiterte	extended
+erweitertes	extended
+erzeugt	generated
+es	it
+esa	ESA
+escape	escape
+esh	ESH
+esm	esm
+esp	ESP
+est	EST
+esti	esti
+esvlb	esvlb
+etc	etc
+ethernet	Ethernet
+ev	EV
+evanos	evanos
+evaporative	evaporative
+event	event
+events	events
+evg	EVG
+evhks	evhks
+evhs	evhs
+evtl	possibly
+evv	EVV
+evz	evz
+ewp	EWP
+ews	EWS
+ex	EX
+exceeded	exceeded
+exceeding	exceeding
+exception	exception
+excess	excess
+exch	exch
+execute	execute
+exhaust	exhaust
+exhtmon	EXHTMON
+exhtmont	exhtmont
+existiert	exists
+expansionsventil	expansion valve
+expected	expected
+ext	EXT
+extender	extender
+extern	external
+external	external
+externe	external
+externen	external
+externer	external
+externes	external
+extrapolation	extrapolation
+exzenterwellensensor	eccentric shaft sensor
+exzenterwinkel	eccentric angle
+eyeq	EyeQ
+fa	fa
+factor	factor
+fadc	fadc
+fading	fading
+fah	FAH
+fahrbahn	roadway
+fahrbahnneigung	road gradient
+fahrbereitschaft	driving readiness
+fahrbetrieb	driving operation
+fahrdynamik	vehicle dynamics
+fahrdynamikschalter	driving dynamics switch
+fahrdynamiksensor	vehicle dynamics sensor
+fahren	driving
+fahrer	driver
+fahrerassistenzsystem	driver assistance system
+fahrerassistenzsysteme	driver assistance systems
+fahrererkennung	driver detection
+fahrerlenkwinkel	driver steering angle
+fahrerseite	driver side
+fahrersitz	driver seat
+fahrerspiegel	driver-side mirror
+fahrertuer	driver door
+fahrertür	driver door
+fahrerwunsch	driver request
+fahrgeschwindigkeit	vehicle speed
+fahrgeschwindigkeitsregelung	cruise control
+fahrgeschwindigkeitsregler	cruise control
+fahrgeschwindigkeitssignal	vehicle speed signal
+fahrgestell	chassis
+fahrgestellnummer	chassis number (VIN)
+fahrleistungsreduzierung	performance reduction
+fahrlicht	driving light
+fahrpedal	accelerator pedal
+fahrpedalmodul	accelerator pedal module
+fahrpedalwinkel	accelerator pedal angle
+fahrspur	lane
+fahrspurerkennung	lane detection
+fahrspurverlassen	lane departure
+fahrspurwechsel	lane change
+fahrstrecke	driving distance
+fahrt	drive
+fahrtrichtung	direction of travel
+fahrtrichtungsanzeiger	turn signal
+fahrwerk	chassis
+fahrwertgeber	chassis sensor
+fahrzeug	vehicle
+fahrzeuggeschwindigkeit	vehicle speed
+fahrzeugmasse	vehicle ground
+fahrzeugmodus	vehicle mode
+fahrzeugregler	vehicle controller
+fahrzeugstatus	vehicle status
+fahrzeugstillstand	vehicle standstill
+fahrzeugtyp	vehicle type
+fahrzeugzentrum	vehicle center
+fahrzeugzustand	vehicle state
+fahrzustand	driving state
+fahrzyklen	driving cycles
+fahrzyklus	driving cycle
+fail	fail
+failed	failed
+failsafe	failsafe
+failure	failure
+fakt	fact
+faktor	factor
+fall	case
+falsch	incorrect
+falsche	incorrect
+falschen	wrong
+falscher	wrong
+falsches	wrong
+fan	fan
+fangbereich	capture range
+fanghaken	catch hook
+fas	FAS
+fasic	fasic
+fast	fast
+fat	FAT
+fatal	fatal
+fault	fault
+faultpath	fault path
+faults	faults
+faulttype	fault type
+fb	FB
+fbas	FBAS
+fbd	FBD
+fbm	FBM
+fc	FC
+fch	fch
+fd	FD
+fdh	FDH
+fdhighsidepowerstage	FD high-side power stage
+fdlowsidepowerstage	FD low-side power stage
+fds	fds
+fdys	FDYS
+fe	FE
+feder	spring
+federbeinverstellung	strut adjustment
+federpruefung	spring check
+federprüfung	spring test
+federtest	spring test
+federverstellung	spring adjustment
+federwegsensor	travel sensor
+fee	FEE
+feedback	feedback
+feedriver	feed driver
+feh	FEH
+fehl	missing
+fehlen	be missing
+fehlende	missing
+fehlender	missing
+fehler	fault
+fehleramplitude	fault amplitude
+fehlerart	fault type
+fehlerbereich	fault range
+fehlercode	fault code
+fehlerdetails	fault details
+fehlereintrag	fault entry
+fehlererkennung	fault detection
+fehlererkennungssystem	fault detection system
+fehlergesteuert	fault-controlled
+fehlerhaft	faulty
+fehlerhafte	faulty
+fehlerhaftem	faulty
+fehlerhaften	faulty
+fehlerhafter	faulty
+fehlerhaftes	faulty
+fehlerlampe	fault lamp
+fehlermeldung	fault message
+fehlermeldungen	fault messages
+fehlerort	fault location
+fehlerpfad	fault path
+fehlerreaktion	fault reaction
+fehlers	fault
+fehlerschwelle	fault threshold
+fehlersignale	fault signals
+fehlerspeicher	fault memory
+fehlerspeichereintrag	fault memory entry
+fehlerspeichersperre	fault memory lock
+fehlerstatus	fault status
+fehlertoleranz	fault tolerance
+fehlerursache	fault cause
+fehlerverdacht	suspected fault
+fehlerwert	fault value
+fehlerzähler	fault counter
+fehlfunktion	malfunction
+fehlgeschlagen	failed
+fehlt	missing
+fehlverbau	incorrect installation
+fehlzündg	misfire
+fehlzündungen	misfires
+feinabstimmungsfehler	fine tuning error
+feinleck	fine leak
+feinpotentiometer	fine potentiometer
+feinstleck	very fine leak
+fem	FEM
+fen	fen
+fenster	window
+fensterfehler	window fault
+fensterheber	window regulator
+fernbedienung	remote control
+fernlicht	high beam
+fernlichtassistent	high beam assistant
+fertigungsmodus	production mode
+festgebrannt	seized
+festgestellt	determined
+festliegend	stuck
+feststellmotor	parking brake motor
+fet	FET
+fetrawe	fetrawe
+fett	rich
+fettbereich	rich range
+ff	FF
+fflv	fflv
+fgr	FGR
+fgs	FGS
+fh	FH
+fifo	FIFO
+file	file
+filt	filt
+filter	filter
+filterung	filtering
+finnen	fins
+firing	firing
+first	first
+fka	FKA
+fkt	FKT
+fl	fl
+fla	FLA
+flag	flag
+flags	flags
+flamme	flame
+flanke	edge
+flanken	edges
+flash	flash
+flashen	flashing
+flashfehler	flash fault
+flashprozess	flashing process
+flashspeicher	flash memory
+flexray	FlexRay
+flexraybus	FlexRay bus
+flglrs	flglrs
+flic	FLIC
+fllupt	FLLUPT
+flow	flow
+fls	FLS
+flsdir	flsdir
+fltab	fltab
+fltbt	fltbt
+fltflic	FLTFLIC
+fltmngtst	fltmngtst
+fltsa	fltsa
+fltsystemasic	FLTSYSTEMASIC
+fluid	fluid
+flx	flx
+flüchtiger	volatile
+fm	FM
+fmo	FMO
+fn	FN
+fnct	fnct
+fog	fog
+folgenschwere	serious consequence
+fond	rear seat
+fondgeblaese	rear blower
+for	for
+forc	forc
+force	force
+fordert	requests
+fot	FOT
+fpc	FPC
+fpga	FPGA
+fphighsidepowerstage	FP high-side power stage
+fplowsidepowerstage	FP low-side power stage
+fps	fps
+fr	FR
+fra	FRA
+frage	question
+frame	frame
+framefehler	frame error
+frau	frau
+frc	frc
+freeze	freeze
+frei	free
+freigabe	release
+freigabeleitung	enable line
+freigeben	release
+freigegeben	released
+freilauf	freewheel
+freilaufdiode	freewheeling diode
+frequenz	frequency
+frischluft	fresh air
+frischluftklappe	fresh air flap
+fristgerecht	on time
+frm	FRM
+frmfa	FRMFA
+from	from
+front	front
+frontend	front end
+frontklappe	front flap
+frontraumüberwachung	front compartment monitoring
+frontscheibe	windshield
+frontscheibenheizung	windshield heating
+frontwischer	front wiper
+frphys	frphys
+frr	FRR
+frueh	early
+früh	early
+fs	FS
+fsa	fsa
+fsc	FSC
+fsmc	FSMC
+fsp	FSP
+fsr	FSR
+fsw	fsw
+ft	FT
+ftax	FTAX
+fth	FTH
+ftiv	ftiv
+fuehler	sensor
+fuehrungssensor	guide sensor
+fuel	fuel
+fuellstand	fill level
+fuellung	filling
+fuer	for
+full	full
+fumwelttexte	environmental texts
+function	function
+functional	functional
+funk	radio
+funkenbrenndauer	spark duration
+funkschluessel	radio key
+funkschlüssel	radio key
+funktion	function
+funktional	functional
+funktionale	functional
+funktionalitaet	functionality
+funktionsanzeige	function indicator
+funktionsbeleuchtung	function lighting
+funktionsblock	function block
+funktionseinschränkung	functional restriction
+funktionsfehler	function fault
+funktionsstörung	malfunction
+funktionstest	function test
+funktionsueberwachung	function monitoring
+funktionsüberprüfung	function check
+funktionsüberwachung	function monitoring
+fuse	fuse
+fusi	FUSI
+fussgaengerschutz	pedestrian protection
+fussgaengerschutzsensor	pedestrian protection sensor
+fussgaengerschutzsystem	pedestrian protection system
+fussgängerschutzsensor	pedestrian protection sensor
+fussraum	footwell
+fussraumklappenmotor	footwell flap motor
+futa	futa
+fußraum	footwell
+fwg	FWG
+fx	FX
+fzb	fzb
+fzd	fzd
+fzg	vehicle
+fzm	FZM
+fzr	fzr
+fzzstd	FZZSTD
+fährt	drives
+förderbecher	feed cup
+förderleistung	delivery rate
+fördermenge	delivery quantity
+förderpumpe	feed pump
+fühler	sensor
+führung	guidance
+füllstand	level
+füllstandsgeber	level sender
+füllstandssensor	level sensor
+füllung	filling
+für	for
+gang	gear
+gangsensor	gear sensor
+gangueberwachung	gear monitoring
+gangwahl	gear selection
+gangwahlschalter	gear selector switch
+gap	gap
+gas	gas
+gase	gases
+gaspedal	accelerator pedal
+gasse	lane
+gate	gate
+gatedriver	gate driver
+gatetreiber	gate driver
+gateway	gateway
+gbx	gbx
+gdu	GDU
+gear	gear
+gearbox	gearbox
+gearbx	gearbox
+geber	sensor
+geberflanken	encoder edges
+geblaese	blower
+gebläseendstufe	blower output stage
+gebrochen	broken
+gedrosselt	throttled
+gedrueckt	pressed
+gef	GEF
+gefiltert	filtered
+gefilterte	filtered
+gefilterter	filtered
+gefiltertes	filtered
+geforderte	required
+gefreezt	frozen
+gefunden	found
+gegeben	given
+gegen	against
+gegendrucksensor	back pressure sensor
+gegentaktwandler	push-pull converter
+gegenüber	compared to
+geheilt	healed
+geht	goes
+gekoppelte	coupled
+geladen	charged
+gelernt	learned
+gelernten	learned
+gelernter	learned
+gelesen	read
+gelöscht	erased
+gemeldet	reported
+gemessen	measured
+gemessene	measured
+gemessener	measured
+gemessenes	measured
+gemisch	mixture
+gemischadaption	mixture adaptation
+gemischadaptionsfaktor	mixture adaptation factor
+gemischfeinregelung	mixture fine control
+gemischkorrektur	mixture correction
+gemischregelung	mixture control
+gemischüberwachung	mixture monitoring
+gemittelt	averaged
+gemittelte	averaged
+gemittelter	averaged
+gemäßigt	moderate
+gen	GEN
+genelb	genelb
+general	general
+generated	generated
+generator	generator
+generatorfehler	generator fault
+generatorlastsignal	generator load signal
+generatorsollspannung	generator target voltage
+generatorspannung	generator voltage
+generatortyp	generator type
+gepuffert	buffered
+gerechnet	calculated
+gering	low
+geringe	low
+geringem	low
+geringer	low
+gerät	device
+gesamt	total
+gesamtadaption	overall adaptation
+gesamtsystem	overall system
+geschaltet	switched
+gescheitert	failed
+geschickt	sent
+geschlossen	closed
+geschlossene	closed
+geschlossener	closed
+geschrieben	written
+geschw	speed
+geschwindigkeit	speed
+geschwindigkeitsimpulse	speed pulses
+geschwindigkeitsregelung	cruise control
+geschwindigkeitssignal	speed signal
+geschädigt	damaged
+geschätzt	estimated
+gesendet	sent
+gesendeten	sent
+gesetzt	set
+gespeichert	stored
+gespeicherter	stored
+gesperrt	locked
+gestartet	started
+gesteckt	plugged in
+gesteuerte	controlled
+gesteuerter	controlled
+gestoert	disturbed
+gestoppt	stopped
+gestört	disturbed
+getrennt	separated
+getretenes	depressed
+getriebe	transmission
+getriebedaten	transmission data
+getriebeeingang	transmission input
+getriebeeingangsdrehzahl	transmission input speed
+getriebeinterne	transmission-internal
+getriebeinterner	transmission-internal
+getriebeoeltemperatur	transmission oil temperature
+getriebeposition	transmission position
+getriebepositionssensor	transmission position sensor
+getriebeschalter	transmission switch
+getriebestatus	transmission status
+getriebesteuergerät	transmission control unit
+getriebesteuerung	transmission control
+getriebestrang	drivetrain
+getriebetemperatur	transmission temperature
+getriebeueberwachung	transmission monitoring
+getriebeventil	transmission valve
+getriebewahlschalter	transmission selector switch
+getriebeöl	transmission oil
+getriebeölpumpe	transmission oil pump
+getriebeöltemperatur	transmission oil temperature
+getriebeöltemperatursensor	transmission oil temperature sensor
+getriebeüberwachung	transmission monitoring
+gewandelt	converted
+geweckt	woken
+gewicht	weight
+gewuenschter	desired
+gewünschter	desired
+geöffnet	opened
+ghas	GHAS
+giergeschwindigkeit	yaw rate
+giermomentverteilung	yaw torque distribution
+gierrate	yaw rate
+gierraten	yaw rates
+gierratenregelung	yaw rate control
+gierratensensor	yaw rate sensor
+ging	went
+given	given
+glb	glb
+gleichlauffehler	synchronism fault
+gleichzeitig	simultaneous
+global	global
+globale	global
+glow	glow
+glue	glue
+gluehkerze	glow plug
+gluehrelais	glow relay
+gluehsteuergeraet	glow control unit
+glwecugk	glwecugk
+glühkerze	glow plug
+glühsteuergerät	glow control unit
+glühstift	glow pin
+glühstiftwiderstand	glow pin resistance
+glühsystem	glow system
+gm	GM
+gmk	gmk
+gnd	GND
+gong	gong
+governor	governor
+gps	GPS
+gpwsup	GPWSUP
+grad	degree
+gradient	gradient
+gradientenüberwachung	gradient monitoring
+grafikplatine	graphics board
+graph	graph
+graubereich	grey area
+grb	GRB
+grd	grd
+grdt	GRDT
+grenze	limit
+grenzen	limits
+grenzwert	limit value
+grobleck	gross leak
+gross	large
+grosse	large
+ground	ground
+groß	large
+große	large
+großen	large
+gruen	green
+grund	reason
+grundabweichung	basic deviation
+grundadaption	basic adaptation
+grundmodul	basic module
+grundwerte	basic values
+gruppe	group
+gruppenfehler	group fault
+grösser	greater
+größer	greater
+gs	GS
+gsf	gsf
+gsg	GSG
+gsm	GSM
+gss	gss
+guard	guard
+gueltig	valid
+gueltigem	valid
+gurt	seat belt
+gurtband	seatbelt webbing
+gurtkontakt	seatbelt contact
+gurtkontakte	seat belt contacts
+gurtkraftbegrenzer	seat belt force limiter
+gurtschloss	seatbelt buckle
+gurtschlosskontakt	seat belt buckle contact
+gurtschloß	seatbelt buckle
+gurtstrammer	seat belt pretensioner
+gurtzubringer	seat belt feed
+gutpruefung	pass test
+gutpuefung	pass test
+gw	GW
+gws	GWS
+gyro	gyro
+gültig	valid
+gültigem	valid
+gültigen	valid
+gültiger	valid
+gültigkeitsbereich	validity range
+ha	HA
+habr	habr
+haengt	hangs
+haeufige	frequent
+hal	hal
+halfbridge	half bridge
+hall	Hall
+hallelement	Hall element
+hallelemente	Hall elements
+hallgeber	Hall sensor
+hallimpulse	Hall pulses
+hallschalter	Hall switch
+hallsenor	Hall sensor
+hallsensor	Hall sensor
+hallsensoren	Hall sensors
+halogen	halogen
+haltemagnet	holding magnet
+halten	hold
+haltephase	hold phase
+handbremse	handbrake
+handbremssignal	parking brake signal
+handle	handle
+handler	handler
+handling	handling
+hands	hands
+handschaltgetriebe	manual transmission
+handtaschen	handbag
+hardware	hardware
+hardwarecodierung	hardware coding
+hardwaredefekt	hardware defect
+hardwarefehler	hardware fault
+hardwareleitung	hardware line
+hardwaresignal	hardware signal
+harte	hard
+has	has
+hat	has
+haupt	main
+hauptdruck	main pressure
+hauptlicht	main light
+hauptprozessor	main processor
+hauptrechner	main computer
+hauptrelais	main relay
+hauptschalter	main switch
+hauptsensor	main sensor
+hauptsäule	main pillar
+hauptverbrennung	main combustion
+hauptzylinder	master cylinder
+hba	HBA
+hc	HC
+hcp	HCP
+hdc	HDC
+hdd	HDD
+hdev	HDEV
+hdevh	HDEVH
+hdevl	HDEVL
+hdwobs	HDWOBS
+he	he
+head	head
+header	header
+headunit	head unit
+heat	heat
+heated	heated
+heater	heater
+heating	heating
+hebelgeber	lever sensor
+heben	lift
+heck	rear
+heckklappe	tailgate
+heckscheibe	rear window
+heckscheibenheizung	rear window heating
+heckspoiler	rear spoiler
+heckwischer	rear wiper
+hego	HEGO
+height	height
+heiss	hot
+heiz	heat
+heizelement	heating element
+heizen	heating
+heizer	heater
+heizereinkopplung	heater coupling
+heizerendstufe	heater output stage
+heizerwiderstand	heater resistance
+heizfeld	heating element
+heizgriff	heated grip
+heizkreis	heating circuit
+heizleistung	heating power
+heizmatte	heating mat
+heizung	heating
+heizungsdiagnose	heater diagnosis
+heizungsrelais	heater relay
+heiß	hot
+heißabschaltung	overheat shutdown
+heißland	hot land
+helligkeit	brightness
+helligkeitsreduzierung	brightness reduction
+hergestellt	manufactured
+het	HET
+hex	hex
+hf	RF
+hfc	HFC
+hfm	HFM
+hfs	hfs
+hglv	HGLV
+hhs	hhs
+hi	HI
+high	high
+higher	higher
+highrescold	high-res cold
+highreshot	high-res hot
+highside	high side
+hilferuf	emergency call
+hilfsprozessor	auxiliary processor
+hili	hili
+hill	hill
+him	HIM
+hinten	rear
+hinter	behind
+hinterachse	rear axle
+hinteren	rear
+hintergrundbeleuchtung	backlighting
+hip	HIP
+hire	hire
+his	his
+history	history
+hk	hk
+hkl	HKL
+hl	HL
+hm	hm
+hmi	HMI
+ho	ho
+hoch	high
+hochdruck	high pressure
+hochdruckeinspritzventil	high-pressure injection valve
+hochdruckpumpe	high-pressure pump
+hochdrucksystem	high-pressure system
+hochohmig	high-impedance
+hochohmiger	high-resistance
+hochsetzbetrieb	step-up operation
+hochspannung	high voltage
+hochspannungsseite	high-voltage side
+hochtöner	tweeter
+hochvolt	high voltage
+hochvoltbatterie	high-voltage battery
+hochvoltbordnetz	high-voltage onboard network
+hochvoltleitungen	high-voltage lines
+hochvoltsicherheitsmanager	high-voltage safety manager
+hochvoltspannung	high voltage
+hochvoltspeicher	high-voltage storage
+hochvoltzwischenkreis	high-voltage DC link
+hod	hod
+hoehenstand	level
+hoehenstandssensor	level sensor
+hohe	high
+hoher	high
+hold	hold
+hom	HOM
+home	home
+homogen	homogeneous
+horizontal	horizontal
+horn	horn
+host	host
+hot	hot
+hotmode	hot mode
+hr	HR
+hs	HS
+hsd	HSD
+hsensor	h-sensor
+hsr	HSR
+hss	HSS
+hssw	hssw
+hsv	HSV
+ht	ht
+hu	HU
+hud	HUD
+hupe	horn
+hv	HV
+hvpm	HVPM
+hvs	HVS
+hvsto	HVSTO
+hw	HW
+hwl	hwl
+hyb	HYB
+hybrid	hybrid
+hyc	hyc
+hydfn	HYDFN
+hydraulik	hydraulics
+hydraulikeinheit	hydraulic unit
+hydraulikfunktion	hydraulic function
+hydraulikpumpe	hydraulic pump
+hydraulikpumpenrelais	hydraulic pump relay
+hydraulische	hydraulic
+hydraulischer	hydraulic
+hysterese	hysteresis
+hysteresedifferenz	hysteresis difference
+hängt	hangs
+häufige	frequent
+höchsten	highest
+höhe	height
+höhenstand	level
+höhenstandssensoren	level sensors
+höher	higher
+iae	IAE
+ib	ib
+ibrake	ibrake
+ibrk	IBRK
+ibs	IBS
+ibsderrs	ibsderrs
+ibus	I-Bus
+ic	IC
+icm	ICM
+id	id
+ide	IDE
+ident	ident
+identifier	identifier
+identifikation	identification
+idle	idle
+idrv	idrv
+ids	IDS
+iep	IEP
+if	if
+igbt	IGBT
+igc	igc
+ign	IGN
+ignition	ignition
+ihka	IHKA
+ihkr	IHKR
+ihks	IHKS
+ihr	your
+ihs	IHS
+ii	II
+iii	III
+ike	ike
+ile	ile
+ilk	ILK
+illegal	illegal
+illegaler	illegal
+im	in
+ima	IMA
+immer	always
+impedanz	impedance
+implausible	implausible
+impuls	pulse
+impulse	pulses
+impulsgeber	pulse generator
+impulsrad	pulse wheel
+impulsradfrequenz	pulse wheel frequency
+in	in
+inaktiv	inactive
+inbdynha	INBDYNHA
+inbdynva	inbdynva
+inbetr	inbetr
+inbetriebnahme	commissioning
+inbpitest	inbpitest
+incorrect	incorrect
+ind	ind
+index	index
+indiziertes	indicated
+inf	inf
+info	info
+infoeintrag	info entry
+infofehler	info fault
+infolge	due to
+information	information
+informationsmodul	information module
+infotainment	infotainment
+infozähler	info counter
+infrarot	infrared
+inhalt	content
+inhibition	inhibition
+inic	INIC
+init	init
+initial	initial
+initialisieren	initialize
+initialisiert	initialized
+initialisierung	initialization
+initialisierungs	initialization
+initialisierungsfehler	initialization error
+initialisierungsphase	initialization phase
+initialisierungsvorgang	initialization process
+initialization	initialization
+initialresvalue	initial resistance value
+initialsensevoltage	initial sense voltage
+initstatusfehler	init status fault
+initwerte	initial values
+inj	INJ
+injection	injection
+injector	injector
+injektor	injector
+injektoransteuerung	injector activation
+injektoren	injectors
+injektormengenabgleich	injector quantity adjustment
+inkompatibel	incompatible
+inkonsistent	inconsistent
+inkonsistenz	inconsistency
+inkrementalgeber	incremental encoder
+innen	interior
+innenbeleuchtung	interior lighting
+innenlicht	interior light
+innenlichteinheit	interior light unit
+innenraum	interior
+innenraumschutz	interior protection
+innenspiegel	interior mirror
+innentemperatur	interior temperature
+innentemperatursensor	interior temperature sensor
+innenwiderstand	internal resistance
+inner	inner
+inneren	inner
+inneres	inner
+innerhalb	within
+inoperative	inoperative
+inplrad	INPLRAD
+input	input
+inqy	inqy
+instabil	unstable
+instr	instr
+instruction	instruction
+instrument	instrument
+instrumentenkombination	instrument cluster
+int	INT
+intake	intake
+integral	integral
+integratorgradient	integrator gradient
+integratorwert	integrator value
+integrierte	integrated
+integrity	integrity
+intelligenter	intelligent
+intensität	intensity
+interface	interface
+interferenzrohrklappe	interference pipe flap
+interlock	interlock
+intermittent	intermittent
+intern	internal
+internal	internal
+interne	internal
+internen	internal
+interner	internal
+internes	internal
+interrupt	interrupt
+interrupts	interrupts
+intervall	interval
+intf	intf
+intitialisierungsfehler	initialization error
+inv	INV
+invalid	invalid
+inverter	inverter
+io	IO
+ionenleitwert	ionic conductivity
+ipb	IPB
+ipc	IPC
+irreversible	irreversible
+is	is
+iso	ISO
+isolation	insulation
+isolationsfehler	insulation fault
+isolationsmessung	insulation measurement
+isolationswiderstand	insulation resistance
+isolationsüberwachung	insulation monitoring
+ist	is
+istdrehzahl	actual speed
+istdruck	actual pressure
+istgang	actual gear
+istmoment	actual torque
+istposition	actual position
+iststrom	actual current
+istwert	actual value
+istwinkel	actual angle
+its	ITS
+iv	IV
+ivdiachp	ivdiachp
+ivpsplydcdcoff	ivpsplydcdcoff
+ivpsplystopdcdc	ivpsplystopdcdc
+iw	iw
+jahr	year
+jammed	jammed
+jbbf	JBBF
+jbe	JBE
+jedoch	however
+junctiontemp	junction temperature
+kabelbaum	wiring harness
+kabelbruch	cable break
+kabelpuller	cable puller
+kafas	KAFAS
+kalibrierdaten	calibration data
+kalibrierfehler	calibration error
+kalibriert	calibrated
+kalibrierung	calibration
+kalt	cold
+kalter	cold
+kaltstart	cold start
+kamera	camera
+kamerafehler	camera fault
+kanal	channel
+kann	can
+kap	kap
+kapazitaet	capacity
+kaputt	broken
+karosseriestecker	body connector
+karte	card
+kartenmaterial	map material
+kat	catalytic converter
+katalysator	catalytic converter
+katalysatorkonvertierung	catalytic converter conversion
+katalysatorwirkungsgrad	catalyst efficiency
+kategorie	category
+katschaedigende	catalyst-damaging
+kbus	K-bus
+kcan	K-CAN
+kein	no
+keine	no
+keinen	no
+kennfeld	map
+kennfeldkuehlung	map cooling
+kennfeldthermostat	map-controlled thermostat
+kennlinie	characteristic curve
+kennlinien	characteristic curves
+kennung	identifier
+kennzeichenleuchte	license plate light
+kennzeichenlicht	license plate light
+kennzeichnung	identification
+keramiktemperatur	ceramic temperature
+kette	chain
+key	key
+keying	keying
+kfc	KFC
+khv	KHV
+ki	ki
+kilometer	kilometers
+kilometerstand	odometer
+kissen	airbag cushion
+kisu	KISU
+kl	kl
+klappe	flap
+klappen	flaps
+klappenkontakt	flap contact
+klappenzustand	flap status
+klassifizierbarer	classifiable
+kle	kle
+kleben	sticking
+kleber	adhesive
+klebt	sticks
+klein	small
+kleinen	small
+kleiner	smaller
+kleines	small
+kleinstmengenadaption	minimum quantity adaptation
+klemme	terminal
+klemmen	terminals
+klemmenstatus	terminal status
+klemmt	jammed
+klima	climate
+klimaanlage	air conditioning
+klimadrucksensor	climate pressure sensor
+klimakompressor	A/C compressor
+klimakompressorfreigabe	climate compressor enable
+klimakompressorsteuerung	climate compressor control
+klimaleistungsausgang	climate power output
+klimasteuergerät	climate control unit
+klopfregelung	knock control
+klopfsensor	knock sensor
+klopfsensorbaustein	knock sensor module
+klopfsensorsignal	knock sensor signal
+klopfsignal	knock signal
+klopfwert	knock value
+klopfwerte	knock values
+klr	klr
+km	km
+knie	knee
+knieairbag	knee airbag
+knoten	node
+ko	ko
+kodierdaten	coding data
+kodiert	coded
+kodierung	coding
+kofferraum	trunk
+kolbenkühlung	piston cooling
+kollision	collision
+kom	kom
+komb	komb
+kombi	instrument cluster
+kombiinstrument	instrument cluster
+kombination	combination
+kombisattel	instrument cluster carrier
+komfort	comfort
+kommt	comes
+kommunikation	communication
+kommunikationsfehler	communication fault
+kommunikationsstatus	communication status
+kommunikationsstoerung	communication disturbance
+kommunikationsstörung	communication fault
+kommunikationsverlust	communication loss
+kompass	compass
+kompatibel	compatible
+kompensation	compensation
+kompensationsfaktor	compensation factor
+komplement	complement
+kompletten	complete
+komponente	component
+komponenten	components
+komponentenfehler	component fault
+kompressionstest	compression test
+kompressor	compressor
+kompressorkupplung	compressor clutch
+kondensator	capacitor
+kondensatorspannung	capacitor voltage
+konfiguration	configuration
+konfigurations	configuration
+konfigurationsfehler	configuration error
+konnte	could
+konsistenz	consistency
+konsistenzfehler	consistency error
+konstant	constant
+kontakt	contact
+kontakte	contacts
+kontaktüberwachung	contact monitoring
+kontinuierlich	continuous
+kontinuierliche	continuous
+kontinuitaet	continuity
+kontrollleuchte	warning lamp
+kontrollprozess	control process
+konvertierung	conversion
+koordination	coordination
+koordinator	coordinator
+koordiniert	coordinated
+kopf	head
+kopfairbag	head airbag
+kopfstuetze	head restraint
+kopie	copy
+koppelgröße	coupling variable
+kopplung	coupling
+korr	corr
+korrekt	correct
+korrekter	correct
+korrektur	correction
+korrekturfaktor	correction factor
+korrekturmenge	correction quantity
+korrektursignal	correction signal
+korrekturwert	correction value
+korrelation	correlation
+korrelationsfehler	correlation error
+korrelierter	correlated
+korrigiert	corrected
+korrigierte	corrected
+korrigierter	corrected
+korrigiertes	corrected
+korrupt	corrupt
+kr	KR
+kraft	force
+kraftschluss	adhesion
+kraftstoff	fuel
+kraftstoffabschaltung	fuel cut-off
+kraftstoffdruck	fuel pressure
+kraftstoffdrucksensor	fuel pressure sensor
+kraftstoffdrucksteuerventil	fuel pressure control valve
+kraftstoffeinspritzleiste	fuel rail
+kraftstofffilter	fuel filter
+kraftstofffilterheizung	fuel filter heating
+kraftstoffhochdruck	high-pressure fuel
+kraftstoffhochdrucksystem	high-pressure fuel system
+kraftstoffkreislaufumschaltung	fuel circuit switchover
+kraftstoffmasse	fuel mass
+kraftstoffmenge	fuel quantity
+kraftstoffniederdruck	low fuel pressure
+kraftstoffniederdrucksensor	low-pressure fuel sensor
+kraftstoffniederdrucksystem	low-pressure fuel system
+kraftstoffpumpe	fuel pump
+kraftstoffpumpen	fuel pumps
+kraftstoffpumpenrelais	fuel pump relay
+kraftstoffsystem	fuel system
+kraftstofftank	fuel tank
+kraftstofftemperatur	fuel temperature
+kraftstofftemperaturfuehler	fuel temperature sensor
+kraftstofftemperatursensor	fuel temperature sensor
+kraftstoffversorgungssystem	fuel supply system
+kraftstoffvorförderdruck	fuel supply pressure
+kreis	circuit
+kritisch	critical
+kritische	critical
+kritischer	critical
+ks	KS
+kuehleraustritt	radiator outlet
+kuehlerjalousie	radiator shutter
+kuehlluftklappensystem	cooling air flap system
+kuehlmittelpumpe	coolant pump
+kuehlmitteltemperatur	coolant temperature
+kuehlmitteltemperaturfuehler	coolant temperature sensor
+kuehlmitteltemperatursensor	coolant temperature sensor
+kuehlwasser	cooling water
+kuehlwassertemperatur	cooling water temperature
+kugelausstroemer	ball ejector
+kuppl	clutch
+kupplung	clutch
+kupplungen	clutches
+kupplungsmoment	clutch torque
+kupplungsposition	clutch position
+kupplungspositionsgeber	clutch position sensor
+kupplungsregelung	clutch control
+kupplungsschalter	clutch switch
+kupplungsstatus	clutch status
+kupplungstemperatur	clutch temperature
+kupplungsventil	clutch valve
+kurbelgehäuseentlüftung	crankcase ventilation
+kurbelgehäuseentlüftungsheizung	crankcase ventilation heater
+kurbelwelle	crankshaft
+kurbelwellen	crankshaft
+kurbelwellengeber	crankshaft sensor
+kurbelwellensensor	crankshaft sensor
+kurschluss	short circuit
+kurvenlicht	cornering light
+kurz	short
+kurzgeschlossen	short-circuited
+kurzschluss	short circuit
+kurzschluß	short circuit
+kurzzeit	short-term
+kurzzeitig	briefly
+kw	kW
+kwp	KWP
+kältekreislauf	refrigerant circuit
+kältemittelabsperrventil	refrigerant shut-off valve
+kältemitteldrucksensor	refrigerant pressure sensor
+kühler	cooler
+kühlerausgang	radiator outlet
+kühleraustritt	cooler outlet
+kühlerfigur	radiator emblem
+kühlerjalousie	radiator shutter
+kühlerwirkungsgrad	cooler efficiency
+kühlkreislauf	cooling circuit
+kühlluftklappe	cooling air flap
+kühlluftklappensystem	cooling air flap system
+kühlmittel	coolant
+kühlmittelkreislauf	coolant circuit
+kühlmittelpumpe	coolant pump
+kühlmitteltemperatur	coolant temperature
+kühlmitteltemperaturmesspunkt	coolant temperature measuring point
+kühlmitteltemperatursensor	coolant temperature sensor
+kühlmittelverlust	coolant loss
+kühlsystem	cooling system
+kühlung	cooling
+kühlventil	cooling valve
+la	la
+label	label
+laco	LACO
+lade	charge
+ladeanschluss	charging port
+ladedruck	boost pressure
+ladedruckabweichung	boost pressure deviation
+ladedruckfuehler	boost pressure sensor
+ladedruckregelung	boost pressure control
+ladedrucksensor	boost pressure sensor
+ladedrucksteller	boost pressure actuator
+ladedruckunterstützter	boost pressure-assisted
+ladeelektronik	charging electronics
+ladeluft	charge air
+ladeluftkuehler	charge air cooler
+ladeluftkühler	charge air cooler
+ladeluftkühlpumpe	charge air cooling pump
+ladeluftschlauch	charge air hose
+ladelufttemperatur	charge air temperature
+ladelufttemperatursensor	charge air temperature sensor
+lademanagement	charge management
+laden	charging
+lader	charger
+laderegler	charge controller
+ladeschalter	charge switch
+ladespannung	charging voltage
+ladestation	charging station
+ladestatus	charge status
+ladestrom	charging current
+ladezeit	charging time
+ladezustand	state of charge
+ladung	charge
+ladungsmessung	charge measurement
+laenger	longer
+laengsbeschleunigung	longitudinal acceleration
+laengsbeschleunigungs	longitudinal acceleration
+laengsbeschleunigungssensor	longitudinal acceleration sensor
+laengsverstellung	longitudinal adjustment
+laeps	laeps
+laeuft	runs
+lag	lag
+lage	position
+lageregelung	position control
+lageregler	position controller
+lagesensor	position sensor
+lagesensorfehler	position sensor fault
+lam	lam
+lambasonde	lambda sensor
+lambda	lambda
+lambdaadapiton	lambda adaptation on
+lambdaadaption	lambda adaptation
+lambdaamplitude	lambda amplitude
+lambdaregelfaktor	lambda control factor
+lambdaregelfaktors	lambda control factor
+lambdaregelung	lambda control
+lambdaregler	lambda controller
+lambdasignal	lambda signal
+lambdasonde	oxygen sensor
+lambdasonden	oxygen sensors
+lambdasondenalterung	oxygen sensor aging
+lambdasondenbaustein	oxygen sensor module
+lambdasondenbeheizung	oxygen sensor heating
+lambdasondenheizung	oxygen sensor heating
+lambdasondenistwert	lambda sensor actual value
+lambdasondensignal	lambda sensor signal
+lambdasondenspannung	lambda sensor voltage
+lambdasondentemperaturmessung	lambda sensor temperature measurement
+lambdatrimmregelung	lambda trim control
+lambdawert	lambda value
+lamdasonde	lambda sensor
+lamp	lamp
+lampe	lamp
+lampenzustand	lamp status
+lamsons	lamsons
+lamzak	lamzak
+lang	long
+lange	long
+langfristige	long-term
+langsam	slow
+langsame	slow
+langsamer	slower
+langsames	slow
+langzeit	long-term
+langzeitig	long-term
+langzeitueberwachung	long-term monitoring
+lara	lara
+lassen	let
+last	load
+lastkreis	load circuit
+lastsignal	load signal
+lastwechsel	load change
+latentwaermespeicher	latent heat storage
+laufenden	running
+laufrichtung	direction of rotation
+laufruheregler	smooth-running controller
+laufunruhe	rough running
+laufwerk	drive unit
+laufzeit	runtime
+laufzeitfehler	runtime error
+laut	loud
+lautsprecher	loudspeaker
+lautsprecherausgangsleitungen	speaker output lines
+lautsprecherkanal	speaker channel
+layer	layer
+layering	layering
+lb	lb
+lbv	lbv
+lc	lc
+lcd	LCD
+lcs	lcs
+ld	ld
+ldm	LDM
+ldp	LDP
+le	le
+leak	leak
+leakage	leakage
+lean	lean
+lebenszeichen	alive signal
+lebenszeit	lifetime
+leck	leak
+leckage	leakage
+leckagediagnose	leak diagnosis
+leckdiagnose	leak diagnosis
+leckdiagnosepumpe	leak diagnosis pump
+leckluft	leakage air
+led	LED
+leds	LEDs
+leer	empty
+leerlauf	idle
+leerlaufdrehzahl	idle speed
+leerlaufregelung	idle speed control
+leerlaufsteller	idle actuator
+left	left
+lehne	backrest
+lehnenkopf	backrest head
+lehnenneigung	backrest tilt
+lehnenverriegelung	backrest lock
+leicht	light
+leichte	light
+leichter	lighter
+leistung	power
+leistungsaufnahme	power consumption
+leistungsbegrenzung	power limitation
+leistungselektronik	power electronics
+leistungsendstufe	power output stage
+leistungsproblem	performance problem
+leistungsreduzierter	power-reduced
+leistungsreduzierung	power reduction
+leistungsschalter	circuit breaker
+leistungsstufe	power stage
+leistungstransistor	power transistor
+leistungsversorgung	power supply
+leiterplatte	printed circuit board
+leitung	line
+leitungen	lines
+leitungs	line
+leitungsabfall	line drop
+leitungsbruch	wire break
+leitungsfehler	wiring fault
+leitungsschluss	line short
+leitungsstoerung	line fault
+leitungsunterbrechnung	line interruption
+leitungsunterbrechung	open circuit (wiring)
+leitungsverbindung	line connection
+length	length
+lenkgetriebe	steering gear
+lenkmoment	steering torque
+lenkmomentsensor	steering torque sensor
+lenkrad	steering wheel
+lenkradelektronik	steering wheel electronics
+lenkradheizung	steering wheel heating
+lenkradschalter	steering wheel switch
+lenkradvibration	steering wheel vibration
+lenkradwinkel	steering wheel angle
+lenkradwinkelsignal	steering wheel angle signal
+lenksaeule	steering column
+lenkstock	steering column
+lenkstockschalter	steering column switch
+lenkstocktaster	steering column switch
+lenksäule	steering column
+lenksäulenverriegelung	steering column lock
+lenksäulenverstellung	steering column adjustment
+lenkung	steering
+lenkunterstützung	steering assistance
+lenkwinkel	steering angle
+lenkwinkelsensor	steering angle sensor
+lenkwinkelsynchronisation	steering angle synchronization
+lernen	learning
+lernfunktion	learning function
+lernverbot	learning prohibition
+lernwert	learned value
+lese	read
+lesefehler	read error
+leselicht	reading light
+lesen	read
+letzte	last
+letztem	last
+letzten	last
+letzter	last
+letztesbremsenevent	last brake event
+leuchtdichte	luminance
+leuchte	lamp
+leuchtweitenregulierung	headlight levelling
+level	level
+levelsensor	level sensor
+lf	LF
+lh	LH
+lhm	LHM
+lhz	lhz
+licht	light
+lichtfunktion	light function
+lichtleistung	light output
+lichtmodul	light module
+lichtsensor	light sensor
+liegen	lie
+liegt	is
+life	life
+light	light
+lim	LIM
+limit	limit
+limitation	limitation
+limited	limited
+lin	LIN
+line	line
+linear	linear
+lineares	linear
+linearisiert	linearized
+linearisierter	linearized
+linif	linif
+link	link
+linken	left
+linkes	left
+links	left
+lkv	lkv
+ll	LL
+llc	llc
+llp	llp
+llr	LLR
+lm	LM
+lmv	LMV
+lnch	LNCH
+lndp	lndp
+lndt	LNDT
+lng	LNG
+lnv	LNV
+lo	LO
+load	load
+loadv	loadv
+local	local
+location	location
+lock	lock
+locked	locked
+locker	loose
+loeschen	clear
+loesen	release
+logger	logger
+logik	logic
+lokal	local
+lokale	local
+long	long
+loop	loop
+loss	loss
+lost	lost
+low	low
+lower	lower
+lowrescold	low-res cold
+lowreshot	low-res hot
+lowside	low side
+lp	LP
+lr	LR
+lre	LRE
+lrhk	lrhk
+lrr	LRR
+ls	LS
+lsh	lsh
+lss	LSS
+lssw	lssw
+lst	lst
+lsu	LSU
+lsunpstat	lsunpstat
+lsv	lsv
+ltc	ltc
+ltg	ltg
+ltrqd	LTRQD
+luefter	fan
+luft	air
+luftanlage	air system
+luftfeder	air spring
+luftfüllung	air charge
+luftklappe	air flap
+luftmasse	air mass
+luftmassen	air masses
+luftmassenmesser	air mass meter
+luftmassenstrom	air mass flow
+luftmassensystem	air mass system
+luftmassenwert	air mass value
+luftmenge	air quantity
+luftpfad	air path
+luftsammler	air collector
+luftspalt	air gap
+luftsystem	air system
+lufttemperatur	air temperature
+luftumfasste	air-enclosed
+luftverteilung	air distribution
+lum	lum
+lv	LV
+lvds	LVDS
+lvk	LVK
+lw	lw
+lwds	lwds
+lwg	lwg
+lwr	LWR
+lws	LWS
+lwva	lwva
+länderfaktor	country factor
+länge	length
+länger	longer
+längs	longitudinal
+längsbeschleunigung	longitudinal acceleration
+längsbeschleunigungssensor	longitudinal acceleration sensor
+längsdynamikmanagement	longitudinal dynamics management
+längsführung	longitudinal guidance
+längsmoment	longitudinal torque
+läuft	runs
+läßt	lets
+löschen	clear
+löschfehler	erase error
+lückenverlust	gap loss
+lüfter	fan
+lüfterfehler	fan fault
+ma	MA
+machine	machine
+maf	MAF
+mager	lean
+magerbereich	lean range
+magnet	magnet
+magnetisch	magnetic
+magnetventil	solenoid valve
+magnetventile	solenoid valves
+main	main
+mainsw	mainsw
+mal	times
+malfunction	malfunction
+management	management
+manager	manager
+manhydr	manhydr
+manifold	manifold
+manipulation	tampering
+manipulationsschutz	tamper protection
+manipuliert	tampered
+manluft	manluft
+manuelle	manual
+manueller	manual
+map	map
+maschine	machine
+maschinenregelung	machine control
+mask	mask
+mass	mass
+massage	massage
+masscntr	MASSCNTR
+masse	ground
+masseabtastung	ground sensing
+massenstrom	mass flow
+masseschluss	short to ground
+massn	measures
+master	master
+match	match
+matte	mat
+max	max
+maximal	maximum
+maximaldruck	maximum pressure
+maximale	maximum
+maximaler	maximum
+maximales	maximum
+maximalwert	maximum value
+maximum	maximum
+mayday	mayday
+maßnahmen	measures
+mb	mb
+mc	MC
+mcpa	MCPA
+mcpb	MCPB
+mcu	MCU
+md	MD
+mdk	MDK
+mdyn	MDYN
+me	ME
+meas	meas
+measured	measured
+measurement	measurement
+mech	mech
+mechanik	mechanics
+mechanisch	mechanical
+mechanische	mechanical
+mechanischer	mechanical
+mechanisches	mechanical
+med	MED
+medium	medium
+mehr	more
+mehrere	several
+mehreren	several
+meldet	reports
+meldung	message
+mem	MEM
+memory	memory
+menge	quantity
+mengen	quantities
+mengenabgleich	quantity matching
+mengenbilanz	quantity balance
+mengendriftkompensation	quantity drift compensation
+mengenfehlerkorrektur	quantity error correction
+mengengeregelt	quantity-controlled
+mengenregelung	quantity control
+mengenregelventil	quantity control valve
+mengensteuerventil	quantity control valve
+menue	menu
+mer	mer
+mes	mes
+mesq	MESQ
+message	message
+messbereich	measuring range
+messbereichs	measuring range
+messdaten	measurement data
+messelektrode	measuring electrode
+messen	measure
+messfehler	measurement error
+messgröße	measured variable
+messsignal	measurement signal
+messspannung	measuring voltage
+messung	measurement
+messwert	measured value
+messwerte	measured values
+messwerterfassung	measurement acquisition
+metering	metering
+meun	meun
+mev	MEV
+mfc	MFC
+mff	mff
+mfl	MFL
+mgt	mgt
+mi	mi
+micro	micro
+microcontroller	microcontroller
+mikrocontroller	microcontroller
+mikrofon	microphone
+mikrophon	microphone
+mikroschalter	microswitch
+mil	MIL
+mile	mile
+mileage	mileage
+min	min
+mind	min
+mindestens	at least
+mindestgeschwindigkeit	minimum speed
+minimal	minimal
+minimaldruck	minimum pressure
+minimale	minimum
+minimaler	minimum
+minimales	minimum
+minimalwert	minimum value
+minimum	minimum
+minus	minus
+minuspol	negative terminal
+minusseite	negative side
+minute	minute
+mirror	mirror
+mischluft	mixed air
+mischluftklappe	blend air flap
+misfire	misfire
+mismatch	mismatch
+missbrauch	misuse
+missing	missing
+mit	with
+mitte	center
+mittel	average
+mittelkonsole	center console
+mitteltöner	midrange speaker
+mittelwert	mean value
+mittlere	mean
+mittlerer	mean
+ml	ml
+mm	mm
+mmi	MMI
+mo	mo
+moc	MOC
+mocsop	MOCSOP
+mod	MOD
+mode	mode
+model	model
+modelgueltigkeit	model validity
+modell	model
+modellfehler	model error
+modellgueltigkeit	model validity
+modellierter	modelled
+modelltemperatur	model temperature
+modellwert	model value
+modes	modes
+modul	module
+module	module
+modulfehler	module fault
+modulspannung	module voltage
+modultemperatur	module temperature
+modultemperaturen	module temperatures
+modus	mode
+moeglich	possible
+mofvss	mofvss
+mom	MOM
+moment	torque
+momentan	momentary
+momentanforderung	instantaneous torque request
+momenten	torques
+momentenanforderung	torque request
+momentenbegrenzung	torque limitation
+momenteneingriff	torque intervention
+momentenvergleich	torque comparison
+momentenüberwachung	torque monitoring
+mon	MON
+monat	month
+monitor	monitor
+monitoring	monitoring
+montage	assembly
+montagemode	assembly mode
+montagemodus	assembly mode
+montiert	mounted
+monumaxsupply	monumaxsupply
+monuminsupply	monuminsupply
+mosfet	MOSFET
+mosfets	MOSFETs
+most	MOST
+mot	MOT
+motbk	MOTBK
+motor	engine
+motorabstellzeit	engine shutdown time
+motoradresse	engine address
+motoransteuerung	motor activation
+motorausfall	engine failure
+motorbetrieb	engine operation
+motorbetriebszustand	engine operating state
+motorbruecke	motor bridge
+motordaten	engine data
+motordrehmoment	engine torque
+motordrehzahl	engine speed
+motoreingriff	engine intervention
+motoreinheit	motor unit
+motoren	motors
+motorentlüftungsheizung	engine breather heater
+motorfehler	engine fault
+motorfunktionen	engine functions
+motorgeräusch	engine noise
+motorhaubenkontakt	hood contact
+motorklemmenspannung	motor terminal voltage
+motorkonfiguration	engine configuration
+motorkühlmittel	engine coolant
+motorlager	engine mount
+motorlagesensor	engine position sensor
+motorlauf	engine running
+motorluefter	engine fan
+motorlüfter	engine fan
+motormoment	engine torque
+motoroel	engine oil
+motoroeltemperatur	engine oil temperature
+motorrad	motorcycle
+motorraum	engine bay
+motorrelais	engine relay
+motorschutz	engine protection
+motorsignale	engine signals
+motorspannung	motor voltage
+motorstart	engine start
+motorstatus	engine status
+motorsteuergerät	engine control unit
+motorsteuerung	engine control
+motorstop	engine stop
+motorstopp	engine stop
+motorstrom	motor current
+motortemp	engine temperature
+motortemperatur	engine temperature
+motortreiber	motor driver
+motorverstellzeitbegrenzung	engine adjustment time limit
+motoröl	engine oil
+motoröldruck	oil pressure
+motoröldruckregelung	oil pressure control
+motoröldruckregelventil	engine oil pressure control valve
+motoröldrucksensor	engine oil pressure sensor
+motorölniveau	engine oil level
+motorölpumpe	engine oil pump
+motoröltemperatur	engine oil temperature
+motorüberstrom	engine overcurrent
+motronic	Motronic
+mp	MP
+mpc	mpc
+mpeg	MPEG
+mpm	mpm
+mr	mr
+mrs	mrs
+mrsa	MRSA
+ms	ms
+msa	MSA
+msabg	msabg
+msc	MSC
+msccomm	msccomm
+msd	MSD
+msg	msg
+msr	MSR
+mss	MSS
+mst	MST
+msv	MSV
+mtc	mtc
+mu	mu
+mul	mul
+mult	mult
+multi	multi
+multifunktions	multifunction
+multifunktionslenkrad	multifunction steering wheel
+multipl	multiple
+multiplikativ	multiplicative
+multiplikative	multiplicative
+multiplikativer	multiplicative
+muw	MUW
+mux	MUX
+mv	MV
+mvr	mvr
+mx	mx
+mzs	mzs
+möglich	possible
+mögliche	possible
+möglichkeit	possibility
+na	na
+nach	to
+nachadaptionswert	post-adaptation value
+nacheinspritzung	post-injection
+nachlauf	overrun
+nachlaufzeit	overrun time
+nachricht	message
+nachrichten	messages
+nachrichtenfehler	message fault
+nachspannen	retension
+nackenwärmer	neck heater
+nahe	near
+nahen	near
+nak	nak
+nav	NAV
+navi	navigation
+navigation	navigation
+navigationsgraph	navigation graph
+navigationsrechner	navigation computer
+nc	NC
+nd	ND
+ndr	NDR
+nebelscheinwerfer	fog light
+nebelschlussleuchte	rear fog light
+nebelschlusslicht	rear fog light
+nebenschluss	shunt
+nebenschlusserkennung	shunt detection
+nec	NEC
+neg	NEG
+negativ	negative
+negative	negative
+negativer	negative
+negl	negl
+neigung	inclination
+neigungsgeber	inclination sensor
+neigungssensor	inclination sensor
+nernstleitung	Nernst line
+nernstspannung	Nernst voltage
+nernstzelle	Nernst cell
+nettocodierdaten	net coding data
+network	network
+networkmaster	network master
+netz	network
+netzwerk	network
+netzwerkfehler	network error
+netzwerkmanagement	network management
+netzwerkmanagment	network management
+neu	new
+neuer	new
+neustart	restart
+neutral	neutral
+neutralgangsensor	neutral gear sensor
+neuzustand	new condition
+new	new
+nf	NF
+nglern	nglern
+nicht	not
+nichtflüchtiger	non-volatile
+nickrate	pitch rate
+niederdruck	low pressure
+niederdruckregelung	low-pressure control
+niederdruckstufe	low-pressure stage
+niederohmiger	low-resistance
+niederspannungsseite	low-voltage side
+niedertemperatur	low temperature
+niedervolt	low voltage
+niedervoltbatterie	low-voltage battery
+niedrig	low
+niedrige	low
+niedrigem	low
+niedriger	low
+niere	niere
+night	night
+niveau	level
+niveaumessung	level measurement
+niveauregulierung	level control
+nivi	NIVI
+nk	nk
+nkat	NKAT
+nkfc	NKFC
+nlp	NLP
+nm	Nm
+nmot	nmot
+no	no
+nocat	nocat
+noch	still
+nockenwelle	camshaft
+nockenwellen	camshaft
+nockenwellengeber	camshaft sensor
+nockenwellenposition	camshaft position
+nockenwellensensor	camshaft sensor
+nockenwellensteuerung	camshaft control
+node	node
+noise	noise
+nok	NOK
+non	non
+nordland	northern land
+norm	standard
+normal	normal
+normalbetrieb	normal operation
+normiert	normalized
+normierte	normalized
+normierter	normalized
+normierung	normalization
+normierungsverlust	normalization loss
+normspreizung	standard spread
+not	not
+notabschaltung	emergency shutdown
+notausstieg	emergency exit
+notentriegelung	emergency release
+notifizierung	notification
+notlauf	limp-home mode
+notlaufanforderung	emergency running request
+notlaufeingang	emergency running input
+notlaufmanager	limp-home manager
+notluftposition	emergency air position
+notluftprüfung	emergency air check
+notluftpunkt	emergency air point
+notprogramm	emergency program
+notruf	emergency call
+notruftaster	emergency call button
+notwendig	necessary
+nox	NOx
+npl	NPL
+nr	nr
+nsc	NSC
+nsl	nsl
+nsw	nsw
+ntc	NTC
+null	zero
+nullgang	neutral gear
+nullgangsensor	neutral position sensor
+nullmenge	zero quantity
+nullmengenadaption	zero-quantity adaptation
+nullmengenkalibrierung	zero-quantity calibration
+nullposition	zero position
+nullpunkt	zero point
+nullpunktkorrektur	zero-point correction
+nulltest	zero test
+number	number
+nummer	number
+nur	only
+nutzdaten	user data
+nutzsignals	useful signal
+nv	NV
+nvc	NVC
+nvm	NVM
+nvmy	nvmy
+nvram	NVRAM
+nw	NW
+obd	OBD
+obdii	OBD II
+oben	upper
+obere	upper
+oberen	upper
+oberer	upper
+oberhalb	above
+objdt	OBJDT
+objekt	object
+objektdaten	object data
+observer	observer
+obsolete	obsolete
+obwohl	although
+oc	OC
+occured	occurred
+oce	oce
+od	OD
+oder	or
+ods	ODS
+oeffnen	open
+oeffnende	opening
+oeffnet	opens
+oel	oil
+oeldruck	oil pressure
+oeldrucksensor	oil pressure sensor
+oelniveau	oil level
+oelniveausensor	oil level sensor
+oelqualitaetssensor	oil quality sensor
+oelsensor	oil sensor
+oelstandssensor	oil level sensor
+oeltemperatur	oil temperature
+oeltemperatursensor	oil temperature sensor
+of	of
+off	off
+offen	open
+offene	open
+offener	open
+offs	offs
+offset	offset
+offsetfehler	offset fault
+offsetkorrektur	offset correction
+ohne	without
+oil	oil
+ok	OK
+ol	OL
+on	on
+online	online
+onlinefehler	online fault
+onlineprüfung	online check
+oor	OOR
+op	OP
+opcode	opcode
+opel	Opel
+open	open
+openload	open load
+oper	oper
+operating	operating
+operation	operation
+opmode	opmode
+option	option
+optische	optical
+or	or
+order	order
+ordnung	order
+os	OS
+osc	osc
+osek	OSEK
+osfg	osfg
+oszillator	oscillator
+ot	OT
+out	out
+outer	outer
+outlet	outlet
+output	output
+outside	outside
+over	over
+overcurrent	overcurrent
+overflow	overflow
+overrun	overrun
+overtemp	overtemp
+overtemperature	overtemperature
+overvoltage	overvoltage
+oxidationskatalysator	oxidation catalyst
+oxidierbare	oxidizable
+paboard	paboard
+pack	pack
+packspannung	pack voltage
+page	page
+paket	package
+panik	panic
+pannendatenspeicher	breakdown data memory
+param	param
+parameter	parameter
+parametersatz	parameter set
+parametrisierung	parameterization
+parity	parity
+parkassistent	parking assistant
+parkbremse	parking brake
+parken	parking
+parking	parking
+parkposition	park position
+parksperre	parking lock
+parksperrenhaltemagnet	parking lock holding magnet
+parksperrenmagnet	parking lock magnet
+parktaster	park button
+particle	particle
+particulate	particulate
+partikelfilter	particulate filter
+partikelfilterheizung	particulate filter heating
+partikelfilters	particulate filter
+partikelfiltersystem	particulate filter system
+partikelsensor	particulate sensor
+partner	partner
+pas	PAS
+passen	fit
+passenger	passenger
+passiv	passive
+passive	passive
+passivtank	passive tank
+passt	fits
+passwort	password
+path	path
+pbrk	PBRK
+pcb	PCB
+pcm	PCM
+pcsh	PCSH
+pcu	PCU
+pcv	PCV
+pd	pd
+pdc	PDC
+pdu	PDU
+peak	peak
+peb	PEB
+pedal	pedal
+pedalwegsensor	pedal travel sensor
+pedalwertgeber	pedal position sensor
+pedelwertgeber	pedal value sensor
+pegel	level
+per	per
+performance	performance
+periodendauer	period duration
+periodische	periodic
+peripheral	peripheral
+peripherial	peripheral
+peripherie	peripherals
+permanent	permanent
+permanentefehler	permanent fault
+permanenter	permanent
+permittivität	permittivity
+permittivitätsmessung	permittivity measurement
+pfad	path
+pfc	PFC
+pflt	pflt
+pgs	PGS
+phase	phase
+phasengeber	phase sensor
+phasenstrom	phase current
+phlsnh	phlsnh
+physical	physical
+physikalische	physical
+physikalischer	physical
+pia	PIA
+pic	PIC
+pid	PID
+pin	pin
+pinpuller	pin puller
+pixel	pixel
+pkg	PKG
+pl	PL
+platine	circuit board
+plaus	plausibility
+plausi	plausibility
+plausibel	plausible
+plausibilisierung	plausibility check
+plausibilisierungsfehler	plausibility error
+plausibilisierungssensor	plausibility sensor
+plausibilitaet	plausibility
+plausibilitaets	plausibility
+plausibilitaetsfehler	plausibility fault
+plausibility	plausibility
+plausibilität	plausibility
+plausibilitätsfehler	plausibility fault
+plausibillität	plausibility
+plausible	plausible
+plausiblity	plausibility
+player	player
+pll	PLL
+plus	B+
+pluspol	positive terminal
+plusseite	positive side
+pm	PM
+pma	PMA
+pmbatt	pmbatt
+pmbn	pmbn
+po	po
+poi	POI
+pol	POL
+port	port
+pos	POS
+position	position
+positionsabweichung	position deviation
+positionsanzeige	position indicator
+positionsdaten	position data
+positionsgeber	position transmitter
+positionsinfo	position info
+positionslicht	position light
+positionsplausibilisierung	position plausibility check
+positionsregelung	position control
+positionssensor	position sensor
+positionssensoren	position sensors
+positionssignal	position signal
+positionsverlust	position loss
+positionsüberwachung	position monitoring
+positiv	positive
+positive	positive
+positiver	positive
+possible	possible
+potentiometer	potentiometer
+poti	potentiometer
+power	power
+powerdown	power down
+powerfail	power failure
+powermanagement	power management
+powermgmt	power management
+powermodul	power module
+powertrain	powertrain
+ppd	PPD
+pre	pre
+precrash	pre-crash
+predrive	predrive
+predrv	predrv
+prefit	PREFIT
+present	present
+pressure	pressure
+prg	prg
+primary	primary
+private	private
+privater	private
+prmsn	PRMSN
+prnd	PRND
+prndl	PRNDL
+pro	PRO
+problem	problem
+process	process
+processor	processor
+profil	profile
+prog	prog
+program	program
+programm	program
+programmablauf	program sequence
+programmiert	programmed
+programmierung	programming
+programming	programming
+programmwahlschalter	program selector switch
+prom	PROM
+proportionalventil	proportional valve
+protection	protection
+protocol	protocol
+protokoll	protocol
+protokollfehler	protocol error
+prozent	percent
+prozessor	processor
+prq	prq
+pruefen	check
+pruefsumme	checksum
+pruefsummen	checksums
+pruefsummenfehler	checksum error
+pruefung	check
+prüfsumme	checksum
+prüfsummenfehler	checksum error
+prüfung	test
+ps	PS
+psa	PSA
+psim	psim
+psip	PSIP
+psm	psm
+psv	psv
+psw	psw
+pt	PT
+ptc	PTC
+pts	PTS
+pu	PU
+pubu	PUBU
+puffer	buffer
+puls	pulse
+pulse	pulses
+pulswechselrichter	pulse inverter
+pump	pump
+pumpe	pump
+pumpen	pumps
+pumpendrehzahl	pump speed
+pumpenmotor	pump motor
+pumpenstrom	pump current
+pumpstrom	pump current
+pumpstromleitung	pump current line
+purge	purge
+pv	PV
+pva	pva
+pvs	PVS
+pwg	PWG
+pwm	PWM
+pwml	pwml
+pwr	PWR
+pwrmng	pwrmng
+pwv	PWV
+pyrotechnisch	pyrotechnic
+qdmfzgzupa	qdmfzgzupa
+qdmgenaastell	qdmgenaastell
+qei	QEI
+ql	QL
+qlt	QLT
+qmvh	qmvh
+qta	QTA
+qu	QU
+quad	quad
+quadrant	quadrant
+quali	QUALI
+qualifier	qualifier
+qualifierueberwachung	qualifier monitoring
+quality	quality
+qualität	quality
+quan	quan
+quantity	quantity
+quelle	source
+quer	transverse
+querbeschleunigung	lateral acceleration
+querbeschleunigungssensor	lateral acceleration sensor
+querführung	lateral guidance
+quermomentenverteilung	lateral torque distribution
+queue	queue
+quittierung	acknowledgment
+quotient	quotient
+ra	RA
+rad	wheel
+radar	radar
+radbeschleunigung	wheel acceleration
+radbeschleunigungssensor	wheel acceleration sensor
+raddrehzahl	wheel speed
+raddrehzahlen	wheel speeds
+raddrehzahlfuehler	wheel speed sensor
+raddrehzahlsensor	wheel speed sensor
+radelektronik	wheel electronics
+radgeschw	wheel speed
+radgeschwindigkeit	wheel speed
+radgeschwindigkeiten	wheel speeds
+radiator	radiator
+radio	radio
+radius	radius
+radknoten	wheel node
+radkreis	wheel circuit
+radlenkwinkel	wheel steering angle
+radmom	RADMOM
+radmoment	wheel torque
+radmomentanforderung	wheel torque request
+radschlupfueberwachung	wheel slip monitoring
+radsensor	wheel sensor
+radtoleranzabgleich	wheel tolerance adjustment
+raeder	wheels
+rail	rail
+railcpctnklo	railcpctnklo
+raildruck	rail pressure
+raildruckregelung	rail pressure control
+raildruckregelventil	rail pressure control valve
+raildrucksensor	rail pressure sensor
+raildruckueberwachung	rail pressure monitoring
+raildrucküberwachung	rail pressure monitoring
+railmeun	railmeun
+railmeuntnklo	RAILMEUNTNKLO
+railpcv	railpcv
+railpcvtnklo	RAILPCVTNKLO
+ram	RAM
+randbedingungen	boundary conditions
+range	range
+rat	rat
+ratio	ratio
+rauschüberwachung	noise monitoring
+raw	raw
+rc	rc
+rcog	RCOG
+rcv	RCV
+rd	RD
+rdc	RDC
+rdci	RDCI
+rdckwp	rdckwp
+rdf	RDF
+rdi	rdi
+rdl	rdl
+rdu	rdu
+re	RE
+read	read
+reagiert	reacts
+reaktion	reaction
+rear	rear
+reason	reason
+received	received
+receiver	receiver
+receivezweig	receive branch
+reception	reception
+rechenzeit	computing time
+rechenzyklus	computation cycle
+rechenzykluszeit	computing cycle time
+rechnen	calculate
+rechner	computer
+rechnerfunktion	computer function
+rechnerüberwachung	computer monitoring
+rechten	right
+rechtes	right
+rechts	right
+recognized	recognized
+recovery	recovery
+red	red
+reduktion	reduction
+reduktionsmittel	reducing agent
+reduktionsmitteldruck	reductant pressure
+redundant	redundant
+redundante	redundant
+redundanter	redundant
+redundanz	redundancy
+reduzierbare	reducible
+reduziert	reduced
+reduzierung	reduction
+reed	reed
+ref	REF
+reference	reference
+referenz	reference
+referenzleck	reference leak
+referenzmessung	reference measurement
+referenzmoment	reference torque
+referenzpegel	reference level
+referenzposition	reference position
+referenzsensor	reference sensor
+referenzsignal	reference signal
+referenzspannung	reference voltage
+referenzspur	reference track
+referenztemperatur	reference temperature
+referenzwiderstand	reference resistor
+reg	reg
+regel	control
+regelabweichung	control deviation
+regelanschlag	control stop
+regelbar	controllable
+regelbereich	control range
+regeleingriffe	control interventions
+regelfaktor	control factor
+regelfehler	control error
+regelklappensteller	control flap actuator
+regelkreises	control loop
+regelstatus	control status
+regelung	control
+regelventil	control valve
+regelzeit	control time
+regeneration	regeneration
+regenerationen	regenerations
+regenerationsbetrieb	regeneration operation
+regenerationsdauer	regeneration duration
+regenerierbar	regenerable
+regensensor	rain sensor
+register	register
+registers	registers
+registriert	registered
+registry	registry
+regler	regulator
+reglereingang	controller input
+reglers	controller
+reglerwert	controller value
+reibung	friction
+reichweite	range
+reifen	tire
+reifenpannenanzeige	tire pressure warning
+reihe	row
+reizgassensor	irritant gas sensor
+rekuperation	recuperation
+rel	REL
+relais	relay
+relaisansteuerung	relay activation
+relaisbox	relay box
+relaiskleber	relay contact sticking
+relaistest	relay test
+relativ	relative
+relative	relative
+relativer	relative
+relatives	relative
+relativzeit	relative time
+relay	relay
+release	release
+relevant	relevant
+relevanter	relevant
+reme	REME
+remote	remote
+repat	REPAT
+report	report
+reported	reported
+reporting	reporting
+req	req
+request	request
+requests	requests
+res	res
+resertierbar	resettable
+reserve	reserve
+reserved	reserved
+reservieren	reserve
+reserviert	reserved
+reset	reset
+resetfest	reset-proof
+resetfesten	reset-proof
+resethistorie	reset history
+resets	resets
+resetursache	reset cause
+resistance	resistance
+reso	reso
+resolver	resolver
+response	response
+responseonevent	response on event
+restart	restart
+restauriert	restored
+restlichen	remaining
+restreichweite	remaining range
+result	result
+reversibel	reversible
+reversible	reversible
+reversierung	reversal
+rf	RF
+rfis	rfis
+rfk	rfk
+rfp	rfp
+rfr	RFR
+rgb	RGB
+rgs	rgs
+rh	RH
+rhu	RHU
+ri	ri
+rich	rich
+richtung	direction
+richtungsventil	directional valve
+riemen	belt
+right	right
+ring	ring
+ringbruchdiagnose	ring break diagnosis
+ringbuf	ring buffer
+ringspeicher	ring buffer
+rinh	rinh
+rinv	rinv
+rip	rip
+ritzelstarter	pinion starter
+rk	rk
+rkrn	RKRN
+rl	RL
+rlh	rlh
+rls	RLS
+rm	RM
+roe	roe
+roetst	roetst
+roh	raw
+rohdaten	raw data
+rohwert	raw value
+rohwerte	raw values
+roll	roll
+rollover	rollover
+rollovercontroller	rollover controller
+rollrate	roll rate
+rollt	rolls
+rom	ROM
+rose	rose
+rosemoni	rosemoni
+rot	red
+rotor	rotor
+rotorlage	rotor position
+rotorlagesensor	rotor position sensor
+rp	rp
+rpa	RPA
+rpm	rpm
+rps	RPS
+rq	RQ
+rr	RR
+rrh	rrh
+rs	RS
+rsb	rsb
+rse	RSE
+rsp	RSP
+rsu	rsu
+rtc	RTC
+rueckfoerder	return pump
+rueckfoerderpumpe	return feed pump
+ruecklicht	tail light
+rueckmeldung	feedback
+rueckstellung	reset
+rueckwaerts	reverse
+rueckwaertsgang	reverse gear
+ruhestrom	quiescent current
+ruhestromverletzung	quiescent current violation
+ruhestromzeit	quiescent current time
+ruhestromüberwachung	quiescent current monitoring
+run	run
+runtime	runtime
+rußmasse	soot mass
+rv	RV
+rw	RW
+rwdt	rwdt
+rwr	RWR
+rx	RX
+rändel	knurl
+rückfahrlicht	reversing light
+rückförderpumpe	return pump
+rückführregler	feedback controller
+rückgemessen	measured back
+rückholer	return mechanism
+rücklesefehler	read-back error
+rückleseleitung	readback line
+rücklesen	read back
+rücklicht	tail light
+rückmeldung	feedback
+rückrechnung	back-calculation
+rückstellfeder	return spring
+rückstellung	reset
+rückstrom	reverse current
+rückwärts	reverse
+rückwärtsgang	reverse gear
+sa	SA
+sae	SAE
+saeule	column
+saf	saf
+safe	safe
+safety	safety
+safing	safing
+sam	sam
+sammeleintrag	collective entry
+sammelfehler	collective fault
+saphir	saphir
+sas	SAS
+sasl	SASL
+sasr	SASR
+satellit	satellite
+sauerstoffkonzentration	oxygen concentration
+sauganlage	intake system
+saugdrosselventil	intake throttle valve
+saugrohr	intake manifold
+saugrohrdruck	intake manifold pressure
+saugrohrdrucksensor	intake manifold pressure sensor
+saugrohrdusche	intake manifold spray
+saugstrahlpumpe	jet pump
+save	save
+sb	SB
+sba	SBA
+sbc	SBC
+sbe	SBE
+sbr	SBR
+sbs	SBS
+sbsl	SBSL
+sbsr	SBSR
+sc	SC
+sca	SCA
+sch	sch
+schaedigend	damaging
+schaltablaufsteuerung	shift sequence control
+schaltbare	switchable
+schalten	switch
+schalter	switch
+schalterblock	switch block
+schaltet	switches
+schalthebelsensor	shift lever sensor
+schaltkreis	circuit
+schaltnetzteil	switch-mode power supply
+schaltpaddel	shift paddle
+schaltpunktanzeige	shift point display
+schaltschütz	shift contactor
+schaltstange	shift rod
+schaltstangensensor	shift rod sensor
+schaltstellungssensor	shift position sensor
+schaltung	circuit
+schaltungsueberwachung	circuit monitoring
+schaltventil	switching valve
+schaltverzögerung	shift delay
+schaltweg	shift travel
+schaltwippen	shift paddles
+schaltzeit	switching time
+schaltzentrum	switching center
+schaltzustand	switch state
+schaltzylinder	shift cylinder
+scheibe	pane
+scheibenueberwachung	window monitoring
+scheibenwischerschalter	wiper switch
+scheinwerfer	headlight
+schicht	layer
+schichtbetrieb	stratified operation
+schichtung	stratification
+schichtungspotentiometer	stratification potentiometer
+schieben	push
+schl	schl
+schlafbereitschaft	sleep readiness
+schlauchleitung	hose line
+schlechte	poor
+schlechtwegstreckenerkennung	rough-road detection
+schleifer	wiper contact
+schliessen	close
+schliessende	closing
+schliesst	closes
+schließdauer	closing duration
+schließdauerkompensation	closing duration compensation
+schließdauerregelabweichung	closing duration control deviation
+schließdauerregelung	closing duration control
+schließen	close
+schließt	closes
+schloss	lock
+schlossschalter	lock switch
+schloßnuß	lock nut
+schluessel	key
+schluesselidentifikation	key identification
+schlug	struck
+schlupf	slip
+schluss	end
+schlusslicht	tail light
+schlägt	fails
+schlüssel	key
+schneekette	snow chain
+schnell	fast
+schnelle	fast
+schneller	faster
+schnittstelle	interface
+schnittstellen	interfaces
+schnittstellenfehler	interface error
+schreib	write
+schreiben	write
+schreibfehler	write error
+schrittmotor	stepper motor
+schrittmotortreiber	stepper motor driver
+schrittverlust	step loss
+schub	overrun
+schubabschaltung	overrun fuel cut-off
+schubbetrieb	overrun operation
+schubprüfung	thrust check
+schubumluftventil	overrun air recirculation valve
+schutz	protection
+schutzziele	protection goals
+schwelle	threshold
+schwellenwert	threshold
+schwellenwerte	thresholds
+schwellwert	threshold
+schwere	severe
+schwerer	heavy
+schwergaengig	stiff
+schwergängig	sluggish
+schwergängigkeit	binding
+schwerpunkt	center of gravity
+schwimmwinkelschätzer	sideslip angle estimator
+schädigung	damage
+schütz	contactor
+schütze	contactors
+sci	SCI
+scls	scls
+sco	SCO
+scon	scon
+scr	SCR
+scra	scra
+scs	scs
+sd	SD
+sdars	sdars
+sdltest	sdltest
+sdram	SDRAM
+seat	seat
+seb	seb
+sec	sec
+second	second
+secondary	secondary
+secret	secret
+secu	SECU
+security	security
+segeln	coasting
+segment	segment
+segmentadaption	segment adaptation
+segmentzeit	segment time
+segmentzeitmessung	segment time measurement
+sehr	very
+seit	since
+seite	side
+seiten	sides
+seitenairbag	side airbag
+seitenmarkierungsleuchte	side marker light
+seitenmarkierungslicht	side marker light
+seitenscheibe	side window
+seitensensor	side sensor
+sek	sec
+sekundaerluft	secondary air
+sekundaerluftpumpe	secondary air pump
+sekundaerluftsystem	secondary air system
+sekundaerluftventil	secondary air valve
+sekunde	second
+sekunden	seconds
+sekundär	secondary
+sekundärkreis	secondary circuit
+sekundärluft	secondary air
+sekundärluftmasse	secondary air mass
+sekundärluftpumpe	secondary air pump
+sekundärluftpumpenrelais	secondary air pump relay
+sekundärluftsystem	secondary air system
+sekundärluftventil	secondary air valve
+selbstentladung	self-discharge
+selbsttest	self-test
+selbsttestwert	self-test value
+selection	selection
+self	self
+selftest	self-test
+sen	SEN
+send	send
+sende	send
+sendefehler	transmission error
+senden	send
+sendepuffer	transmit buffer
+sender	transmitter
+senderknoten	transmitter node
+sendesignal	transmit signal
+sendesignale	transmit signals
+sendet	sends
+senke	sink
+senken	lower
+sens	SENS
+sensnotavailable	sensor not available
+sensor	sensor
+sensorabgleich	sensor adjustment
+sensorbox	sensor box
+sensorcluster	sensor cluster
+sensordefekt	sensor defect
+sensoren	sensors
+sensorfehler	sensor fault
+sensorheizung	sensor heating
+sensorik	sensors
+sensorkennlinie	sensor characteristic
+sensorleitung	sensor line
+sensorparameter	sensor parameter
+sensorplausibilisierung	sensor plausibility check
+sensors	sensors
+sensorsignal	sensor signal
+sensorspannung	sensor voltage
+sensorspannungsversorgung	sensor voltage supply
+sensortemperatur	sensor temperature
+sensortyp	sensor type
+sensorverbund	sensor cluster
+sensorversorgung	sensor supply
+sensorversorgungsspannung	sensor supply voltage
+sensorwert	sensor value
+sensorwerte	sensor values
+sensorwerten	sensor values
+sent	sent
+sequenz	sequence
+ser	SER
+serial	serial
+serielle	serial
+seriennummer	serial number
+server	server
+service	service
+servo	servo
+servotronic	Servotronic
+servotronik	Servotronic
+set	set
+setzen	set
+sf	SF
+sfcan	SFCAN
+sfyc	sfyc
+sfz	SFZ
+sg	sg
+sgm	SGM
+sgr	sgr
+sgs	SGS
+sh	SH
+shadow	shadow
+shadowspeicher	shadow memory
+shc	SHC
+shd	SHD
+shift	shift
+shiftlock	shift lock
+short	short
+shortcircuit	short circuit
+shortcut	shortcut
+shorted	shorted
+shut	shut
+shutdown	shutdown
+shv	SHV
+si	SI
+sia	SIA
+sich	itself
+sicherheit	safety
+sicherheits	safety
+sicherheitsabschaltung	safety shutdown
+sicherheitsbatterieklemme	safety battery terminal
+sicherheitsfunktion	safety function
+sicherheitskonzept	safety concept
+sicherheitskoordinator	safety coordinator
+sicherheitsrechner	safety computer
+sicherheitsventil	safety valve
+sichern	secure
+sicherung	fuse
+sicherungsrelais	fuse relay
+side	side
+siemens	Siemens
+sig	SIG
+signal	signal
+signalabweichung	signal deviation
+signalamplitude	signal amplitude
+signalausfall	signal loss
+signalauswertung	signal evaluation
+signalbeobachtung	signal observation
+signale	signals
+signaleinsteuungs	signal injection
+signalerfassung	signal acquisition
+signalerkennung	signal detection
+signalfehler	signal fault
+signalflanke	signal edge
+signalfrequenz	signal frequency
+signalgradient	signal gradient
+signalinhalt	signal content
+signalisiert	signaled
+signalkreisadaptionswerte	signal circuit adaptation values
+signalleitung	signal line
+signalleitungen	signal lines
+signalpegel	signal level
+signalpfad	signal path
+signalqualitaet	signal quality
+signalqualität	signal quality
+signals	signals
+signalspannung	signal voltage
+signalstatus	signal status
+signalstoerung	signal disturbance
+signaltoleranz	signal tolerance
+signalueberwachung	signal monitoring
+signalverarbeitung	signal processing
+signalverlauf	signal progression
+signalverlust	signal loss
+signalweite	signal range
+signalwert	signal value
+signaländerung	signal change
+signalübertragung	signal transmission
+signalüberwachung	signal monitoring
+signatur	signature
+signature	signature
+signaturprüfung	signature check
+sim	SIM
+simulator	simulator
+simulierter	simulated
+sin	sin
+sind	are
+sine	sine
+single	single
+sinit	sinit
+sinus	sine
+sinuswert	sine value
+sirene	siren
+sitz	seat
+sitzairbag	seat airbag
+sitzbelegung	seat occupancy
+sitzbelegungserkennung	seat occupancy detection
+sitzbelegungsmatte	seat occupancy mat
+sitzheizung	seat heating
+sitzhoehe	seat height
+sitzklima	seat climate
+sitzlehne	seat backrest
+sitzlehnenverriegelung	seat backrest lock
+sitzmatte	seat mat
+sitzmemory	seat memory
+sitzmodul	seat module
+sitzneigung	seat inclination
+sitzpositionssensor	seat position sensor
+sitzreihe	seat row
+sitztiefe	seat depth
+sitzverstellschalter	seat adjustment switch
+sk	SK
+skb	skb
+ske	ske
+sl	SL
+slave	slave
+sld	sld
+sle	SLE
+sleep	sleep
+slgs	SLGS
+slide	slide
+slow	slow
+slrdi	slrdi
+sls	sls
+slsii	slsii
+slsiii	slsiii
+slv	SLV
+sm	SM
+small	small
+smart	smart
+smb	smb
+smbf	SMBF
+smbfh	smbfh
+smc	SMC
+smcom	smcom
+sme	SME
+smfa	SMFA
+smfah	SMFAH
+smg	SMG
+smi	SMI
+smo	smo
+snapshot	snapshot
+snc	snc
+snv	snv
+soad	soad
+soc	SOC
+soccu	SOCCU
+soft	soft
+softcloseautomatik	soft-close automatic
+software	software
+softwarefehler	software fault
+softwareversion	software version
+soh	SOH
+solarsensor	solar sensor
+solenoid	solenoid
+soll	target
+sollansteuerspannung	target activation voltage
+solldrehzahl	target speed
+solldruck	target pressure
+sollkraftstoffmassen	target fuel masses
+sollmoment	setpoint torque
+sollmomentanforderung	target torque request
+sollmomentenvorgabe	target torque specification
+sollposition	target position
+sollspannung	target voltage
+sollstrom	setpoint current
+sollvorgabe	target specification
+sollwert	setpoint
+sollwinkel	target angle
+sollzustand	target state
+sols	sols
+sonde	probe
+sondenalterung	probe aging
+sondenheizung	sensor heater
+sondenleitungen	probe lines
+sondensignal	probe signal
+sondensignals	probe signal
+sondenspannung	probe voltage
+sonderfunktion	special function
+sonnenrollo	sunshade
+sos	SOS
+soundklappe	sound flap
+source	source
+sp	SP
+spannbuegel	tension bracket
+spannbügel	clamp bracket
+spannung	voltage
+spannungen	voltages
+spannungs	voltage
+spannungsbegrenzung	voltage limitation
+spannungsbereich	voltage range
+spannungsdifferenz	voltage difference
+spannungsfehler	voltage fault
+spannungsgesteuert	voltage-controlled
+spannungshub	voltage swing
+spannungsmessung	voltage measurement
+spannungsregelung	voltage regulation
+spannungsregler	voltage regulator
+spannungsrohwert	raw voltage value
+spannungsschwelle	voltage threshold
+spannungssensor	voltage sensor
+spannungssensorik	voltage sensing
+spannungsstabilisator	voltage stabilizer
+spannungsueberwachung	voltage monitoring
+spannungsversorgung	voltage supply
+spannungswert	voltage value
+spannungsüberwachung	voltage monitoring
+spannungsüberwachungskreis	voltage monitoring circuit
+spec	spec
+special	special
+specialregistermonitoring	special register monitoring
+speed	speed
+speg	SPEG
+speicher	memory
+speicherdruck	accumulator pressure
+speicherfehler	memory error
+speicherfähigkeit	storage capability
+speichertest	memory test
+speichervorhaltewert	storage lead value
+speicherzugriff	memory access
+speisespannung	supply voltage
+sperre	lock
+sperrinformation	lock information
+sperrsystem	locking system
+sperrventil	check valve
+spez	spec
+spezialfehler	special fault
+spezifikation	specification
+spezifizierten	specified
+spg	spg
+spgs	spgs
+spi	SPI
+spiegel	mirror
+spiegelheizung	mirror heating
+spiegelmotor	mirror motor
+spielschutz	clearance protection
+sporadisch	sporadic
+sporadischer	sporadic
+sport	sport
+sporttaster	sport button
+sprung	jump
+sprungzeit	jump time
+spule	coil
+spulenwiderstand	coil resistance
+spur	track
+spurverlassenswarnsystem	lane departure warning system
+spät	late
+spülluftsystem	purge air system
+sra	sra
+src	SRC
+srr	SRR
+ss	ss
+ssbf	SSBF
+ssfa	SSFA
+ssg	SSG
+ssh	SSH
+ssm	SSM
+sspmon	sspmon
+sst	sst
+ssta	ssta
+sstb	sstb
+ssw	ssw
+st	st
+sta	STA
+stab	rod
+stabilisierung	stabilization
+stability	stability
+stabilitäts	stability
+stack	stack
+staendig	constant
+stage	stage
+stand	status
+standard	standard
+standardabsicherung	standard protection
+standardcore	standard core
+standby	standby
+standheizgerät	auxiliary heater
+standheizung	auxiliary heater
+standkühlen	standstill cooling
+standlicht	parking light
+standverbraucher	standby consumer
+stark	strong
+starke	strong
+start	start
+startaggregat	starter unit
+startautomatik	automatic start
+started	started
+startende	start end
+starter	starter
+startergenerator	starter generator
+startfreigabeleitung	start release line
+startposition	start position
+startprüfung	start check
+startspannungswandler	start voltage converter
+startsystem	starting system
+startup	startup
+startuptest	start-up test
+startupzeit	start-up time
+startverhinderung	start prevention
+startvorgang	starting process
+startwert	start value
+startzeit	start time
+stat	stat
+state	state
+static	static
+statisch	static
+statischer	static
+stator	stator
+statt	instead
+status	status
+statusbit	status bit
+statusbotschaft	status message
+statusbyte	status byte
+statusfehler	status fault
+statusleitung	status line
+statusmeldung	status message
+statuswort	status word
+staudruck	dynamic pressure
+ste	STE
+stea	STEA
+steckdose	socket
+stecker	connector
+steckt	stuck
+steering	steering
+stehendem	stationary
+steht	stationary
+steigt	rises
+steigung	gradient
+stellanf	stellanf
+stellanforderung	actuator request
+stellantrieb	actuator
+stelleinheit	actuator unit
+steller	actuator
+stellerbewegung	actuator movement
+stellertest	actuator test
+stellglied	actuator
+stellgliedposition	actuator position
+stellgliedueberwachung	actuator monitoring
+stellgroesse	manipulated variable
+stellgröße	manipulated variable
+stellmotor	actuator motor
+stellung	position
+stellweg	travel
+stellwegsensor	travel sensor
+stepper	stepper
+steppermotor	stepper motor
+steptronic	Steptronic
+sternpunktrelais	neutral point relay
+stetigen	continuous
+steuergeraet	control unit
+steuergeraete	control units
+steuergeraeteadresse	control unit address
+steuergeraetefehler	control unit fault
+steuergeraetetemperatur	control unit temperature
+steuergeraeteueberwachung	control unit monitoring
+steuergerät	control unit
+steuergeräte	control units
+steuergerätefehler	control unit fault
+steuergeräten	control units
+steuergerätetemperatur	control unit temperature
+steuergerätetemperatursensor	control unit temperature sensor
+steuergeräteüberwachung	control unit monitoring
+steuerkreis	control circuit
+steuerleitung	control line
+steuerstromkreis	control circuit
+steuerung	control
+steuerventil	control valve
+stg	stg
+stickoxidsensor	NOx sensor
+stickoxydsensor	NOx sensor
+stillegungsstufe	shutdown level
+stillgelegt	decommissioned
+stillstand	standstill
+stillstandsmanagement	standstill management
+stimmen	match
+stimmt	matches
+stm	stm
+stmd	stmd
+stmom	STMOM
+stoerung	fault
+stop	stop
+stopp	stop
+stopped	stopped
+storage	storage
+stored	stored
+strangspannung	phase voltage
+strangstrom	phase current
+strangunterbrechung	phase open circuit
+stream	stream
+strmom	strmom
+strom	current
+stromanstieg	current rise
+stromaufnahme	current draw
+stromkreis	circuit
+strommessung	current measurement
+stromregelung	current control
+stromregler	current controller
+stromreglerplausibilitätsfehler	current controller plausibility error
+stromschwankungen	current fluctuations
+stromsense	current sense
+stromsensor	current sensor
+stromsensors	current sensor
+stromversorgung	power supply
+stromverteiler	power distributor
+stromwert	current value
+stromüberwachung	current monitoring
+strömungswiderstand	flow resistance
+stuck	stuck
+stufe	stage
+stufentempomat	stepped cruise control
+stv	stv
+stvl	STVL
+stvr	STVR
+stw	STW
+störung	fault
+störungs	fault
+störungszähler	fault counter
+störzähler	fault counter
+su	SU
+sub	sub
+subs	subs
+substrattemperatur	substrate temperature
+substrattemperatursensor	substrate temperature sensor
+suchbeleuchtung	search light
+sudden	sudden
+sum	sum
+summe	sum
+summenfehler	sum fault
+summenlenkwinkel	total steering angle
+summenstrom	total current
+supercap	supercapacitor
+superklopfen	super-knock
+superklopfer	super knock
+supervisionstate	supervision state
+supplier	supplier
+supply	supply
+sv	SV
+svc	SVC
+svs	svs
+svt	svt
+sw	SW
+swe	swe
+swip	swip
+switch	switch
+switchboard	switchboard
+swo	SWO
+swreset	software reset
+sws	sws
+swt	SWT
+swup	SWUP
+sy	sy
+symptom	symptom
+sync	sync
+synchronisation	synchronization
+synchronisationsverlust	synchronization loss
+synchronisierung	synchronization
+sys	SYS
+sysfunktion	system function
+system	system
+systemcheck	system check
+systemdruck	system pressure
+systemfehler	system fault
+systemprüfung	system check
+systems	systems
+systemspannung	system voltage
+systemstatus	system status
+systemtest	system test
+systemzeit	system time
+systemzustand	system state
+szl	SZL
+szm	SZM
+szt	szt
+säule	column
+tab	tab
+tabelle	table
+tabgm	tabgm
+tabgmf	tabgmf
+table	table
+tacho	speedometer
+tag	tag
+tage	days
+tagfahrlicht	daytime running light
+tail	tail
+takt	cycle
+taktgeber	clock generator
+tandemhauptzylinder	tandem master cylinder
+tank	tank
+tankabsperrventil	tank shut-off valve
+tankdeckel	fuel cap
+tankdrucksensor	tank pressure sensor
+tankentlueftung	evaporative purge
+tankentlueftungssystem	tank ventilation system
+tankentlueftungsventil	evaporative purge valve
+tankentlüftung	tank ventilation
+tankentlüftungs	evaporative purge
+tankentlüftungssystem	evaporative emission system
+tankentlüftungsventil	evaporative purge valve
+tankfuellstand	tank fill level
+tankfüllstand	fuel level
+tankfüllstandsignal	tank fill level signal
+tankfüllstandssensor	fuel level sensor
+tankgeber	tank sender
+tankklappe	fuel filler flap
+tankklappensensor	fuel filler flap sensor
+tankleckagemodul	tank leakage module
+tanksensor	tank sensor
+tanktemperatur	tank temperature
+tans	tans
+tanwrhf	tanwrhf
+tar	TAR
+tas	TAS
+task	task
+taste	key
+tasten	keys
+tastenden	key end
+taster	button
+tastverhaeltnis	duty cycle
+tastverhältnis	duty cycle
+tausch	exchange
+tauschen	swap
+tauscherkennung	exchange detection
+tbd	TBD
+tc	TC
+tcm	TCM
+tco	tco
+tcu	TCU
+td	TD
+te	te
+tebft	tebft
+tefat	tefat
+teil	part
+teillast	part load
+teillastadaption	part-load adaptation
+teilnehmer	participant
+teilweise	partial
+teilwert	partial value
+tel	tel
+telefon	telephone
+telegram	telegram
+telegramm	telegram
+teleservice	teleservice
+temp	temp
+temparature	temperature
+temperatur	temperature
+temperaturabhängiger	temperature-dependent
+temperaturanstieg	temperature rise
+temperaturauswertung	temperature evaluation
+temperaturbereich	temperature range
+temperature	temperature
+temperaturfehler	temperature fault
+temperaturfuehler	temperature sensor
+temperaturfühler	temperature sensor
+temperaturgrenze	temperature limit
+temperaturkompensation	temperature compensation
+temperaturmessdraht	temperature measuring wire
+temperaturmessung	temperature measurement
+temperaturschwelle	temperature threshold
+temperatursensor	temperature sensor
+temperatursensoren	temperature sensors
+temperatursensorik	temperature sensing
+temperatursensorwert	temperature sensor value
+temperatursignal	temperature signal
+temperatursignalen	temperature signals
+temperatursollwert	temperature setpoint
+temperatursprung	temperature jump
+temperaturstatistik	temperature statistics
+temperaturwert	temperature value
+tempomat	cruise control
+tempomatschalter	cruise control switch
+temporaer	temporary
+temporär	temporary
+temporäre	temporary
+temporärer	temporary
+tension	tension
+terminal	terminal
+test	test
+testbedingungen	test conditions
+tester	tester
+testfunktion	test function
+testimpuls	test pulse
+testpuls	test pulse
+tests	tests
+testspannung	test voltage
+testzwecke	test purposes
+tev	TEV
+text	text
+tfl	tfl
+tg	tg
+th	th
+than	than
+the	the
+thermalmodel	thermal model
+thermische	thermal
+thermischer	thermal
+thermistor	thermistor
+thermoschutz	thermal protection
+thermostat	thermostat
+third	third
+thorax	thorax
+threshold	threshold
+thro	thro
+throttle	throttle
+ti	TI
+tia	tia
+tiefentladen	deep discharge
+tiefentladung	deep discharge
+tiefsetzbetrieb	step-down operation
+tiefsetzsteller	buck converter
+tikatm	tikatm
+tilt	tilt
+time	time
+timeout	timeout
+timeoutfehler	timeout fault
+timeoutkbus	timeout K-bus
+timer	timer
+timing	timing
+tip	tip
+tkatm	tkatm
+tkp	TKP
+tl	TL
+tlc	tlc
+tle	tle
+tlt	TLT
+tm	TM
+tmbf	TMBF
+tmfa	TMFA
+tmot	TMOT
+tms	TMS
+to	to
+toens	toens
+toggle	toggle
+tol	tol
+toleranz	tolerance
+toleranzabgleich	tolerance matching
+toleranzen	tolerances
+toleranzüberschreitung	tolerance exceedance
+toma	toma
+too	too
+top	top
+torq	TORQ
+torque	torque
+toshiba	Toshiba
+totalausfall	total failure
+totpunkt	dead center
+tp	TP
+tpi	TPI
+tps	TPS
+tpsvkmf	tpsvkmf
+tpu	TPU
+tqi	TQI
+tr	tr
+tracker	tracker
+trafo	transformer
+trailer	trailer
+train	train
+traktion	traction
+traktions	traction
+trana	trana
+transaction	transaction
+transaktion	transaction
+transceiver	transceiver
+transfer	transfer
+transferpumpe	transfer pump
+transistor	transistor
+transistoren	transistors
+transistortemperatur	transistor temperature
+transistortest	transistor test
+transition	transition
+transmission	transmission
+transmit	transmit
+transmitter	transmitter
+transponderspule	transponder coil
+transport	transport
+transportmodus	transport mode
+transtion	transition
+trap	trap
+trct	trct
+trcv	trcv
+treiber	driver
+treiberfehler	driver fault
+trennkupplung	disconnect clutch
+trennrelais	isolation relay
+trennventil	isolation valve
+treshold	threshold
+trigger	trigger
+triggerhistory	trigger history
+triggersignal	trigger signal
+triggerspule	trigger coil
+trimmregelung	trim control
+trockenlauf	dry running
+trotz	despite
+trq	TRQ
+trsp	trsp
+trsvc	TRSVC
+trw	TRW
+ts	ts
+tsa	tsa
+tse	tse
+tstart	TSTART
+tube	tube
+tuer	door
+tuere	door
+tuerkontakt	door contact
+tumg	tumg
+tuner	tuner
+turbine	turbine
+turbinendrehzahl	turbine speed
+turbinendrehzahlsensor	turbine speed sensor
+turbo	turbo
+turbolader	turbocharger
+turboladerdiagnose	turbocharger diagnosis
+turn	turn
+tv	TV
+tview	tview
+twintrbn	twintrbn
+two	two
+tx	TX
+txu	txu
+typ	type
+type	type
+tyr	TYR
+tür	door
+türkontakt	door contact
+türmodul	door module
+türsensoren	door sensors
+uart	UART
+ub	UB
+ubat	Ubat
+ubatt	Ubatt
+uc	uc
+ucoil	ucoil
+ucx	UCX
+udkp	udkp
+ueber	via
+ueberein	match
+ueberfallschalter	override switch
+ueberhitzt	overheated
+ueberlast	overload
+ueberlastet	overloaded
+ueberlauf	overflow
+ueberschreitet	exceeds
+ueberschritten	exceeded
+uebersetzungsfehler	gear ratio error
+ueberspannung	overvoltage
+ueberstrom	overcurrent
+uebertemp	overtemperature
+uebertemperatur	overtemperature
+uebertragung	transmission
+uebertragungsfehler	transmission error
+uebertragungskanal	transmission channel
+ueberwachung	monitoring
+uer	UER
+uet	uet
+ugdo	UGDO
+uhrzeit	time of day
+uhsh	uhsh
+uhsv	uhsv
+ukl	ukl
+ulf	ULF
+ultraschall	ultrasonic
+ultraschallsensor	ultrasonic sensor
+ultraschallsensoren	ultrasonic sensors
+um	by
+uma	UMA
+umgebung	environment
+umgebungsdruck	ambient pressure
+umgebungsdrucksensor	ambient pressure sensor
+umgebungshelligkeit	ambient brightness
+umgebungstemperatur	ambient temperature
+umgebungstemperaturfuehler	ambient temperature sensor
+umgebungstemperatursensor	ambient temperature sensor
+umgeschaltet	switched over
+umgesetzt	implemented
+umlaufdruck	circulation pressure
+umluft	recirculated air
+umluftklappe	recirculation flap
+umluftklappenmotor	recirculation flap motor
+umpumpeinheit	transfer pump unit
+umrechnung	conversion
+umrichter	inverter
+umschaltung	switchover
+umschaltventil	changeover valve
+umsetzung	implementation
+umwelt	environment
+umweltbed	environmental conditions
+umweltbedingung	environmental condition
+umweltbedingungen	environmental conditions
+umweltdatum	environmental data
+unbekannt	unknown
+unbekannte	unknown
+unbekannter	unknown
+unbelegt	unassigned
+unbenutzt	unused
+unbestromt	de-energized
+und	and
+undefined	undefined
+undefiniert	undefined
+undefinierter	undefined
+under	under
+undervoltage	undervoltage
+undicht	leaking
+undichtigkeit	leak
+unerlaubte	unauthorized
+unerlaubter	unauthorized
+unerwartet	unexpected
+unerwartete	unexpected
+unerwarteter	unexpected
+unexpected	unexpected
+ungefiltert	unfiltered
+ungenuegend	insufficient
+ungesichert	unsecured
+ungleich	unequal
+unguelt	unguelt
+ungueltig	invalid
+ungueltige	invalid
+ungueltiger	invalid
+ungueltiges	invalid
+ungültig	invalid
+ungültige	invalid
+ungültiger	invalid
+ungültiges	invalid
+ungültigkeitswert	invalid value
+unit	unit
+unknown	unknown
+unkomfortable	uncomfortable
+unlock	unlock
+unlocks	unlocks
+unplausibel	implausible
+unplausibilitaet	implausibility
+unplausibilität	implausibility
+unplausible	implausible
+unplausiblem	implausible
+unplausiblen	implausible
+unplausibler	implausible
+unplausibles	implausible
+unspezifizierter	unspecified
+unstimmig	inconsistent
+unt	unt
+unten	lower
+unter	under
+unterbr	interruption
+unterbrechung	open circuit
+unterbrochen	interrupted
+unterdruck	vacuum
+unterdruckpumpe	vacuum pump
+unterdrucksensor	vacuum sensor
+unterdrucksystem	vacuum system
+untere	lower
+unteren	lower
+unterer	lower
+unteres	lower
+unterhalb	below
+unterschied	difference
+unterschieden	distinguished
+unterschiedlich	different
+unterschiedliche	different
+unterschreitung	undershoot
+unterschritten	undershot
+unterspannung	undervoltage
+unterstützt	supported
+unterstützung	assistance
+untertemperatur	undertemperature
+unused	unused
+unvollstaendig	incomplete
+unvollständig	incomplete
+unzulaessige	impermissible
+unzulässig	impermissible
+unzulässige	impermissible
+unzulässiger	impermissible
+unzureichend	insufficient
+up	up
+update	update
+upfront	upfront
+upper	upper
+upshift	upshift
+upstream	upstream
+upwg	upwg
+urea	urea
+urlernen	initial learning
+ursache	cause
+us	US
+usb	USB
+used	used
+user	user
+ushk	ushk
+usp	usp
+usv	USV
+usvk	usvk
+uulsuv	uulsuv
+uushk	uushk
+uusvk	uusvk
+uw	UW
+uwb	UWB
+uz	UZ
+va	VA
+vacuum	vacuum
+vacuumsensor	vacuum sensor
+vafs	VAFS
+valid	valid
+value	value
+valve	valve
+valvetronic	valvetronic
+vanos	VANOS
+variable	variable
+variant	variant
+variante	variant
+varianten	variants
+variantencodierung	variant coding
+variantenkodierung	variant coding
+vb	VB
+vbat	VBAT
+vbatt	VBATT
+vcc	VCC
+vch	vch
+vcv	VCV
+vda	VDA
+vdc	VDC
+vdm	VDM
+ve	VE
+veh	veh
+vehicle	vehicle
+vehss	vehss
+velocity	velocity
+ventil	valve
+ventilansteuerung	valve activation
+ventile	valves
+ventilfehler	valve fault
+ventilgruppe	valve group
+ventilleitung	valve line
+ventilprüfung	valve test
+ventilrelais	valve relay
+ventils	valve
+ventilspannung	valve voltage
+ventilspule	valve coil
+ventilstrom	valve current
+ver	ver
+verarbeitung	processing
+verbau	installation
+verbaut	installed
+verbindung	connection
+verbindungsfehler	connection error
+verbrauch	consumption
+verbraucher	consumer
+verbraucherabschaltung	consumer shutdown
+verbraucherreduzierung	consumer reduction
+verbraucherstatus	consumer status
+verbrauchersteuerung	consumer control
+verbrennungsaussetzer	misfire
+verbrennungslageregelung	combustion phasing control
+verbrennungsmotor	internal combustion engine
+verbrennungsmotorferne	combustion engine remote
+verbrennungsmotornahe	near-engine
+verbrennungsmotrferne	combustion engine remote
+verbunden	connected
+verdacht	suspicion
+verdampfer	evaporator
+verdampfertemperaturfühler	evaporator temperature sensor
+verdeck	convertible top
+verdeckklappe	convertible top flap
+verdeckschalter	soft-top switch
+verdeckstecker	soft-top connector
+verdichter	compressor
+verfahren	procedure
+verfuegbar	available
+verfügbar	available
+vergleich	comparison
+vergleicher	comparator
+vergleichsfehler	comparison fault
+vergleichswert	comparison value
+vergleicht	compares
+verhalten	behaviour
+verhindert	prevented
+verhältnis	ratio
+verify	verify
+verklebt	stuck together
+verkoppelt	coupled
+verkopplung	coupling
+verlassen	leave
+verletzt	violated
+verletzung	violation
+verloren	lost
+verlust	loss
+verlustmoment	loss torque
+verlängert	extended
+verpolung	reverse polarity
+verriegeln	lock
+verriegelt	locked
+verriegelung	locking
+verriegelungsmotor	locking motor
+verriegelungsposition	locking position
+vers	vers
+versatz	offset
+verschleissgrenze	wear limit
+verschleiß	wear
+verschluss	closure
+verschmutzt	contaminated
+version	version
+versionsnummer	version number
+versorgung	supply
+versorgungsleitung	supply line
+versorgungspannung	supply voltage
+versorgungsspannung	supply voltage
+versorgungsspannungsfehler	supply voltage fault
+verstaerkerabgleich	amplifier calibration
+verstellbereich	adjustment range
+verstellung	adjustment
+verstellzeit	adjustment time
+verstellzeitbegrenzung	adjustment time limit
+verstopft	clogged
+verstärkerabgleich	amplifier calibration
+versuchen	try
+versucht	attempted
+vertauscht	swapped
+vertauschte	swapped
+verteilergetriebe	transfer case
+verteilung	distribution
+vertikal	vertical
+vertikalbeschleunigung	vertical acceleration
+verursachen	cause
+verursacht	caused
+verwendet	used
+verzoegert	delayed
+verzoegerung	delay
+verzögerte	delayed
+vfzg	vehicle
+vg	VG
+vgl	cf.
+vgsg	VGSG
+vhss	vhss
+vi	VI
+via	via
+vib	VIB
+vibration	vibration
+vics	vics
+video	video
+videoausgabe	video output
+viel	much
+viele	many
+view	view
+vin	VIN
+vip	vip
+virtuelle	virtual
+vision	vision
+viva	VIVA
+vk	vk
+vkat	pre-catalytic converter
+vl	VL
+vls	vls
+vnt	VNT
+voll	full
+vollast	full load
+volllast	full load
+vollständig	complete
+volt	volt
+voltage	voltage
+volumenstrom	volume flow
+vom	from
+von	from
+vor	before
+vorbefüllung	pre-filling
+vorderachse	front axle
+voreinspritzung	pilot injection
+vorfoerderdruck	supply pressure
+vorfoerderpumpe	booster fuel pump
+vorförderdruck	supply pressure
+vorförderdruckregelung	feed pressure control
+vorförderdrucksensor	booster pressure sensor
+vorförderpumpe	pre-feed pump
+vorgabe	specification
+vorhalt	lead
+vorhanden	present
+vorhandener	existing
+vorhang	curtain
+vorkat	pre-catalyst
+vorkatsonde	pre-catalyst probe
+vorladung	precharge
+vorläufig	provisional
+vorn	front
+vorne	front
+vorsichtig	cautious
+voruebergehend	temporarily
+vorwarnung	pre-warning
+vorzeichenfehler	sign error
+vr	VR
+vref	VREF
+vrfd	VRFD
+vsm	vsm
+vsu	VSU
+vsw	VSW
+vtg	VTG
+vvt	VVT
+vx	vx
+vyaw	VYAW
+wackelkontakt	loose contact
+waehlhebel	selector lever
+waehlhebelschalter	selector lever switch
+waehlhebelsignal	selector lever signal
+waehlwinkel	selection angle
+waehrend	during
+waermestrom	heat flow
+wahlrad	selector dial
+wait	wait
+wake	wake
+wakeup	wake-up
+wakeupleitung	wake-up line
+wandler	converter
+wandleraustritt	converter outlet
+wandlerfehler	converter fault
+wandlerkupplung	torque converter clutch
+wandlerleitungen	converter lines
+wandlers	converter
+wandlervergleich	converter comparison
+wandlung	conversion
+wankmoment	roll moment
+war	was
+warm	warm
+warmlauf	warm-up
+warn	warn
+warning	warning
+warnlampe	warning lamp
+warnschwelle	warning threshold
+warnschwellenwert	warning threshold
+warnstufe	warning level
+warnung	warning
+warten	wait
+warteschlange	queue
+was	what
+wasserpumpe	water pump
+wasserventil	water valve
+wastegate	wastegate
+wastegateansteuerung	wastegate activation
+watchdog	watchdog
+wc	WC
+wd	WD
+wda	wda
+wdg	WDG
+wdgm	WDGM
+wdkba	wdkba
+wdks	wdks
+wdpd	wdpd
+wechselcode	rolling code
+wechselcodeablage	rolling code storage
+wecken	wake up
+weckendes	waking
+weckleitung	wake-up line
+weg	path
+wegen	due to
+wegfahrsicherung	immobilizer
+wegfahrsperre	immobilizer
+wegsignal	travel signal
+wegstrecke	distance
+weil	because
+weit	wide
+weitergeleitet	forwarded
+wenn	when
+werden	are
+wert	value
+werte	values
+wertebereich	value range
+wertebereiches	value range
+wertebereichs	value range
+wertebereichsverletzung	value range violation
+wertänderung	value change
+wg	WG
+wheel	wheel
+when	when
+which	which
+whl	WHL
+wi	wi
+wicklung	winding
+widerspruch	contradiction
+widerstand	resistance
+widerstandsmessung	resistance measurement
+wiederholsperre	repeat lock
+wiederholstrategie	retry strategy
+wiederholungen	repetitions
+wiederlernen	relearn
+windlauf	cowl
+window	window
+windowbag	window bag
+windschild	windshield
+windshield	windshield
+windungsschluss	turn-to-turn short
+winkel	angle
+winkelbeschl	angle acceleration
+winkelsensor	angle sensor
+winkelunterschied	angle difference
+winkelversatz	angular offset
+wippe	rocker
+wird	is
+wire	wire
+wirkungsgrad	efficiency
+wischer	wiper
+wischergeschwindigkeit	wiper speed
+wischermotor	wiper motor
+wischertaster	wiper switch
+with	with
+within	within
+wk	WK
+wm	wm
+wmom	WMOM
+word	word
+write	write
+wrong	wrong
+wsta	wsta
+wup	WUP
+wurde	was
+wurden	were
+wählhebel	selector lever
+wählhebelposition	selector lever position
+während	during
+wärmepumpe	heat pump
+wärmestrom	heat flow
+wärmetauscher	heat exchanger
+xa	XA
+xaa	XAA
+xabc	xabc
+xabd	XABD
+xac	xac
+xae	xae
+xb	XB
+xba	XBA
+xbb	xbb
+xbc	xbc
+xbd	xbd
+xbf	XBF
+xc	XC
+xcd	XCD
+xcda	XCDA
+xcdad	xcdad
+xcdb	XCDB
+xcdba	XCDBA
+xcdbb	xcdbb
+xcdbc	xcdbc
+xcdbe	xcdbe
+xcdbf	xcdbf
+xcdc	XCDC
+xcdd	XCDD
+xcdda	xcdda
+xcddd	xcddd
+xcde	XCDE
+xcdf	XCDF
+xce	XCE
+xd	XD
+xde	xde
+xdfc	XDFC
+xe	XE
+xec	xec
+xef	XEF
+xenon	xenon
+xf	XF
+xgate	xgate
+xmt	xmt
+xtrq	XTRQ
+xx	xx
+xxx	xxx
+xy	XY
+yaw	yaw
+ymr	YMR
+yr	yr
+zaehler	counter
+zahn	tooth
+zahnfehler	tooth fault
+zahnsprung	tooth skip
+zahnstange	rack
+zahnversatz	tooth offset
+zbe	zbe
+zeigen	show
+zeigt	shows
+zeile	line
+zeit	time
+zeitbotschaft	time message
+zeitbotschafttimeout	time message timeout
+zeitdauer	duration
+zeitspanne	time span
+zeitueberschreitung	timeout
+zeitweise	temporarily
+zeitzähler	time counter
+zeitüberschreitung	timeout
+zeitüberwachung	time monitoring
+zellblock	cell block
+zelldefekt	cell defect
+zelle	cell
+zellen	cells
+zellenblock	cell block
+zellspannung	cell voltage
+zellspannungsmessung	cell voltage measurement
+zelltemperaturen	cell temperatures
+zellüberwachung	cell monitoring
+zentral	central
+zentralantrieb	central drive
+zentrale	central
+zentrales	central
+zentralsteuergeraet	central control unit
+zentralverriegelung	central locking
+zerstört	destroyed
+zf	ZF
+zfe	zfe
+zfls	ZFLS
+zfm	ZFM
+zgm	ZGM
+zgw	ZGW
+zieht	pulls
+zielgang	target gear
+zk	zk
+zku	zku
+zse	zse
+zsg	zsg
+zsr	ZSR
+zu	to
+zueinander	relative to each other
+zuendaussetzerkennung	misfire detection
+zuender	ignition
+zuendfunkens	ignition spark
+zuendkapazitaet	ignition capacitance
+zuendkondensator	ignition capacitor
+zuendkreis	ignition circuit
+zuendkreisueberwachung	ignition circuit monitoring
+zuendpille	ignition plug
+zuendreihenfolge	firing order
+zuendspule	ignition coil
+zuendung	ignition
+zuendwinkel	ignition angle
+zuendzeit	ignition timing
+zug	pull
+zugelassener	approved
+zugeschlagen	slammed shut
+zugeteilt	assigned
+zugriff	access
+zugstufe	rebound damping
+zuheizer	auxiliary heater
+zukundskreis	ignition circuit
+zul	zul
+zulaessige	permissible
+zuleitung	supply line
+zuletzt	last
+zulieferer	supplier
+zulieferers	supplier
+zulässig	permissible
+zulässige	permissible
+zulässigem	permissible
+zulässigen	permissible
+zulässiger	permissible
+zulässiges	permissible
+zum	to
+zuordenbarer	assignable
+zuordnung	assignment
+zur	for
+zurückgesetzt	reset
+zusaetzliche	additional
+zusammen	together
+zusatz	auxiliary
+zusatzbatterie	auxiliary battery
+zusatzblinker	auxiliary indicator
+zusatzkühlmittelpumpe	auxiliary coolant pump
+zusatzluefter	auxiliary fan
+zusatzscheinwerfer	auxiliary headlight
+zusatzwasserpumpe	auxiliary water pump
+zuschaltung	connection
+zust	state
+zustand	state
+zustandsautomat	state machine
+zustarteinrichtung	starting device
+zuviele	too many
+zuweisbar	assignable
+zuziehhilfe	soft-close assist
+zv	ZV
+zw	zw
+zwangshochschaltung	forced upshift
+zwei	two
+zweig	branch
+zwischen	between
+zwischenkreis	DC link
+zwischenkreisspannung	DC link voltage
+zwischenposition	intermediate position
+zwischenwellensensor	intermediate shaft sensor
+zwk	ZWK
+zyklische	cyclic
+zyklischem	cyclic
+zyklischen	cyclic
+zyklus	cycle
+zyl	cyl
+zylinder	cylinder
+zylindereinspritzabschaltung	cylinder injection cut-off
+zylindergleichstellung	cylinder balancing
+zylinderindividuell	cylinder-specific
+zylinderindividuelle	cylinder-specific
+zylinderindividuellen	cylinder-specific
+zylindern	cylinders
+zylinderreihenfolge	cylinder firing order
+zylinderselektive	cylinder-selective
+zylinderspezifische	cylinder-specific
+zähler	counter
+zündendstufe	ignition output stage
+zünder	igniter
+zündfolge	firing order
+zündkreis	ignition circuit
+zündkreisüberwachung	ignition circuit monitoring
+zündpillen	squib
+zündreihenfolge	firing order
+zündspule	ignition coil
+zündung	ignition
+zündwinkel	ignition angle
+zündwinkelverstellung	ignition timing adjustment
+zündzeit	ignition timing
+änderung	change
+äquidistanten	equidistant
+äußeren	outer
+öffnen	open
+öffnende	opening
+öffnet	opens
+öffnungsverzugszeit	opening delay time
+öl	oil
+öldruck	oil pressure
+öldruckregelung	oil pressure control
+öldruckregelventil	oil pressure control valve
+öldruckschalter	oil pressure switch
+öldrucksensor	oil pressure sensor
+ölmasse	oil mass
+ölniveau	oil level
+ölniveausensor	oil level sensor
+ölpumpe	oil pump
+ölsensor	oil sensor
+ölstand	oil level
+öltemperatur	oil temperature
+öltemperatursensor	oil temperature sensor
+ölviskosität	oil viscosity
+ölzustandssensor	oil condition sensor
+über	via
+überdrehzahl	overspeed
+übereinstimmung	agreement
+übergang	transition
+überhitzt	overheated
+überhitzung	overheating
+überhöhter	excessive
+überlast	overload
+überlastet	overloaded
+überlastschutz	overload protection
+überlastung	overload
+überlauf	overflow
+überprüfung	check
+überschreitung	exceedance
+überschritten	exceeded
+übersetzungsueberwachung	gear ratio monitoring
+übersetzungsüberwachung	gear ratio monitoring
+überspannung	overvoltage
+überspannungserkennung	overvoltage detection
+übersteigt	exceeds
+überstrom	overcurrent
+übertemperatur	overtemperature
+übertemperaturabschaltung	overtemperature shutdown
+übertemperaturerkennung	overtemperature detection
+übertragbares	transferable
+übertragung	transmission
+übertragungsfehler	transmission error
+übertragungskanal	transmission channel
+überwachung	monitoring
+überwachungsebene	monitoring level
+überwachungsmodul	monitoring module
+überwachungsrechner	monitoring computer
