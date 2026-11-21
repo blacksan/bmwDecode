@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    EDIABAS runtime for bmwDecode.
+    Compiles EdiabasLib (github.com/uholeschak/ediabaslib, GPLv3) straight from the pinned submodule so the
+    app never needs BMW's 32-bit EDIABAS install: only the SGBD files (C:\EDIABAS\Ecu) are read.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>BmwDecode.Ediabas</RootNamespace>
+    <!-- EdiabasLib sources predate nullable annotations and rely on explicit usings. -->
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>$(NoWarn);CS0162;CS0168;CS0219;CS0414;CS0649;CS0067;CS8981;CS1998;CS0618;SYSLIB0011;SYSLIB0014;SYSLIB0051;CA1416;CA2022</NoWarn>
+    <EdiabasLibDir>$(MSBuildThisFileDirectory)..\..\external\ediabaslib\EdiabasLib\EdiabasLib\</EdiabasLibDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(EdiabasLibDir)*.cs"
+             Exclude="$(EdiabasLibDir)*Android*.cs;$(EdiabasLibDir)BtLeGattSpp.cs;$(EdiabasLibDir)EdBluetoothInterface.cs"
+             Link="EdiabasLib\%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.IO.Ports" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BmwDecode.Core\BmwDecode.Core.csproj" />
+  </ItemGroup>
+
+</Project>

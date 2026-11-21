@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BmwDecode.Core/BmwDecode.Core.csproj" />
+    <Project Path="src/BmwDecode.Ediabas/BmwDecode.Ediabas.csproj" />
+    <Project Path="src/BmwDecode.App/BmwDecode.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BmwDecode.Core.Tests/BmwDecode.Core.Tests.csproj" />
+  </Folder>
+</Solution>

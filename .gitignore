@@ -1,0 +1,16 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+artifacts/
+publish/
+TestResults/
+# Never commit BMW proprietary data (EDIABAS / INPA / SP-Daten)
+EDIABAS/
+*.prg
+*.PRG
+*.grp
+*.GRP
+*.ipo
+*.IPO

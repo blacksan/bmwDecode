@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Pure .NET library: no NuGet dependencies, no Windows APIs. Holds the domain model,
+       the chassis catalogue, diagnostic workflows and the demo vehicle. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>BmwDecode.Core</RootNamespace>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Chassis -> ECU address / group file catalogue maintained by the EdiabasLib project (GPLv3). -->
+    <EmbeddedResource Include="..\..\external\ediabaslib\EdiabasLib\BmwFileReader\VehicleSeries.zip"
+                      LogicalName="BmwDecode.Core.VehicleSeries.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="BmwDecode.Core.Tests" />
+  </ItemGroup>
+
+</Project>
