@@ -515,7 +515,7 @@ public sealed partial class ModuleViewModel : ObservableObject
         LiveRows.Clear();
         _liveByKey.Clear();
         IsLive = true;
-        _session.IsBusy = true;
+        using var busy = _session.BeginBusy();
         var interval = TimeSpan.FromMilliseconds(Math.Clamp(_settings.Current.LiveIntervalMs, 100, 10_000));
         var rounds = 0;
         try
@@ -553,7 +553,6 @@ public sealed partial class ModuleViewModel : ObservableObject
         finally
         {
             IsLive = false;
-            _session.IsBusy = false;
             if (cancellationToken.IsCancellationRequested)
             {
                 LiveStatus = $"Stopped after {rounds} rounds.";
@@ -635,6 +634,7 @@ public sealed partial class ModuleViewModel : ObservableObject
 
         IsBusy = true;
         StatusText = text;
+        using var busy = _session.BeginBusy();
         try
         {
             await action(CancellationToken.None);

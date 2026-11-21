@@ -140,14 +140,23 @@ public sealed partial class SettingsViewModel : PageViewModel
         }
     }
 
-    public string IstaInfo
+    [ObservableProperty]
+    private string _istaInfo = "Looking for ISTA session files…";
+
+    public override void OnNavigatedTo() => _ = LoadIstaInfoAsync();
+
+    private async Task LoadIstaInfoAsync()
     {
-        get
+        try
         {
-            var cars = Core.Vehicle.IstaHistory.Load();
-            return cars.Count == 0
+            var cars = await Task.Run(() => Core.Vehicle.IstaHistory.Load());
+            IstaInfo = cars.Count == 0
                 ? "No ISTA session files found. When ISTA has identified a car on this PC, its VIN, type key and model are reused here."
                 : $"{cars.Count} car(s) known from ISTA sessions: " + string.Join(", ", cars.Take(5).Select(c => $"{c.Vin[^7..]} {c.Model ?? c.Series}"));
+        }
+        catch (Exception ex)
+        {
+            IstaInfo = $"ISTA session files could not be read: {ex.Message}";
         }
     }
 

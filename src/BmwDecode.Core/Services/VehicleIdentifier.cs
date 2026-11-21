@@ -164,6 +164,32 @@ public sealed partial class VehicleIdentifier
             }
         }
 
+        // ---- Cross-check a CAS VIN against the body modules: a swapped CAS carries its donor's VIN ----
+        var vinFromCasOnly = false;
+        if (vin is not null && vinSource?.StartsWith("CAS", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            vinFromCasOnly = true;
+            foreach (var (sgbd, job, result) in new[] { ("FRM_87", "READ_FVIN", "FVIN"), ("D_LM", "READ_FVIN", "FVIN"), ("D_KOMBI", "C_FG_LESEN", "FG_NR") })
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var r = await TryRunAsync(sgbd, job, cancellationToken).ConfigureAwait(false);
+                if (NormalizeVin(r?.Sets.Select(s => s.Text(result)).FirstOrDefault(v => !string.IsNullOrWhiteSpace(v))) is not { } body)
+                {
+                    continue;
+                }
+
+                vinFromCasOnly = false;
+                if (!SameVin(body, vin))
+                {
+                    sources.Add($"CAS reports VIN {vin}, {r!.Variant} reports {body} – the CAS is probably from another car; using the body VIN");
+                    vin = body.Length == 17 || vin.Length != 17 ? body : vin;
+                    vinSource = $"{r.Variant} {job}";
+                }
+
+                break;
+            }
+        }
+
         // ---- Vehicle order (FA) ----
         string? faRaw = null, series = null, seriesSource = null;
         VehicleOrder? order = null;
@@ -249,17 +275,17 @@ public sealed partial class VehicleIdentifier
                 }
 
                 series = vinSeries;
-                seriesSource = "VIN (ISTA history)";
+                seriesSource = vinFromCasOnly ? "VIN (ISTA history, CAS only)" : "VIN (ISTA history)";
             }
 
             sources.Add($"VIN known from ISTA session {seen.SeenAt:yyyy-MM-dd} (factory build: {seen.Model ?? seen.Series}, {seen.EngineCode ?? seen.Engine})");
         }
 
         var typeKeySeries = NormalizeSeries(_typeKeys.Find(vin is { Length: 17 } ? vin[3..7] : null)?.Series);
-        if (typeKeySeries is not null && seriesSource != "VIN (ISTA history)")
+        if (typeKeySeries is not null && seriesSource?.StartsWith("VIN (ISTA", StringComparison.Ordinal) != true)
         {
             series = typeKeySeries;
-            seriesSource = "VIN type key";
+            seriesSource = vinFromCasOnly ? "VIN type key (CAS only)" : "VIN type key";
         }
 
         // ---- Type key: local database first (FZGIDENT tables + the user's typekeys.csv), then FZGIDENT jobs ----
@@ -361,6 +387,10 @@ public sealed partial class VehicleIdentifier
         var br = r?.Sets.Select(s => s.Text("BR")).FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
         return (std, br);
     }
+
+    /// <summary>Full and short VINs match when the last 7 characters agree.</summary>
+    internal static bool SameVin(string a, string b) =>
+        a.Equals(b, StringComparison.OrdinalIgnoreCase) || (a.Length >= 7 && b.Length >= 7 && a[^7..].Equals(b[^7..], StringComparison.OrdinalIgnoreCase));
 
     internal static string? SeriesFromOrder(string? vehicleOrder) => VehicleOrderParser.Parse(vehicleOrder)?.Series;
 

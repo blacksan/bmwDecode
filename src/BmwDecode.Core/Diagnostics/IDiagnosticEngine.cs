@@ -94,32 +94,42 @@ public sealed record JobDescription(
 
 public static class JobSafety
 {
-    private static readonly string[] DangerousFragments =
+    // Anything that can change the ECU. Checked even for jobs that otherwise look read-only.
+    private static readonly string[] WritingFragments =
     [
-        "SCHREIBEN", "FLASH", "LOESCHEN", "STEUERN", "PROGRAMM", "RESET", "C_C_", "C_FA_", "C_FG_AUFTRAG",
-        "C_FG_SCHREIBEN", "AIF_SCHREIBEN", "ABGLEICH", "LERNWERTE", "ADAP", "SET_", "WRITE", "AUTHENTISIERUNG",
-        "STEUERGERAETE_RESET", "SPEICHER_SCHREIBEN", "_COD", "SLEEP_MODE", "ENERGIESPARMODE", "DIAGNOSE_MODE",
+        "SCHREIBEN", "LOESCHEN", "STEUERN", "FLASH", "PROG", "RESET", "AUFTRAG", "CODIER", "ABGLEICH_PROG", "LERNWERTE_RUECK",
+        "SET_", "WRITE", "AUTHENTISIERUNG_START", "SLEEP", "ENERGIESPAR", "DIAGNOSE_MODE", "EINLERNEN", "KALIBR", "NORMIER",
+        "REGISTRIEREN", "INITIALISIER_", "START_", "STOP_", "SPERREN", "AKTIVIEREN", "DEAKTIVIEREN",
     ];
 
+    /// <summary>
+    /// Whitelist: a job counts as safe only if it clearly just reads (STATUS_*, *_LESEN, IDENT, INFO, virtual _JOBS)
+    /// and contains no writing keyword. Everything else asks for confirmation before it runs.
+    /// </summary>
     public static bool IsPotentiallyDestructive(string jobName)
     {
-        if (string.IsNullOrWhiteSpace(jobName) || jobName.StartsWith("_JOB", StringComparison.OrdinalIgnoreCase))
+        if (string.IsNullOrWhiteSpace(jobName))
+        {
+            return true;
+        }
+
+        var upper = jobName.Trim().ToUpperInvariant();
+        if (upper.StartsWith("_JOB", StringComparison.Ordinal) || upper is "_TABLES" or "_TABLE" or "_ARGUMENTS" or "_RESULTS" or "_VERSIONINFO")
         {
             return false;
         }
 
-        var upper = jobName.ToUpperInvariant();
-
-        // Read-only jobs by naming convention, unless they also write or clear something.
         var looksReadOnly = upper.StartsWith("STATUS_", StringComparison.Ordinal) ||
                             upper.EndsWith("_LESEN", StringComparison.Ordinal) ||
-                            upper.Contains("_LESEN_", StringComparison.Ordinal);
-        if (looksReadOnly)
+                            upper.Contains("_LESEN_", StringComparison.Ordinal) ||
+                            upper.StartsWith("IDENT", StringComparison.Ordinal) ||
+                            upper is "INFO" or "INITIALISIERUNG";
+        if (!looksReadOnly)
         {
-            return upper.Contains("SCHREIBEN", StringComparison.Ordinal) || upper.Contains("LOESCHEN", StringComparison.Ordinal);
+            return true;
         }
 
-        return DangerousFragments.Any(upper.Contains);
+        return WritingFragments.Any(upper.Contains);
     }
 }
 

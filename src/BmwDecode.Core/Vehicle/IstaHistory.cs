@@ -43,19 +43,22 @@ public static class IstaHistory
     public static IReadOnlyList<IstaVehicleRecord> Load(IEnumerable<string>? folders = null)
     {
         var byVin = new Dictionary<string, IstaVehicleRecord>(StringComparer.OrdinalIgnoreCase);
+        var all = new List<string>();
         foreach (var folder in (folders ?? DefaultFolders()).Where(Directory.Exists))
         {
-            IEnumerable<string> files;
             try
             {
-                files = Directory.EnumerateFiles(folder, "RG_*.xml").OrderBy(File.GetLastWriteTimeUtc).ToList();
+                all.AddRange(Directory.EnumerateFiles(folder, "RG_*.xml"));
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                continue;
+                // unreadable folder: skip
             }
+        }
 
-            foreach (var file in files)
+        // One chronological pass over every folder so the newest session wins.
+        foreach (var file in all.OrderBy(File.GetLastWriteTimeUtc))
+        {
             {
                 IstaVehicleRecord? record;
                 try

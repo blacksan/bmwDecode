@@ -1,4 +1,4 @@
-; bmwDecode installer (Inno Setup 6).
+﻿; bmwDecode installer (Inno Setup 6).
 ;
 ; Public build (CI):   iscc bmwDecode.iss /DAppVersion=0.2.0 /DPublishDir=..\publish
 ; Private build:       installer\build-private.ps1 -EcuPath C:\EDIABAS\Ecu -DriverPath "<K+DCAN driver folder>"

@@ -130,7 +130,7 @@ public sealed partial class QuickTestViewModel : PageViewModel
         var series = _session.Series!;
         var engine = _session.RequireEngine();
         IsWorking = true;
-        _session.IsBusy = true;
+        using var busy = _session.BeginBusy();
         RefreshCommands();
         Rows.Clear();
         var rowByKey = new Dictionary<string, EcuRowViewModel>(StringComparer.OrdinalIgnoreCase);
@@ -191,7 +191,6 @@ public sealed partial class QuickTestViewModel : PageViewModel
         {
             Current = null;
             IsWorking = false;
-            _session.IsBusy = false;
             RefreshCommands();
         }
     }
@@ -211,6 +210,7 @@ public sealed partial class QuickTestViewModel : PageViewModel
         }
 
         IsWorking = true;
+        using var busy = _session.BeginBusy();
         RefreshCommands();
         try
         {

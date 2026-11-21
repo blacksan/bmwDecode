@@ -114,7 +114,7 @@ public sealed partial class OverviewViewModel : PageViewModel
     /// <summary>Shown when the car reports a different chassis than the selected profile (e.g. a CAS from another car).</summary>
     public string? SeriesMismatch =>
         Vehicle.Series is { } detected && _session.Series is { } chosen && !detected.Equals(chosen.Series, StringComparison.OrdinalIgnoreCase)
-            ? $"The vehicle order reports {detected}, but the {chosen.Series} profile is selected. Swapped modules (e.g. a CAS from another chassis) can cause this; keep the profile that matches the body."
+            ? $"The car reports {detected} (from {Vehicle.SeriesSource ?? "the vehicle order"}), but the {chosen.Series} profile is selected. Swapped modules (e.g. a CAS from another chassis) can cause this; keep the profile that matches the body."
             : null;
 
     public override void OnNavigatedTo()
@@ -241,7 +241,9 @@ public sealed partial class OverviewViewModel : PageViewModel
         if (vehicle.Series is { } detected && _session.Catalog.Find(detected) is { } series &&
             !series.Series.Equals(_session.Series?.Series, StringComparison.OrdinalIgnoreCase))
         {
-            var fromVin = vehicle.SeriesSource?.Contains("VIN", StringComparison.OrdinalIgnoreCase) == true;
+            // A VIN read only from the CAS may belong to a donor car (swapped CAS): treat it like the vehicle order.
+            var fromVin = vehicle.SeriesSource?.Contains("VIN", StringComparison.OrdinalIgnoreCase) == true &&
+                          vehicle.SeriesSource?.Contains("CAS only", StringComparison.OrdinalIgnoreCase) != true;
             if (fromVin || series.IsDs2 || _session.Series?.IsDs2 != false ||
                 !string.Equals(series.Family, _session.Series?.Family, StringComparison.OrdinalIgnoreCase))
             {
@@ -255,11 +257,20 @@ public sealed partial class OverviewViewModel : PageViewModel
             var current = _session.Series;
             var candidates = new[] { current?.MainSgbd }.OfType<string>().Concat(ModuleDiscovery.AllMainSgbds);
             var (main, ecus) = await new ModuleDiscovery(engine).DiscoverAnyAsync(candidates, cancellationToken);
-            if (main is not null && !string.Equals(current?.MainSgbd, main, StringComparison.OrdinalIgnoreCase) &&
-                _session.Catalog.ESeries.FirstOrDefault(x => x.MainSgbd == main) is { } family)
+            if (main is not null && !string.Equals(current?.MainSgbd, main, StringComparison.OrdinalIgnoreCase))
             {
-                _session.Series = family;
-                _session.Warn($"VIN did not identify the chassis; {ecus.Count} modules answer to {main}, using the {family.Series} profile. Change it if needed.");
+                // Several chassis share a main-series SGBD (E81…E93 = E89X): pick the one whose module list fits best.
+                var groups = ecus.Select(e => e.Group).OfType<string>().ToHashSet(StringComparer.OrdinalIgnoreCase);
+                var family = _session.Catalog.ESeries
+                    .Where(x => string.Equals(x.MainSgbd, main, StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(x => x.Ecus.Count(e => e.Groups.Any(groups.Contains)))
+                    .ThenBy(x => x.Ecus.Count)
+                    .FirstOrDefault();
+                if (family is not null)
+                {
+                    _session.Series = family;
+                    _session.Warn($"The VIN did not identify the chassis; {ecus.Count} modules answer to {main}. Using the {family.Series} profile – pick the exact chassis on the Overview page if it differs.");
+                }
             }
         }
 
@@ -276,6 +287,7 @@ public sealed partial class OverviewViewModel : PageViewModel
         IsWorking = true;
         StatusText = busy;
         ErrorText = null;
+        using var busScope = _session.BeginBusy();
         ConnectCommand.NotifyCanExecuteChanged();
         DisconnectCommand.NotifyCanExecuteChanged();
         IdentifyCommand.NotifyCanExecuteChanged();

@@ -148,3 +148,44 @@ public class JobCategoryTests
         Assert.False(JobCategories.IsCodingRead("C_C_SCHREIBEN"));
     }
 }
+
+public class SafetyAndTranslationRegressionTests
+{
+    [Fact]
+    public void Only_clearly_read_only_jobs_skip_confirmation()
+    {
+        foreach (var job in new[] { "C_S_AUFTRAG", "C_AEI_AUFTRAG", "CODIERUNG_SCHREIBEN", "START_SYSTEMCHECK_PM_MESSEMODE", "STOP_SYSTEMCHECK",
+                     "LENKWINKEL_KALIBRIEREN", "FENSTERHEBER_EINLERNEN", "STEUERN_BATTERIETAUSCH_REGISTRIEREN", "DIAGNOSE_MODE", "IRGENDWAS" })
+        {
+            Assert.True(JobSafety.IsPotentiallyDestructive(job), job);
+        }
+
+        foreach (var job in new[] { "STATUS_UBATT", "FS_LESEN", "IDENT", "INFO", "C_C_LESEN", "ABGLEICH_LESEN", "_JOBS" })
+        {
+            Assert.False(JobSafety.IsPotentiallyDestructive(job), job);
+        }
+    }
+
+    [Fact]
+    public void Identifiers_and_caps_codes_are_not_translated()
+    {
+        var t = BmwDecode.Core.Translation.Translator.FromTables(
+            [new("klemme", "terminal"), new("motordrehzahl", "engine speed"), new("gang", "gear"), new("wert", "value")], []);
+
+        Assert.Equal("STATUS_MOTORDREHZAHL", t.Translate("STATUS_MOTORDREHZAHL"));
+        Assert.Equal("KLEMME_15", t.Translate("KLEMME_15"));
+        Assert.Equal("DSCIII", t.Translate("DSCIII"));
+        Assert.Equal("Actual-gear", t.Translate("Ist-Gang"));
+        Assert.Equal("Terminal 15", t.Translate("Klemme 15"));
+    }
+
+    [Fact]
+    public void Functional_ident_addresses_prefer_the_numeric_result()
+    {
+        var numeric = new ResultSet([new ResultValue("ECU_ADR", ResultKind.Integer, 18L), new ResultValue("ID_SG_ADR", ResultKind.Integer, 0x12L)]);
+        var text = new ResultSet([new ResultValue("ECU_ADR", ResultKind.Text, "12")]);
+
+        Assert.Equal(0x12, BmwDecode.Core.Services.ModuleDiscovery.AddressOf(numeric));
+        Assert.Equal(0x12, BmwDecode.Core.Services.ModuleDiscovery.AddressOf(text));
+    }
+}

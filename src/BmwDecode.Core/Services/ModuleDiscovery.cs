@@ -44,7 +44,7 @@ public sealed class ModuleDiscovery
         var byAddress = new Dictionary<int, DiscoveredEcu>();
         foreach (var set in ident.Sets)
         {
-            var address = ParseAddress(set.Text("ECU_ADR")) ?? (int?)set.Long("ID_SG_ADR");
+            var address = AddressOf(set);
             if (address is null || address < 0)
             {
                 continue;
@@ -79,7 +79,7 @@ public sealed class ModuleDiscovery
             var fs = await _engine.ExecuteAsync(mainSgbd, "FS_LESEN_FUNKTIONAL", "", cancellationToken).ConfigureAwait(false);
             foreach (var set in fs.Sets)
             {
-                var address = ParseAddress(set.Text("ECU_ADR")) ?? (int?)set.Long("ID_SG_ADR");
+                var address = AddressOf(set);
                 if (address is { } a && byAddress.TryGetValue(a, out var ecu) && set.Long("F_ANZ") is { } n)
                 {
                     byAddress[a] = ecu with { FaultCount = (int)n };
@@ -108,6 +108,22 @@ public sealed class ModuleDiscovery
         }
 
         return (null, []);
+    }
+
+    /// <summary>ID_SG_ADR (numeric) first; ECU_ADR is a hex string ("12" = 0x12) only when it really is text.</summary>
+    internal static int? AddressOf(ResultSet set)
+    {
+        if (set.Long("ID_SG_ADR") is { } numeric and >= 0)
+        {
+            return (int)numeric;
+        }
+
+        if (set.TryGetValue("ECU_ADR", out var adr))
+        {
+            return adr.Kind == ResultKind.Text ? ParseAddress(adr.Display) : (int?)adr.AsLong;
+        }
+
+        return null;
     }
 
     internal static int? ParseAddress(string? text)

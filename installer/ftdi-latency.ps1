@@ -1,4 +1,4 @@
-# Sets the latency timer of every FTDI USB serial device to 1 ms (INPA/EDIABAS recommendation for K+DCAN cables).
+﻿# Sets the latency timer of every FTDI USB serial device to 1 ms (INPA/EDIABAS recommendation for K+DCAN cables).
 # Applies to cables that have been plugged in at least once; replug the cable afterwards.
 $root = 'HKLM:\SYSTEM\CurrentControlSet\Enum\FTDIBUS'
 if (-not (Test-Path $root)) { exit 0 }

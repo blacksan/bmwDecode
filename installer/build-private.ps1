@@ -1,4 +1,4 @@
-<#
+﻿<#
   Builds a private, fully standalone bmwDecode installer on this PC: the app, your SGBD files and the K+DCAN
   (FTDI) driver in one setup.exe. BMW's SGBD files are BMW's property: keep the result for your own machines and
   never upload it (the public GitHub build deliberately contains no BMW data).
@@ -22,6 +22,7 @@ $staging = Join-Path $repo 'artifacts\ecu-staging'
 
 dotnet publish (Join-Path $repo 'src\BmwDecode.App\BmwDecode.App.csproj') -c Release -r win-x64 --self-contained true `
     -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=none -o $publish
+if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed ($LASTEXITCODE)" }
 
 # Merge INPA's and ISTA's SGBDs (ISTA's newer files win).
 Remove-Item $staging -Recurse -Force -ErrorAction SilentlyContinue
@@ -37,4 +38,5 @@ if (-not $iscc) { throw 'Inno Setup 6 not found. Install it with: winget install
 $defines = @("/DAppVersion=$Version", "/DPublishDir=$publish", "/DEcuDir=$staging", "/DOutputDir=$(Join-Path $repo 'artifacts')")
 if ($DriverPath -and (Test-Path $DriverPath)) { $defines += "/DDriverDir=$DriverPath" }
 & $iscc @defines (Join-Path $PSScriptRoot 'bmwDecode.iss')
+if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed ($LASTEXITCODE)" }
 Write-Host "Private installer written to $(Join-Path $repo 'artifacts')"

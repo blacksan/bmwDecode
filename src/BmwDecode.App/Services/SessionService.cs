@@ -53,6 +53,50 @@ public sealed partial class SessionService : ObservableObject
     [ObservableProperty]
     private bool _isBusy;
 
+    private int _busyCount;
+
+    /// <summary>
+    /// Marks the bus as in use (quick test, live data, module jobs, identification, job explorer) so background
+    /// polling of battery/ignition never slips in between related jobs. Dispose to release; scopes nest.
+    /// </summary>
+    public IDisposable BeginBusy()
+    {
+        var dispatcher = Application.Current?.Dispatcher;
+        void Update(int delta)
+        {
+            _busyCount = Math.Max(0, _busyCount + delta);
+            IsBusy = _busyCount > 0;
+        }
+
+        if (dispatcher is null || dispatcher.CheckAccess())
+        {
+            Update(+1);
+        }
+        else
+        {
+            dispatcher.Invoke(() => Update(+1));
+        }
+
+        return new BusyScope(() =>
+        {
+            if (dispatcher is null || dispatcher.CheckAccess())
+            {
+                Update(-1);
+            }
+            else
+            {
+                dispatcher.BeginInvoke(() => Update(-1));
+            }
+        });
+    }
+
+    private sealed class BusyScope(Action release) : IDisposable
+    {
+        private Action? _release = release;
+
+        public void Dispose() => Interlocked.Exchange(ref _release, null)?.Invoke();
+    }
+
     [ObservableProperty]
     private string _busyText = string.Empty;
 

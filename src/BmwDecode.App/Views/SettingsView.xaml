@@ -37,6 +37,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.ColumnSpan="2" Text="Preferences" Style="{StaticResource SectionTitle}" />
@@ -64,7 +65,7 @@
                               Content="Identify the car from its VIN and list the modules it reports straight after connecting" />
 
                     <TextBlock Grid.Row="8" Text="ISTA history" Style="{StaticResource Value}" VerticalAlignment="Top" Margin="0,4" />
-                    <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding IstaInfo, Mode=OneTime}" Style="{StaticResource Caption}" Margin="0,4" />
+                    <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding IstaInfo}" Style="{StaticResource Caption}" Margin="0,4" />
                 </Grid>
             </Border>
 

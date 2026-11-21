@@ -222,7 +222,8 @@ public class IstaHistoryTests
         var id = await new BmwDecode.Core.Services.VehicleIdentifier(sim, db).IdentifyAsync(VehicleCatalog.Default.Find("E84"));
 
         Assert.Equal("E91", id.Series); // VIN wins over the (demo) vehicle order that says E84
-        Assert.Equal("VIN (ISTA history)", id.SeriesSource);
+        Assert.StartsWith("VIN (ISTA history", id.SeriesSource); // demo VIN comes from the CAS only
+        Assert.Contains("CAS only", id.SeriesSource);
         Assert.Equal("ZZ99", db.Find("ZZ99")?.TypeKey);
         Assert.NotNull(db.FindVin(BmwDecode.Core.Simulation.SimulatedEngine.DemoVin[^7..]));
     }

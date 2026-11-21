@@ -131,10 +131,19 @@ public sealed partial class Translator
                 continue;
             }
 
+            var before = m.Index > 0 ? prepared[m.Index - 1] : ' ';
+            var after = m.Index + token.Length < prepared.Length ? prepared[m.Index + token.Length] : ' ';
             previous = token[^1];
 
+            // Identifiers (STATUS_MOTORDREHZAHL, KLEMME_15) and all-caps codes (DSCIII) are never translated.
+            if (before == '_' || after == '_' || (token.Length > 1 && token.All(char.IsUpper)))
+            {
+                sb.Append(token);
+                continue;
+            }
+
             // BMW uses capitalised Ist/Soll for actual/target values (Ist-Gang, Soll Drehzahl).
-            if (token is "Ist" && m.Index > 0)
+            if (token is "Ist" && (m.Index > 0 || after == '-'))
             {
                 sb.Append("actual");
                 translatedAny = true;

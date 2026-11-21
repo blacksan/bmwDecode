@@ -1,4 +1,4 @@
-# Copies SGBD files (*.prg, *.grp) from existing INPA/EDIABAS and ISTA installs into bmwDecode's own folder.
+﻿# Copies SGBD files (*.prg, *.grp) from existing INPA/EDIABAS and ISTA installs into bmwDecode's own folder.
 # INPA's set first (covers older cars), then ISTA's newer files on top.
 param([Parameter(Mandatory = $true)][string]$Target)
 

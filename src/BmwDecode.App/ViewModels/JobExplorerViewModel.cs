@@ -201,6 +201,7 @@ public sealed partial class JobExplorerViewModel : PageViewModel
         }
 
         IsWorking = true;
+        using var busy = _session.BeginBusy();
         RunCommand.NotifyCanExecuteChanged();
         Results.Clear();
         ResultSummary = $"Running {job.Name}…";
