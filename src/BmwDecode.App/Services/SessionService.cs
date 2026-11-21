@@ -4,6 +4,7 @@ using BmwDecode.Core.Catalog;
 using BmwDecode.Core.Diagnostics;
 using BmwDecode.Core.Services;
 using BmwDecode.Core.Simulation;
+using BmwDecode.Core.Vehicle;
 using BmwDecode.Ediabas;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -20,6 +21,8 @@ public sealed partial class SessionService : ObservableObject
     private SgbdInspector? _fileInspector;
     private string? _fileInspectorPath;
     private readonly SimulatedEngine _demoInspector = new(fast: true);
+    private TypeKeyDatabase? _typeKeys;
+    private string? _typeKeysStamp;
 
     public SessionService(SettingsStore settings)
     {
@@ -85,6 +88,27 @@ public sealed partial class SessionService : ObservableObject
     /// <summary>Metadata for an ECU's live-data job list: the demo car describes itself, real cars use the SGBD files.</summary>
     public ISgbdInspector InspectorFor(IDiagnosticEngine? engine) =>
         engine is ISgbdInspector simulated ? simulated : FileInspector;
+
+    /// <summary>User-maintained type key list (VIN positions 4–7 → model). Merged over the FZGIDENT tables.</summary>
+    public static string TypeKeyCsvPath => System.IO.Path.Combine(SettingsStore.Folder, "typekeys.csv");
+
+    /// <summary>
+    /// Type key database from the EDIABAS folder's FZGIDENT.PRG plus typekeys.csv; reloaded when either changes.
+    /// Falls back to the demo car's table when no EDIABAS folder is configured.
+    /// </summary>
+    public async Task<TypeKeyDatabase> GetTypeKeysAsync(CancellationToken cancellationToken = default)
+    {
+        var inspector = EcuPathLocator.IsValid(_settings.Current.EcuPath) ? FileInspector : (ISgbdInspector)_demoInspector;
+        var csvStamp = System.IO.File.Exists(TypeKeyCsvPath) ? System.IO.File.GetLastWriteTimeUtc(TypeKeyCsvPath).Ticks : 0;
+        var stamp = $"{_settings.Current.EcuPath}|{inspector.GetType().Name}|{csvStamp}";
+        if (_typeKeys is null || _typeKeysStamp != stamp)
+        {
+            _typeKeys = await TypeKeyDatabase.LoadAsync(inspector, TypeKeyCsvPath, cancellationToken);
+            _typeKeysStamp = stamp;
+        }
+
+        return _typeKeys;
+    }
 
     public async Task ConnectAsync(ConnectionSettings settings, CancellationToken cancellationToken)
     {

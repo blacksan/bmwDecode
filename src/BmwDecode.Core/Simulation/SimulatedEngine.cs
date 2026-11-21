@@ -127,6 +127,20 @@ public sealed class SimulatedEngine : IDiagnosticEngine, ISgbdInspector
             : throw new DiagnosticException($"SYS-0008: JOB NOT FOUND ({job})", "EDIABAS_SYS_0008");
     }
 
+    public Task<IReadOnlyList<IReadOnlyList<string>>> ReadTableAsync(string sgbd, string table, CancellationToken cancellationToken = default)
+    {
+        // Demo type key so the VIN page can show a full RealOEM-style decode of the demo car.
+        IReadOnlyList<IReadOnlyList<string>> rows =
+            sgbd.Equals("FZGIDENT", StringComparison.OrdinalIgnoreCase) && table.Equals("GM_TEXTE", StringComparison.OrdinalIgnoreCase)
+                ?
+                [
+                    ["GMTYP", "TYP", "BR", "VERK", "MOTOR", "ANTR", "GETR", "HUBR", "KAROS", "LEIST", "LENK", "TUER", "LAND", "REIHE"],
+                    ["8484", "DM84", "E84", "X1 DEMO M57 RWD", "M57/TU2", "HECK", "AUT", "30.00", "SAV", "180", "LL", "5", "EUR", "6"],
+                ]
+                : [];
+        return Task.FromResult(rows);
+    }
+
     public ValueTask DisposeAsync()
     {
         // Not disposing _bus: in-flight jobs on other pages may still release it.

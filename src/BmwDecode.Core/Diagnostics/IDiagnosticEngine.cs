@@ -66,6 +66,9 @@ public interface ISgbdInspector
     Task<SgbdDescription> DescribeAsync(string sgbd, CancellationToken cancellationToken = default);
 
     Task<JobDescription> DescribeJobAsync(string sgbd, string job, CancellationToken cancellationToken = default);
+
+    /// <summary>Reads an SGBD table (first row = column names). Empty if the SGBD or table does not exist.</summary>
+    Task<IReadOnlyList<IReadOnlyList<string>>> ReadTableAsync(string sgbd, string table, CancellationToken cancellationToken = default);
 }
 
 public sealed record SgbdFile(string Name, bool IsGroup, string FullPath);

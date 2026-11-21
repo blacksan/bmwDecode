@@ -6,7 +6,7 @@ namespace BmwDecode.Core.Catalog;
 /// <summary>One control unit slot of a chassis: diagnostic address plus the group file(s) that identify it.</summary>
 public sealed record EcuDefinition(int Address, string Abbreviation, IReadOnlyList<string> Groups)
 {
-    public string AddressHex => $"0x{Address:X2}";
+    public string AddressHex => Address >= 0 ? $"0x{Address:X2}" : "—";
 
     /// <summary>Group file tried first (D_MOTOR, D_CAS, ...).</summary>
     public string PrimaryGroup => Groups[0];
@@ -20,9 +20,20 @@ public sealed record EcuDefinition(int Address, string Abbreviation, IReadOnlyLi
 /// <summary>A chassis (Baureihe) such as E84 with all ECUs it can carry.</summary>
 public sealed record SeriesDefinition(string Series, string Family, string BusType, IReadOnlyList<EcuDefinition> Ecus)
 {
-    public bool IsESeries => Series.StartsWith('E');
+    public bool IsESeries => Series.StartsWith('E') && !BusType.Contains("MOTORBIKE", StringComparison.OrdinalIgnoreCase);
 
-    public string DisplayName => SeriesNames.Describe(Series);
+    /// <summary>K-line / DS2 generation (E30 … E53, E83, E85): identified via the ZCS coding key rather than CAS/FA.</summary>
+    public bool IsDs2 => BusType is "IBUS" or "KBUS" or "DS2";
+
+    /// <summary>Generic profile for a chassis the ISTA catalogue does not list (all DS2 modules are probed).</summary>
+    public bool IsGeneric { get; init; }
+
+    /// <summary>ZCS SGBD that reads the coding key on DS2 cars (ZCS_E36, ZCS_E39, ZCS_ALL...).</summary>
+    public string? IdentSgbd => Family.StartsWith("ZCS", StringComparison.OrdinalIgnoreCase) ? Family : IsDs2 ? "ZCS_ALL" : null;
+
+    public string Generation => IsDs2 ? "DS2 / K-line" : BusType == "BN2000" ? "BN2000 / D-CAN" : BusType;
+
+    public string DisplayName => SeriesNames.Describe(Series) + (IsGeneric ? " – generic" : string.Empty);
 }
 
 /// <summary>
@@ -107,7 +118,36 @@ public sealed class VehicleCatalog
                 ecus.Values.OrderBy(e => e.Address).ThenBy(e => e.Abbreviation, StringComparer.Ordinal).ToList()));
         }
 
+        AddClassicSeries(result);
         return new VehicleCatalog(result);
+    }
+
+    /// <summary>
+    /// Pre-1995 cars (E30, E31, E32, E34) and the E36/7 Z3 are not in the ISTA-derived catalogue. They speak the same
+    /// DS2 protocol on K-line, so they get a generic profile that probes every DS2 module of E36/E38/E39 (like INPA's
+    /// BMW_ALT menu). Modules that are not fitted simply do not answer.
+    /// </summary>
+    private static void AddClassicSeries(List<SeriesDefinition> series)
+    {
+        var donors = series.Where(s => s.Series is "E36" or "E38" or "E39").ToList();
+        if (donors.Count == 0)
+        {
+            return;
+        }
+
+        var ecus = donors.SelectMany(s => s.Ecus)
+            .GroupBy(e => e.PrimaryGroup, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .OrderBy(e => e.Address)
+            .ToList();
+
+        foreach (var classic in new[] { "E30", "E31", "E32", "E34", "E36/7" })
+        {
+            if (series.All(s => !s.Series.Equals(classic, StringComparison.OrdinalIgnoreCase)))
+            {
+                series.Add(new SeriesDefinition(classic, "ZCS_ALL", "DS2", ecus) { IsGeneric = true });
+            }
+        }
     }
 
     private static EcuDefinition? ParseEcu(XElement el)

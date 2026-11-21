@@ -215,19 +215,37 @@ public sealed partial class ModuleViewModel : ObservableObject
 
     private async Task LoadDetailCoreAsync(FaultEntry fault, CancellationToken ct)
     {
-        var r = await RunAsync("FS_LESEN_DETAIL", fault.Code.ToString(CultureInfo.InvariantCulture), ct);
+        // DS2 (K-line) SGBDs have no FS_LESEN_DETAIL: their environment conditions arrive with FS_LESEN itself.
+        FaultDetail detail;
+        JobResult? r = null;
+        try
+        {
+            r = await RunAsync("FS_LESEN_DETAIL", fault.Code.ToString(CultureInfo.InvariantCulture), ct);
+        }
+        catch (DiagnosticException)
+        {
+            // fall through to the FS_LESEN data
+        }
+
         if (!ReferenceEquals(SelectedFault, fault))
         {
             return; // selection moved on while the ECU answered
         }
 
-        if (!r.IsOkay)
+        if (r is { IsOkay: true })
         {
-            DetailSummary = $"No details available ({r.JobStatus}).";
-            return;
+            detail = FaultParser.ParseDetail(fault.Code, r);
+        }
+        else
+        {
+            detail = FaultParser.DetailFromEntry(fault);
+            if (detail.Conditions.Count == 0)
+            {
+                DetailSummary = r is null ? "This module has no detailed fault data." : $"No details available ({r.JobStatus}).";
+                return;
+            }
         }
 
-        var detail = FaultParser.ParseDetail(fault.Code, r);
         DetailConditions.Clear();
         foreach (var c in detail.Conditions)
         {

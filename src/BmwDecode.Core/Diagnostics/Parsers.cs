@@ -19,6 +19,12 @@ public sealed record FaultEntry
 
     /// <summary>F_WARNUNG_NR fault type code (0x30 no warning lamp, 0x31 warning lamp).</summary>
     public long? WarningCode { get; init; }
+
+    /// <summary>DS2 SGBDs: F_VORHANDEN status bit (1 = present now, 0 = stored only).</summary>
+    public long? PresentBit { get; init; }
+
+    /// <summary>DS2 SGBDs: all F_ARTn_TEXT fault-type texts.</summary>
+    public IReadOnlyList<string> FaultTypes { get; init; } = [];
     public string? ReadinessText { get; init; }
     public int? Frequency { get; init; }
     public string? PCode { get; init; }
@@ -33,7 +39,12 @@ public sealed record FaultEntry
     {
         0x22 or 0x23 => true,
         0x20 or 0x21 => false,
-        _ => FaultParser.InterpretPresent(PresentText),
+        _ => PresentBit switch
+        {
+            1 => true,
+            0 => false,
+            _ => FaultParser.InterpretPresent(PresentText) ?? FaultTypes.Select(FaultParser.InterpretPresent).FirstOrDefault(v => v is not null),
+        },
     };
 
     public bool? WarningLampOn => WarningCode switch
@@ -79,11 +90,20 @@ public static partial class FaultParser
                 continue;
             }
 
+            var types = set.Keys
+                .Where(k => ArtRegex().IsMatch(k))
+                .OrderBy(k => int.Parse(ArtRegex().Match(k).Groups[1].Value, CultureInfo.InvariantCulture))
+                .Select(k => Clean(set.Text(k)))
+                .OfType<string>()
+                .ToList();
+
             faults.Add(new FaultEntry
             {
                 Code = code.Value,
                 Text = Clean(set.Text("F_ORT_TEXT")) ?? "(no description in SGBD)",
-                Symptom = Clean(set.Text("F_SYMPTOM_TEXT")) ?? Clean(set.Text("F_ART1_TEXT")),
+                Symptom = Clean(set.Text("F_SYMPTOM_TEXT")) ?? (types.Count > 0 ? string.Join("; ", types) : null),
+                FaultTypes = types,
+                PresentBit = set.ContainsKey("F_VORHANDEN_NR") ? null : set.Long("F_VORHANDEN"),
                 PresentText = Clean(set.Text("F_VORHANDEN_TEXT")),
                 WarningText = Clean(set.Text("F_WARNUNG_TEXT")),
                 PresentCode = set.Long("F_VORHANDEN_NR"),
@@ -132,6 +152,29 @@ public static partial class FaultParser
         }
 
         return new FaultDetail(code, mileage, frequency, logistics, conditions, raw);
+    }
+
+    /// <summary>
+    /// Environment conditions carried inside the FS_LESEN result itself (DS2 SGBDs have no FS_LESEN_DETAIL).
+    /// </summary>
+    public static FaultDetail DetailFromEntry(FaultEntry fault)
+    {
+        var raw = fault.Raw.ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.OrdinalIgnoreCase);
+        var conditions = raw.Keys
+            .Select(k => UwRegex().Match(k))
+            .Where(m => m.Success)
+            .Select(m => int.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture))
+            .Distinct()
+            .Order()
+            .Select(i => new EnvironmentCondition(
+                Clean(raw.GetValueOrDefault($"F_UW{i}_TEXT")) ?? $"Condition {i}",
+                raw.GetValueOrDefault($"F_UW{i}_WERT") ?? string.Empty,
+                Clean(raw.GetValueOrDefault($"F_UW{i}_EINH")) is { } u && u != "-" ? u : null))
+            .ToList();
+
+        long? km = long.TryParse(raw.GetValueOrDefault("F_UW_KM"), NumberStyles.Integer, CultureInfo.CurrentCulture, out var k) ? k : null;
+        int? lz = int.TryParse(raw.GetValueOrDefault("F_LZ"), out var l) ? l : null;
+        return new FaultDetail(fault.Code, km, fault.Frequency, lz, conditions, fault.Raw);
     }
 
     /// <summary>Extracts identification data from IDENT (or any *IDENT* job) with friendly labels.</summary>
@@ -273,6 +316,9 @@ public static partial class FaultParser
 
     [GeneratedRegex(@"^F_UW(\d+)_(TEXT|WERT|EINH|NR)$", RegexOptions.IgnoreCase)]
     private static partial Regex UwRegex();
+
+    [GeneratedRegex(@"^F_ART(\d+)_TEXT$", RegexOptions.IgnoreCase)]
+    private static partial Regex ArtRegex();
 }
 
 /// <summary>Human labels for common BMW identification result names.</summary>

@@ -57,6 +57,38 @@ public sealed class SgbdInspector : ISgbdInspector, IDisposable
     public Task<JobDescription> DescribeJobAsync(string sgbd, string job, CancellationToken cancellationToken = default) =>
         Task.Run(() => _jobCache.GetOrAdd($"{sgbd}|{job}", _ => DescribeJob(sgbd, job)), cancellationToken);
 
+    public Task<IReadOnlyList<IReadOnlyList<string>>> ReadTableAsync(string sgbd, string table, CancellationToken cancellationToken = default) =>
+        Task.Run(() => ReadTable(sgbd, table), cancellationToken);
+
+    public IReadOnlyList<IReadOnlyList<string>> ReadTable(string sgbd, string table)
+    {
+        lock (_lock)
+        {
+            if (!File.Exists(Path.Combine(_ecuPath, sgbd + ".prg")) && !ListFiles().Any(f => f.Name.Equals(sgbd, StringComparison.OrdinalIgnoreCase)))
+            {
+                return [];
+            }
+
+            try
+            {
+                // _TABLE virtual job: one set per row (header first) with COLUMN0..n. Works without a connection.
+                var sets = Run(Open(sgbd), "_TABLE", table);
+                return sets
+                    .Select(set => (IReadOnlyList<string>)set
+                        .Where(kv => kv.Key.StartsWith("COLUMN", StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(kv => int.TryParse(kv.Key.AsSpan(6), out var i) ? i : int.MaxValue)
+                        .Select(kv => (kv.Value.OpData as string)?.Trim() ?? string.Empty)
+                        .ToList())
+                    .Where(row => row.Count > 0)
+                    .ToList();
+            }
+            catch (DiagnosticException)
+            {
+                return [];
+            }
+        }
+    }
+
     /// <summary>Synchronous variant used by tooling and tests.</summary>
     public SgbdDescription Describe(string sgbd)
     {

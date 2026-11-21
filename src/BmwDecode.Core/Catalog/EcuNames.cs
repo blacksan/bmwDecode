@@ -146,6 +146,11 @@ public static class SeriesNames
 {
     private static readonly Dictionary<string, string> s_names = new(StringComparer.OrdinalIgnoreCase)
     {
+        ["E30"] = "3 Series (E30)",
+        ["E31"] = "8 Series (E31)",
+        ["E32"] = "7 Series (E32)",
+        ["E34"] = "5 Series (E34)",
+        ["E36/7"] = "Z3 (E36/7)",
         ["E36"] = "3 Series (E36)",
         ["E38"] = "7 Series (E38)",
         ["E39"] = "5 Series (E39)",

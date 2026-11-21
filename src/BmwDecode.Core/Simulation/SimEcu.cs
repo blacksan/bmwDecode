@@ -89,7 +89,7 @@ internal sealed class SimEcu
             case "C_FG_LESEN" when Variant is "CAS" or "JBBF70":
                 return [SimulatedEngine.Set(("FG_NR", SimulatedEngine.DemoVin), ("JOB_STATUS", "OKAY"))];
             case "C_FA_LESEN" when Variant == "CAS":
-                return [SimulatedEngine.Set(("FAHRZEUGAUFTRAG", "E84_#0909%0730&DEMO*"), ("JOB_STATUS", "OKAY"))];
+                return [SimulatedEngine.Set(("FAHRZEUGAUFTRAG", "E84_#0909*DM84%0475&LCSW$205$248$302$423$520$548-A8B+HO01"), ("JOB_STATUS", "OKAY"))];
         }
 
         var live = Live.Where(l => l.Job.Equals(job, StringComparison.OrdinalIgnoreCase)).ToList();

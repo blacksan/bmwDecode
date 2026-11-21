@@ -1,5 +1,8 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
+using BmwDecode.Core.Catalog;
 using BmwDecode.Core.Diagnostics;
+using BmwDecode.Core.Vehicle;
 
 namespace BmwDecode.Core.Services;
 
@@ -8,6 +11,64 @@ public sealed record SupplyStatus(long? BatteryMillivolts, bool? IgnitionOn)
 {
     public string BatteryText => BatteryMillivolts is { } mv ? $"{mv / 1000.0:0.0} V" : "n/a";
     public string IgnitionText => IgnitionOn switch { true => "On", false => "Off", _ => "n/a" };
+}
+
+/// <summary>RealOEM-style description of a car, assembled from everything the car (and the SGBD files) can tell us.</summary>
+public sealed record VehicleDetails
+{
+    public static VehicleDetails Empty { get; } = new();
+
+    public string? TypeKey { get; init; }
+    public string? Model { get; init; }
+    public string? Engine { get; init; }
+    public string? EngineEcu { get; init; }
+    public string? Drive { get; init; }
+    public string? Gearbox { get; init; }
+    public string? Displacement { get; init; }
+    public string? Body { get; init; }
+    public string? Power { get; init; }
+    public string? Steering { get; init; }
+    public string? Doors { get; init; }
+    public string? Market { get; init; }
+    public DateOnly? ProductionDate { get; init; }
+    public string? Paint { get; init; }
+    public string? Upholstery { get; init; }
+    public IReadOnlyList<string> Options { get; init; } = [];
+
+    /// <summary>Where each piece of information came from, for the "evidence" list.</summary>
+    public IReadOnlyList<string> Sources { get; init; } = [];
+
+    public string? ProductionText => ProductionDate?.ToString("MM/yyyy", CultureInfo.InvariantCulture);
+
+    /// <summary>Label/value pairs for display, skipping unknown values.</summary>
+    public IReadOnlyList<KeyValuePair<string, string>> Rows()
+    {
+        var rows = new List<KeyValuePair<string, string>>();
+        void Add(string label, string? value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                rows.Add(new(label, value.Trim()));
+            }
+        }
+
+        Add("Type key", TypeKey);
+        Add("Model", Model);
+        Add("Engine", Engine);
+        Add("Engine ECU", EngineEcu);
+        Add("Displacement", Displacement);
+        Add("Power", Power);
+        Add("Gearbox", Gearbox);
+        Add("Drive", Drive);
+        Add("Body", Body);
+        Add("Doors", Doors);
+        Add("Steering", Steering);
+        Add("Market", Market);
+        Add("Production", ProductionText);
+        Add("Paint code", Paint);
+        Add("Upholstery code", Upholstery);
+        return rows;
+    }
 }
 
 /// <summary>What the car told us about itself.</summary>
@@ -22,15 +83,24 @@ public sealed record VehicleIdentity(
 {
     public static VehicleIdentity Unknown { get; } = new(null, null, null, null, null, null, null);
 
-    /// <summary>Last 7 characters of the VIN, as BMW uses on documents and in ISTA.</summary>
+    public VehicleDetails Details { get; init; } = VehicleDetails.Empty;
+
+    public VehicleOrder? Order { get; init; }
+
+    /// <summary>Last 7 characters of the VIN, as BMW uses on documents, in ETK and RealOEM.</summary>
     public string? ShortVin => Vin is { Length: 17 } ? Vin[^7..] : Vin;
+
+    public VinDecode? VinInfo => Vin is null ? null : VinDecoder.Decode(Vin, Details.ProductionDate?.Year);
 }
 
-/// <summary>Reads VIN and vehicle order (FA) from an E-series car using the BN2000 jobs ISTA uses.</summary>
+/// <summary>
+/// Identifies E-series cars of both generations: BN2000 / D-CAN cars (E6x/E7x/E8x/E9x) via CAS, FA and FA.PRG,
+/// and DS2 / K-line cars (E36/E38/E39/E46/E52/E53/E83/E85) via the ZCS coding key and FZGIDENT.
+/// </summary>
 public sealed partial class VehicleIdentifier
 {
-    // Order follows EdiabasLib's DetectVehicleBmw (BN2000): CAS first, then light/footwell module, gateway.
-    private static readonly (string Sgbd, string Job, string Result)[] s_vinJobs =
+    // BN2000 (EdiabasLib DetectVehicleBmw order): CAS first, then light/footwell module, gateway.
+    private static readonly (string Sgbd, string Job, string Result)[] s_vinJobsBn2000 =
     [
         ("D_CAS", "STATUS_FAHRGESTELLNUMMER", "FGNUMMER"),
         ("D_CAS", "C_FG_LESEN", "FG_NR"),
@@ -40,43 +110,63 @@ public sealed partial class VehicleIdentifier
         ("D_KOMBI", "C_FG_LESEN", "FG_NR"),
     ];
 
+    // DS2 (ISTA ReadVinForGroupCars): coding key, then light check module / engine / immobiliser.
+    private static readonly (string Sgbd, string Job, string Result)[] s_vinJobsDs2 =
+    [
+        ("ZCS_ALL", "FGNR_LESEN", "FG_NR"),
+        ("D_0080", "AIF_FG_NR_LESEN", "AIF_FG_NR"),
+        ("D_0010", "AIF_LESEN", "AIF_FG_NR"),
+        ("EWS3", "FGNR_LESEN", "FG_NR"),
+    ];
+
     private static readonly (string Sgbd, string Job, string Result)[] s_faJobs =
     [
         ("D_CAS", "C_FA_LESEN", "FAHRZEUGAUFTRAG"),
         ("D_LM", "C_FA_LESEN", "FAHRZEUGAUFTRAG"),
         ("D_KBM", "C_FA_LESEN", "FAHRZEUGAUFTRAG"),
+        ("D_0080", "C_FA_LESEN", "FAHRZEUGAUFTRAG"),
+        ("D_00D0", "C_FA_LESEN", "FAHRZEUGAUFTRAG"),
     ];
 
     private readonly IDiagnosticEngine _engine;
+    private readonly TypeKeyDatabase _typeKeys;
 
-    public VehicleIdentifier(IDiagnosticEngine engine) => _engine = engine;
-
-    public async Task<VehicleIdentity> IdentifyAsync(CancellationToken cancellationToken = default)
+    public VehicleIdentifier(IDiagnosticEngine engine, TypeKeyDatabase? typeKeys = null)
     {
-        string? vin = null, vinSource = null, fa = null, series = null, seriesSource = null;
-        var supply = await ReadSupplyAsync(cancellationToken).ConfigureAwait(false);
-        long? battery = supply.BatteryMillivolts;
-        bool? ignition = supply.IgnitionOn;
+        _engine = engine;
+        _typeKeys = typeKeys ?? TypeKeyDatabase.Empty;
+    }
 
-        foreach (var (sgbd, job, result) in s_vinJobs)
+    /// <param name="profile">The chassis profile currently selected; decides which generation's jobs are tried first.</param>
+    public async Task<VehicleIdentity> IdentifyAsync(SeriesDefinition? profile = null, CancellationToken cancellationToken = default)
+    {
+        var supply = await ReadSupplyAsync(cancellationToken).ConfigureAwait(false);
+        var ds2First = profile?.IsDs2 == true;
+        var sources = new List<string>();
+
+        // ---- VIN ----
+        string? vin = null, vinSource = null;
+        var vinJobs = ds2First ? s_vinJobsDs2.Concat(s_vinJobsBn2000) : s_vinJobsBn2000.Concat(s_vinJobsDs2);
+        if (profile?.IdentSgbd is { } zcs && !zcs.Equals("ZCS_ALL", StringComparison.OrdinalIgnoreCase))
+        {
+            vinJobs = vinJobs.Prepend((zcs, "FGNR_LESEN", "FG_NR"));
+        }
+
+        foreach (var (sgbd, job, result) in vinJobs)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var r = await TryRunAsync(sgbd, job, cancellationToken).ConfigureAwait(false);
-            if (r is null)
-            {
-                continue;
-            }
-
-            ignition ??= r.IgnitionOn;
-            var candidate = NormalizeVin(r.Sets.Select(s => s.Text(result)).FirstOrDefault(v => !string.IsNullOrWhiteSpace(v)));
-            if (candidate is not null)
+            if (NormalizeVin(r?.Sets.Select(s => s.Text(result)).FirstOrDefault(v => !string.IsNullOrWhiteSpace(v))) is { } candidate)
             {
                 vin = candidate;
-                vinSource = $"{r.Variant} {job}";
+                vinSource = $"{r!.Variant} {job}";
                 break;
             }
         }
 
+        // ---- Vehicle order (FA) ----
+        string? faRaw = null, series = null, seriesSource = null;
+        VehicleOrder? order = null;
         foreach (var (sgbd, job, result) in s_faJobs)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -87,21 +177,119 @@ public sealed partial class VehicleIdentifier
                 continue;
             }
 
-            fa = candidate;
-            series = await DecodeSeriesAsync(candidate, cancellationToken).ConfigureAwait(false);
+            faRaw = candidate;
+            var (standardFa, br) = await DecodeFaAsync(candidate, cancellationToken).ConfigureAwait(false);
+            order = VehicleOrderParser.Parse(standardFa ?? candidate);
+            series = NormalizeSeries(br) ?? order?.Series;
             if (series is not null)
             {
                 seriesSource = $"vehicle order from {r!.Variant}";
             }
 
+            sources.Add($"Vehicle order (FA) from {r!.Variant}");
             break;
         }
 
-        return new VehicleIdentity(vin, vinSource, series, seriesSource, fa, battery, ignition);
+        var details = new VehicleDetails
+        {
+            TypeKey = order?.TypeKey ?? (vin is { Length: 17 } ? vin[3..7] : null),
+            ProductionDate = order?.ProductionDate,
+            Paint = order?.Paint,
+            Upholstery = order?.Upholstery,
+            Options = order?.Options ?? [],
+        };
+
+        // ---- DS2 coding key (ZCS): series, model, engine, gearbox... straight from the car ----
+        if (order is null)
+        {
+            foreach (var zcsSgbd in new[] { profile?.IdentSgbd, "ZCS_ALL" }.OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                var gm = await TryRunAsync(zcsSgbd, "ZCS_GM_LESEN", cancellationToken).ConfigureAwait(false);
+                if (gm?.Sets.FirstOrDefault(s => s.ContainsKey("BR_TXT")) is not { } set)
+                {
+                    continue;
+                }
+
+                details = Merge(details, set);
+                series ??= NormalizeSeries(set.Text("BR_TXT"));
+                seriesSource ??= series is null ? null : $"coding key from {gm.Variant}";
+                sources.Add($"Coding key (ZCS) from {gm.Variant}");
+
+                var prod = await TryRunAsync(zcsSgbd, "PROD_DATUM_LESEN", cancellationToken).ConfigureAwait(false);
+                if (prod?.Sets.FirstOrDefault() is { } p && p.Long("JAHR_DEC") is { } y and > 1980 && p.Long("MONAT_DEC") is { } mo and >= 1 and <= 12)
+                {
+                    details = details with { ProductionDate = new DateOnly((int)y, (int)mo, 1) };
+                }
+
+                break;
+            }
+        }
+
+        // ---- Type key: local database first (FZGIDENT tables + the user's typekeys.csv), then FZGIDENT jobs ----
+        if (_typeKeys.Find(details.TypeKey) is { } known)
+        {
+            details = Merge(details, known);
+            series ??= NormalizeSeries(known.Series);
+            sources.Add($"Type key {known.TypeKey} from {known.Source}");
+        }
+
+        if (details.TypeKey is { } typeKey && details.Model is null)
+        {
+            var gm = await TryRunAsync("FZGIDENT", "GM_LESEN_TYPSCHLUESSEL", cancellationToken, typeKey).ConfigureAwait(false);
+            if (gm?.Sets.FirstOrDefault(s => !string.IsNullOrWhiteSpace(Clean(s.Text("VERK_TXT"))) || !string.IsNullOrWhiteSpace(Clean(s.Text("BR_TXT")))) is { } set)
+            {
+                details = Merge(details, set);
+                series ??= NormalizeSeries(set.Text("BR_TXT"));
+                sources.Add("Type key table in FZGIDENT.PRG");
+            }
+            else
+            {
+                var str = await TryRunAsync("FZGIDENT", "STRINGS_LESEN_TYPSCHLUESSEL", cancellationToken, typeKey).ConfigureAwait(false);
+                if (str?.Sets.FirstOrDefault(s => !string.IsNullOrWhiteSpace(Clean(s.Text("MO_TXT")))) is { } s2)
+                {
+                    details = details with { Model = details.Model ?? Clean(s2.Text("MO_TXT")), Market = details.Market ?? Clean(s2.Text("LA_TXT")) };
+                    series ??= NormalizeSeries(s2.Text("BR_TXT"));
+                    sources.Add("Type key strings in FZGIDENT.PRG");
+                }
+            }
+        }
+
+        // ---- Engine ECU: the fitted DME/DDE variant names the engine (and reveals swaps) ----
+        var engineGroups = ds2First ? new[] { "D_0012", "D_MOTOR" } : new[] { "D_MOTOR", "D_0012" };
+        foreach (var group in engineGroups)
+        {
+            try
+            {
+                var variant = await _engine.ResolveVariantAsync(group, cancellationToken).ConfigureAwait(false);
+                details = details with
+                {
+                    EngineEcu = variant,
+                    Engine = details.Engine ?? EngineHints.Describe(variant),
+                };
+                sources.Add($"Engine ECU identified as {variant}");
+                break;
+            }
+            catch (DiagnosticException)
+            {
+                // Try the other generation's group file.
+            }
+        }
+
+        if (vinSource is not null)
+        {
+            sources.Insert(0, $"VIN from {vinSource}");
+        }
+
+        details = details with { Sources = sources };
+        return new VehicleIdentity(vin, vinSource, series, seriesSource, faRaw, supply.BatteryMillivolts, supply.IgnitionOn)
+        {
+            Details = details,
+            Order = order,
+        };
     }
 
     /// <summary>
-    /// Reads battery voltage and ignition from the interface via UTILITY.PRG (as INPA's status bar does).
+    /// Reads battery voltage and ignition via UTILITY.PRG (as INPA's status bar does).
     /// K+DCAN cables cannot measure voltage precisely; values are what the interface reports.
     /// </summary>
     public async Task<SupplyStatus> ReadSupplyAsync(CancellationToken cancellationToken = default)
@@ -126,26 +314,18 @@ public sealed partial class VehicleIdentifier
     }
 
     /// <summary>
-    /// Decodes the series (Baureihe) from an FA stream. Uses FA.PRG's FA_STREAM2STRUCT (pure computation, as ISTA)
-    /// and falls back to the leading "E84_" token of the stream.
+    /// Runs FA.PRG's FA_STREAM2STRUCT (pure computation, as ISTA does) on the raw stream.
+    /// Returns the standard FA and series if the SGBD accepted the stream.
     /// </summary>
-    public async Task<string?> DecodeSeriesAsync(string vehicleOrder, CancellationToken cancellationToken = default)
+    public async Task<(string? StandardFa, string? Series)> DecodeFaAsync(string vehicleOrder, CancellationToken cancellationToken = default)
     {
         var r = await TryRunAsync("FA", "FA_STREAM2STRUCT", cancellationToken, "1;" + vehicleOrder).ConfigureAwait(false);
+        var std = r?.Sets.Select(s => s.Text("STANDARD_FA")).FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
         var br = r?.Sets.Select(s => s.Text("BR")).FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
-        return NormalizeSeries(br) ?? SeriesFromOrder(vehicleOrder);
+        return (std, br);
     }
 
-    internal static string? SeriesFromOrder(string? vehicleOrder)
-    {
-        if (string.IsNullOrWhiteSpace(vehicleOrder))
-        {
-            return null;
-        }
-
-        var m = OrderSeriesRegex().Match(vehicleOrder.Trim());
-        return m.Success ? m.Groups[1].Value.ToUpperInvariant() : null;
-    }
+    internal static string? SeriesFromOrder(string? vehicleOrder) => VehicleOrderParser.Parse(vehicleOrder)?.Series;
 
     internal static string? NormalizeSeries(string? br)
     {
@@ -170,6 +350,41 @@ public sealed partial class VehicleIdentifier
         return VinRegex().IsMatch(vin) && !vin.All(c => c == '0') ? vin : null;
     }
 
+    /// <summary>Fills details from a ZCS_GM_LESEN / GM_LESEN_TYPSCHLUESSEL result set (TYPSNR_TXT, VERK_TXT, MOTOR_TXT...).</summary>
+    internal static VehicleDetails Merge(VehicleDetails d, ResultSet s) => d with
+    {
+        TypeKey = d.TypeKey ?? Clean(s.Text("TYPSNR_TXT")),
+        Model = d.Model ?? Clean(s.Text("VERK_TXT")),
+        Engine = d.Engine ?? Clean(s.Text("MOTOR_TXT")),
+        Drive = d.Drive ?? Clean(s.Text("ANTR_TXT")),
+        Gearbox = d.Gearbox ?? Clean(s.Text("GETR_TXT")),
+        Displacement = d.Displacement ?? Clean(s.Text("HUBR_TXT")),
+        Body = d.Body ?? Clean(s.Text("KAROS_TXT")),
+        Power = d.Power ?? (Clean(s.Text("LEIST_TXT")) is { } kw ? (kw.Any(char.IsLetter) ? kw : kw + " kW") : null),
+        Steering = d.Steering ?? Clean(s.Text("LENK_TXT")),
+        Doors = d.Doors ?? Clean(s.Text("TUER_TXT")),
+        Market = d.Market ?? Clean(s.Text("LAND_TXT")),
+    };
+
+    /// <summary>Fills details from a type key database entry.</summary>
+    public static VehicleDetails Merge(VehicleDetails d, TypeKeyInfo t) => d with
+    {
+        TypeKey = d.TypeKey ?? t.TypeKey,
+        Model = d.Model ?? t.Model,
+        Engine = d.Engine ?? t.Engine,
+        Drive = d.Drive ?? t.Drive,
+        Gearbox = d.Gearbox ?? t.Gearbox,
+        Displacement = d.Displacement ?? t.Displacement,
+        Body = d.Body ?? t.Body,
+        Power = d.Power ?? t.Power,
+        Steering = d.Steering ?? t.Steering,
+        Doors = d.Doors ?? t.Doors,
+        Market = d.Market ?? t.Market,
+    };
+
+    private static string? Clean(string? s) =>
+        string.IsNullOrWhiteSpace(s) || s.Trim() is "-" or "--" or "?" or "XX" ? null : s.Trim();
+
     private async Task<JobResult?> TryRunAsync(string sgbd, string job, CancellationToken ct, string args = "")
     {
         try
@@ -182,9 +397,6 @@ public sealed partial class VehicleIdentifier
             return null;
         }
     }
-
-    [GeneratedRegex(@"^([EFGIRK]\d{2,3})[_#]", RegexOptions.IgnoreCase)]
-    private static partial Regex OrderSeriesRegex();
 
     [GeneratedRegex(@"^[EFGIRK]\d{2,3}", RegexOptions.IgnoreCase)]
     private static partial Regex SeriesRegex();

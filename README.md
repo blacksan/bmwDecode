@@ -1,6 +1,7 @@
 # bmwDecode
 
-Modern Windows 11 diagnostics for BMW **E-series** cars (E36 → E93, including the **E84 X1**), built as a
+Modern Windows 11 diagnostics for **every BMW E-series** car – E30 to E93, K-line (DS2) and D-CAN (BN2000),
+including the **E84 X1** – built as a
 replacement for the INPA workflow: identify the car, run a quick test of every module, read and clear fault
 memory with freeze-frame data, watch live values and run any SGBD job.
 
@@ -14,6 +15,7 @@ does not need BMW's 32-bit EDIABAS runtime, INPA scripts or any COM-port jugglin
 | Page | What it does |
 | --- | --- |
 | **Overview** | Connect (K+DCAN cable via its COM port, ENET, or the built-in demo car), read VIN and vehicle order (FA → series via `FA.PRG`), battery and ignition via `UTILITY.PRG`, pick the chassis profile. Warns when a swapped module (e.g. an E90 CAS in an E84) reports a different chassis. |
+| **Vehicle / VIN** | RealOEM-style identification from a full or short (last 7) VIN, offline: manufacturer, type key, plant, check digit/model year, plus model, engine, gearbox, body, power and market from the type key tables. With the car connected it adds the vehicle order (build date, paint, upholstery, option codes) and the fitted engine ECU. Buttons for RealOEM and the free NHTSA online decode. |
 | **Quick test** | Tries every module slot of the chassis (group files `D_MOTOR`, `D_CAS`, `D_DSC`… from the ISTA-derived catalogue), identifies the fitted variant (`D60M57A0`, `CAS`, `DSC_87`…), reads `IDENT` and `FS_LESEN`. Clear all faults, export HTML/CSV report. |
 | **Modules** | Per-module identification, fault memory with environmental conditions (`FS_LESEN_DETAIL`: mileage, frequency, `F_UWn` values), info memory (`IS_LESEN`), clear, and **live data**: tick any argument-free `STATUS_*` jobs and poll them with min/max. |
 | **Job explorer** | Tool32-style: browse all 2,000+ SGBDs offline, read job/argument/result documentation, run any job with arguments. Writing jobs (coding, flashing, actuators, clearing) need explicit confirmation. |
@@ -23,6 +25,34 @@ does not need BMW's 32-bit EDIABAS runtime, INPA scripts or any COM-port jugglin
 The UI is WPF on .NET 10 with the built-in **Windows 11 Fluent theme**: follows the Windows light/dark setting and
 accent colour, Mica backdrop, per-monitor DPI.
 
+## Do I need INPA or ISTA installed?
+
+No. bmwDecode has its own EDIABAS engine, so it needs only:
+
+- the **SGBD files**: the `Ecu` folder of an INPA/EDIABAS package (`*.prg`, `*.grp`). Copy it anywhere. An existing
+  `C:\EDIABAS\Ecu` is found automatically. INPA, EDIABAS configuration and the COM1 requirement are not needed.
+- the **FTDI driver** for the K+DCAN cable.
+
+ISTA is never used. Without either, the demo car and the offline VIN decoder still work.
+
+## Supported cars
+
+| Generation | Chassis | Protocol / cable setting | Identification |
+| --- | --- | --- | --- |
+| BN2000 | E60–E64, E65–E68, E70–E72, E81/E82/E84/E87/E88, E89, E90–E93 | D-CAN | VIN + vehicle order from CAS/LM/FRM, decoded with `FA.PRG` |
+| DS2 | E36, E38, E39, E46, E52, E53, E83, E85/E86 | K-line | VIN + coding key (`ZCS_*.PRG`: series, model, engine, gearbox…) and build date |
+| Classic (generic profile) | E30, E31, E32, E34, E36/7 Z3 | K-line, 20-pin round socket adapter | VIN via DS2 jobs; every DS2 module is probed |
+
+Each chassis profile lists the module addresses and group files from the ISTA-derived catalogue, and the actual
+variant fitted is identified on the car. Engine swaps, CAS swaps and retrofits are therefore detected rather than assumed.
+
+### VIN and type keys
+
+The type key (VIN positions 4–7) is looked up in `FZGIDENT.PRG` from your Ecu folder (about 2,200 type keys,
+E36–E93) and in an optional `%LOCALAPPDATA%\bmwDecode\typekeys.csv` you can extend
+(*Vehicle / VIN → Edit type key list*). Newer models missing from FZGIDENT (e.g. E84) can be added there. The car's
+own data (vehicle order, ZCS, engine ECU) always takes precedence.
+
 ## Getting started
 
 1. **Download** `bmwDecode-win-x64.zip` from the latest [Actions run](../../actions) (or a [release](../../releases)),
@@ -31,8 +61,9 @@ accent colour, Mica backdrop, per-monitor DPI.
    (normally `C:\EDIABAS\Ecu`). It is auto-detected when present. bmwDecode never ships BMW files.
 3. **Cable** (K+DCAN USB):
    - Install the FTDI driver that came with the cable (`D-CAN.exe` / `OBDSetup.exe` in the INPA package).
-   - E8x / E9x / **E84** use **D-CAN**: set the cable's switch to D-CAN (pins 7 and 8 *not* bridged).
-     Older cars (E46, E39, E53, E83 early) use K-line.
+   - 2007+ cars (E8x / E9x / **E84**, E6x/E7x) use **D-CAN**: set the cable's switch to D-CAN (pins 7 and 8 *not*
+     bridged). Older cars (E36, E38, E39, E46, E53, E83, E85) use **K-line**. Pre-1996 cars with the round 20-pin
+     socket need a 20-pin → OBD adapter.
    - Pick **K+DCAN (COM port)** and select the cable's COM port (Device Manager → Ports → USB Serial Port →
      Advanced → *Latency timer 1 ms*). Any COM number works; it does not have to be COM1 as INPA requires.
 4. Ignition **on**, engine off, battery charger connected for long sessions → **Connect** → **Run quick test**.

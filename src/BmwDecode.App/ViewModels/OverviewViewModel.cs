@@ -208,6 +208,9 @@ public sealed partial class OverviewViewModel : PageViewModel
     private Task IdentifyAsync(CancellationToken cancellationToken) =>
         RunAsync("Identifying vehicle…", () => IdentifyCoreAsync(cancellationToken));
 
+    [RelayCommand]
+    private void VehicleDetails() => _navigator.NavigateTo<VehicleViewModel>();
+
     [RelayCommand(CanExecute = nameof(CanIdentify))]
     private void QuickTest()
     {
@@ -221,22 +224,27 @@ public sealed partial class OverviewViewModel : PageViewModel
     private async Task IdentifyCoreAsync(CancellationToken cancellationToken)
     {
         var engine = _session.RequireEngine();
-        var identifier = new VehicleIdentifier(engine);
-        var vehicle = await identifier.IdentifyAsync(cancellationToken);
+        var identifier = new VehicleIdentifier(engine, await _session.GetTypeKeysAsync(cancellationToken));
+        var vehicle = await identifier.IdentifyAsync(_session.Series, cancellationToken);
         _session.Supply = new SupplyStatus(vehicle.BatteryMillivolts, vehicle.IgnitionOn);
         _session.Vehicle = vehicle;
 
-        // Switch profile only when the car belongs to a different family (e.g. E60 vs E89X). Within a family keep the
-        // user's choice: on swapped cars (an E84 with an E90 CAS) the CAS reports the donor's chassis.
+        // Switch profile when the car belongs to a different family (e.g. E60 vs E89X), or for DS2 cars whose
+        // families are shared. Within a BN2000 family keep the user's choice: on swapped cars (an E84 with an E90 CAS)
+        // the CAS reports the donor's chassis.
         if (vehicle.Series is { } detected && _session.Catalog.Find(detected) is { } series &&
-            !string.Equals(series.Family, _session.Series?.Family, StringComparison.OrdinalIgnoreCase))
+            !series.Series.Equals(_session.Series?.Series, StringComparison.OrdinalIgnoreCase) &&
+            (series.IsDs2 || _session.Series?.IsDs2 != false ||
+             !string.Equals(series.Family, _session.Series?.Family, StringComparison.OrdinalIgnoreCase)))
         {
             _session.Series = series;
         }
 
         StatusText = vehicle.Vin is null
             ? "Connected, but the VIN could not be read. Is the ignition on?"
-            : $"VIN {vehicle.Vin} · {vehicle.Series ?? "series not reported"}";
+            : $"VIN {vehicle.Vin} · {vehicle.Series ?? "series not reported"}" +
+              (vehicle.Details.Model is { } model ? $" · {model}" : string.Empty) +
+              (vehicle.Details.EngineEcu is { } ecu ? $" · engine ECU {ecu}" : string.Empty);
         _session.Info(StatusText);
     }
 

@@ -84,6 +84,7 @@
                 <StackPanel>
                     <DockPanel Margin="0,0,0,12">
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Button Content="VIN details…" Command="{Binding VehicleDetailsCommand}" Margin="0,0,8,0" />
                             <Button Content="Identify again" Command="{Binding IdentifyCommand}" Margin="0,0,8,0" />
                             <Button Style="{DynamicResource AccentButtonStyle}" Command="{Binding QuickTestCommand}">
                                 <StackPanel Orientation="Horizontal">
@@ -104,6 +105,9 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -140,6 +144,18 @@
 
                         <TextBlock Grid.Row="5" Text="Ignition" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                         <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Supply.IgnitionText, TargetNullValue='—'}" />
+
+                        <TextBlock Grid.Row="6" Text="Model" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Vehicle.Details.Model, TargetNullValue='—'}" />
+
+                        <TextBlock Grid.Row="7" Text="Engine" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBlock Grid.Row="7" Grid.Column="1">
+                            <Run Text="{Binding Vehicle.Details.Engine, Mode=OneWay, TargetNullValue='—'}" />
+                            <Run Text="{Binding Vehicle.Details.EngineEcu, Mode=OneWay, StringFormat='(ECU {0})'}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        </TextBlock>
+
+                        <TextBlock Grid.Row="8" Text="Built" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Vehicle.Details.ProductionText, TargetNullValue='—'}" />
                     </Grid>
 
                     <Border Style="{StaticResource WarningBar}" Margin="0,12,0,0"
@@ -153,7 +169,7 @@
                 <StackPanel>
                     <TextBlock Text="Cable checklist" FontWeight="SemiBold" Margin="0,0,0,4" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                     <TextBlock Style="{StaticResource Caption}"
-                               Text="• E8x / E9x / E84 use D-CAN: set the cable switch to D-CAN (pins 7 and 8 not bridged). Older cars (E46, E39, E53) need K-line.&#x0a;• Device Manager → Ports → USB Serial Port → Advanced: latency timer 1 ms, and note the COM number (any number works – unlike INPA it need not be COM1).&#x0a;• Keep a battery charger on for long sessions; diagnostics with the ignition on drains the battery." />
+                               Text="• 2007+ cars (E8x, E9x, E84, E6x/E7x LCI) use D-CAN: cable switch to D-CAN (pins 7 and 8 not bridged). Older cars (E36, E38, E39, E46, E53, E83, E85) use K-line: switch to K-line. Pre-1996 cars with the round 20-pin socket (E30, E31, E32, E34, early E36) need a 20-pin to OBD adapter.&#x0a;• Device Manager → Ports → USB Serial Port → Advanced: latency timer 1 ms, and note the COM number (any number works – unlike INPA it need not be COM1).&#x0a;• Keep a battery charger on for long sessions; diagnostics with the ignition on drains the battery." />
                 </StackPanel>
             </Border>
         </StackPanel>

@@ -23,6 +23,7 @@ public partial class App : Application
         services.AddSingleton<SessionService>();
         services.AddSingleton<Navigator>();
         services.AddSingleton<OverviewViewModel>();
+        services.AddSingleton<VehicleViewModel>();
         services.AddSingleton<QuickTestViewModel>();
         services.AddSingleton<ModulesViewModel>();
         services.AddSingleton<JobExplorerViewModel>();
