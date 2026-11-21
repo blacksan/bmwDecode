@@ -16,6 +16,8 @@ does not need BMW's 32-bit EDIABAS runtime, INPA scripts or any COM-port jugglin
 | --- | --- |
 | **Overview** | Connect (K+DCAN cable via its COM port, ENET, or the built-in demo car), read VIN and vehicle order (FA → series via `FA.PRG`), battery and ignition via `UTILITY.PRG`, pick the chassis profile. Warns when a swapped module (e.g. an E90 CAS in an E84) reports a different chassis. |
 | **Vehicle / VIN** | RealOEM-style identification from a full or short (last 7) VIN, offline: manufacturer, type key, plant, check digit/model year, plus model, engine, gearbox, body, power and market from the type key tables. With the car connected it adds the vehicle order (build date, paint, upholstery, option codes) and the fitted engine ECU. Buttons for RealOEM and the free NHTSA online decode. |
+| **Modules (car-reported)** | After connecting, the car itself reports its modules: one functional `IDENT_FUNKTIONAL` broadcast through the main-series SGBD (`E89X`, `E60`, `E65`, `E70`) returns every ECU with its exact variant SGBD and fault count, like ISTA. DS2 cars are probed module by module. The list is ranked by importance: engine, transmission, brakes, airbag, CAS, cluster, gateway, steering… |
+| **Jobs & coding (per module)** | Every job of that module's SGBD, grouped (fault memory, status, identification, actuator tests, adaptations & resets, coding, programming). Translated documentation, arguments, run with results, and *Back up coding*, which runs every coding read job and saves the results. Writing jobs always ask first. |
 | **Quick test** | Tries every module slot of the chassis (group files `D_MOTOR`, `D_CAS`, `D_DSC`… from the ISTA-derived catalogue), identifies the fitted variant (`D60M57A0`, `CAS`, `DSC_87`…), reads `IDENT` and `FS_LESEN`. Clear all faults, export HTML/CSV report. |
 | **Modules** | Per-module identification, fault memory with environmental conditions (`FS_LESEN_DETAIL`: mileage, frequency, `F_UWn` values), info memory (`IS_LESEN`), clear, and **live data**: tick any argument-free `STATUS_*` jobs and poll them with min/max. |
 | **Job explorer** | Tool32-style: browse all 2,000+ SGBDs offline, read job/argument/result documentation, run any job with arguments. Writing jobs (coding, flashing, actuators, clearing) need explicit confirmation. |
@@ -24,6 +26,27 @@ does not need BMW's 32-bit EDIABAS runtime, INPA scripts or any COM-port jugglin
 
 The UI is WPF on .NET 10 with the built-in **Windows 11 Fluent theme**: follows the Windows light/dark setting and
 accent colour, Mica backdrop, per-monitor DPI.
+
+## English texts
+
+BMW's SGBD texts are German. bmwDecode translates them offline. It checks an exact table of 2,289 common phrases
+first (fault types, conditions, frequent locations), then a 6,000-word automotive glossary with compound splitting.
+"Kühlmitteltemperatur Signal unplausibel" becomes "Coolant temperature signal implausible", and codes such as
+`0x2FC`, `PT-CAN` or `D60M57A0` stay untouched. Put corrections in `%LOCALAPPDATA%\bmwDecode\translations.tsv`
+(`German<TAB>English`), or switch translation off in Settings.
+
+## Vehicle identification
+
+On connect the VIN is read from the car (CAS, light module, footwell module, gateway; on DS2 cars the coding key),
+and the chassis profile is chosen from it:
+
+1. **ISTA history**: cars ISTA has identified on this PC. Its plain-XML session files (`RG_META_*.xml`,
+   `RG_TRANS_*.xml`) hold VIN, type key, series, sales name, engine, gearbox and build date. ISTA's encrypted
+   databases are never opened.
+2. **Type key** (VIN 4–7) from `FZGIDENT.PRG` or your `typekeys.csv`.
+3. **Vehicle order** read from the car, then the main-series SGBD that answers.
+
+You can still type a VIN on the *Vehicle / VIN* page, or change the profile by hand.
 
 ## Do I need INPA or ISTA installed?
 
@@ -79,6 +102,28 @@ complete with plausible faults, freeze frames and live data.
   family and shows a notice instead of silently switching.
 - A RWD conversion has no transfer case (`VGSG`); its absence, and the "transfer case message missing" faults that
   other modules store, are expected.
+
+## Installer
+
+`bmwDecode-x.y.z-setup.exe` (from CI) installs the self-contained app. If INPA/EDIABAS or ISTA is on the PC, it
+offers to copy their SGBD files into `C:\ProgramData\bmwDecode\Ecu`, so bmwDecode keeps working after they are
+removed. It also sets the FTDI latency timer to 1 ms.
+
+For a **fully standalone private installer**, run `installer\build-private.ps1` on your own PC (needs the .NET 10
+SDK and Inno Setup 6). It also carries your SGBD files and the K+DCAN FTDI driver:
+
+```powershell
+.\installer\build-private.ps1 -EcuPath C:\EDIABAS\Ecu -DriverPath "D:\BMW INPA v5.0.6\Driver_D_CAN_USB\Driver"
+```
+
+BMW's SGBD files are BMW's property, so a private installer is for your own machines only. Never publish one.
+
+## Roadmap: F/G series
+
+The engine (EdiabasLib) already speaks ENET/DoIP, ISTA's Ecu folder contains the F/G SGBDs (`G_ZGW`, `ZGW_01`,
+`F01`…), and the chassis catalogue includes F/G/I series. Support needs ENET cable handling, BN2020 module
+discovery (`STATUS_VCM_GET_ECU_LIST_ALL` on the central gateway) and UDS fault parsing. These are planned once the
+E-series side is proven on real cars.
 
 ## Building
 
