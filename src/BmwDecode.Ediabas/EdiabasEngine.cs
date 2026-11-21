@@ -154,8 +154,8 @@ public sealed partial class EdiabasEngine : IDiagnosticEngine
 
     public async ValueTask DisposeAsync()
     {
+        // The bus semaphore is deliberately not disposed: a quick test or live poll may still be waiting on it.
         await DisconnectAsync().ConfigureAwait(false);
-        _bus.Dispose();
     }
 
     private string ResolveLocked(string sgbd)
@@ -222,6 +222,19 @@ public sealed partial class EdiabasEngine : IDiagnosticEngine
 
             throw new DiagnosticException(EdiabasNet.GetErrorDescription(ex.ErrorCode), ex.ErrorCode.ToString(), ex);
         }
+        catch (Exception ex) when (ex is not OperationCanceledException and not DiagnosticException)
+        {
+            // EdiabasLib reports aborts ("executeJob aborted") and many interpreter failures as plain Exception.
+            if (_abort && cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException(cancellationToken);
+            }
+
+            var inner = ex.InnerException is EdiabasNet.EdiabasNetException en ? en : null;
+            throw inner is not null
+                ? new DiagnosticException(EdiabasNet.GetErrorDescription(inner.ErrorCode), inner.ErrorCode.ToString(), ex)
+                : new DiagnosticException(ex.InnerException?.Message ?? ex.Message, "EDIABAS_SYS_0000", ex);
+        }
         finally
         {
             _abort = false;
@@ -234,7 +247,6 @@ public sealed partial class EdiabasEngine : IDiagnosticEngine
     internal static string Describe(ConnectionSettings s) => s.Kind switch
     {
         InterfaceKind.KDcanSerial => $"K+DCAN on {s.Port}",
-        InterfaceKind.KDcanFtdi => $"K+DCAN via FTDI ({s.Port})",
         InterfaceKind.Enet => $"ENET ({s.Port})",
         _ => s.Kind.ToString(),
     };

@@ -129,16 +129,24 @@ public sealed partial class JobExplorerViewModel : PageViewModel
 
             StatusText = $"{description.Name}: {Jobs.Count} jobs.";
         }
-        catch (DiagnosticException ex)
-        {
-            StatusText = ex.Message;
-        }
         catch (OperationCanceledException)
         {
         }
+        catch (Exception ex)
+        {
+            if (!ct.IsCancellationRequested)
+            {
+                StatusText = ex.Message;
+            }
+        }
         finally
         {
-            IsWorking = false;
+            // Only the newest load may clear the busy flag.
+            if (!ct.IsCancellationRequested)
+            {
+                IsWorking = false;
+                RunCommand.NotifyCanExecuteChanged();
+            }
         }
     }
 
@@ -157,9 +165,13 @@ public sealed partial class JobExplorerViewModel : PageViewModel
     {
         try
         {
-            JobDetails = await _inspector!.DescribeJobAsync(VariantName, job.Name);
+            var details = await _inspector!.DescribeJobAsync(VariantName, job.Name);
+            if (ReferenceEquals(SelectedJob, job))
+            {
+                JobDetails = details;
+            }
         }
-        catch (DiagnosticException ex)
+        catch (Exception ex)
         {
             StatusText = ex.Message;
         }
@@ -224,7 +236,14 @@ public sealed partial class JobExplorerViewModel : PageViewModel
             sb.Append(r.Set).Append('\t').Append(r.Name).Append('\t').Append(r.Value).Append('\t').AppendLine(r.Type);
         }
 
-        Clipboard.SetText(sb.ToString());
+        try
+        {
+            Clipboard.SetText(sb.ToString());
+        }
+        catch (System.Runtime.InteropServices.COMException)
+        {
+            ResultSummary = "Clipboard is busy – try again.";
+        }
     }
 
     private static bool Matches(string? text, string filter) =>

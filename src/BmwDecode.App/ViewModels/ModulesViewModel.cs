@@ -34,6 +34,11 @@ public sealed partial class ModulesViewModel : PageViewModel
         _dialogs = dialogs;
         _session.ConnectionChanged += (_, _) =>
         {
+            foreach (var vm in _cache.Values)
+            {
+                vm.StopLive();
+            }
+
             _cache.Clear();
             Module = null;
         };
@@ -63,7 +68,13 @@ public sealed partial class ModulesViewModel : PageViewModel
             Items.Insert(0, item);
         }
 
-        _cache.Remove(ecu.Key);
+        if (_cache.Remove(ecu.Key, out var stale))
+        {
+            stale.StopLive();
+        }
+
+        // Reset first: records compare by value, so re-selecting the same module would otherwise be a no-op.
+        SelectedItem = null;
         SelectedItem = item;
     }
 
@@ -83,7 +94,20 @@ public sealed partial class ModulesViewModel : PageViewModel
         }
 
         Module = vm;
-        _ = vm.InitialiseAsync();
+        _ = InitialiseSafeAsync(vm);
+    }
+
+    private async Task InitialiseSafeAsync(ModuleViewModel vm)
+    {
+        try
+        {
+            await vm.InitialiseAsync();
+        }
+        catch (Exception ex)
+        {
+            vm.StatusText = ex.Message;
+            _session.Error($"{vm.Ecu.Abbreviation}: {ex.Message}");
+        }
     }
 
     private void Rebuild()

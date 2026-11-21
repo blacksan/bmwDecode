@@ -204,9 +204,23 @@ public sealed partial class ModuleViewModel : ObservableObject
         }
     }
 
+    /// <summary>Stops a running live-data poll (called on disconnect).</summary>
+    public void StopLive()
+    {
+        if (StartLiveCancelCommand.CanExecute(null))
+        {
+            StartLiveCancelCommand.Execute(null);
+        }
+    }
+
     private async Task LoadDetailCoreAsync(FaultEntry fault, CancellationToken ct)
     {
         var r = await RunAsync("FS_LESEN_DETAIL", fault.Code.ToString(CultureInfo.InvariantCulture), ct);
+        if (!ReferenceEquals(SelectedFault, fault))
+        {
+            return; // selection moved on while the ECU answered
+        }
+
         if (!r.IsOkay)
         {
             DetailSummary = $"No details available ({r.JobStatus}).";
@@ -281,10 +295,11 @@ public sealed partial class ModuleViewModel : ObservableObject
         }
 
         _settings.Current.LiveSelections[Variant] = jobs;
-        _settings.Save();
+        _settings.Save(); // best effort
         LiveRows.Clear();
         _liveByKey.Clear();
         IsLive = true;
+        _session.IsBusy = true;
         var interval = TimeSpan.FromMilliseconds(Math.Clamp(_settings.Current.LiveIntervalMs, 100, 10_000));
         var rounds = 0;
         try
@@ -315,9 +330,14 @@ public sealed partial class ModuleViewModel : ObservableObject
         {
             LiveStatus = ex.Message;
         }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            LiveStatus = ex.Message;
+        }
         finally
         {
             IsLive = false;
+            _session.IsBusy = false;
             if (cancellationToken.IsCancellationRequested)
             {
                 LiveStatus = $"Stopped after {rounds} rounds.";
@@ -415,6 +435,12 @@ public sealed partial class ModuleViewModel : ObservableObject
         catch (OperationCanceledException)
         {
             StatusText = "Cancelled.";
+        }
+        catch (Exception ex)
+        {
+            // Last resort for fire-and-forget callers: never let an unexpected error escape unobserved.
+            StatusText = ex.Message;
+            _session.Error($"{Ecu.Abbreviation}: {ex}");
         }
         finally
         {

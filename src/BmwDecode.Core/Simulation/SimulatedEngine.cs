@@ -129,8 +129,8 @@ public sealed class SimulatedEngine : IDiagnosticEngine, ISgbdInspector
 
     public ValueTask DisposeAsync()
     {
+        // Not disposing _bus: in-flight jobs on other pages may still release it.
         _connected = false;
-        _bus.Dispose();
         return ValueTask.CompletedTask;
     }
 

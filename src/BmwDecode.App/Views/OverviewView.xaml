@@ -153,7 +153,7 @@
                 <StackPanel>
                     <TextBlock Text="Cable checklist" FontWeight="SemiBold" Margin="0,0,0,4" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                     <TextBlock Style="{StaticResource Caption}"
-                               Text="• E8x / E9x / E84 use D-CAN: set the cable switch to D-CAN (pins 7 and 8 not bridged). Older cars (E46, E39, E53) need K-line.&#x0a;• Device Manager → Ports → USB Serial Port → Advanced: latency timer 1 ms, and note the COM number (or pick the FTDI interface and skip COM ports entirely).&#x0a;• Keep a battery charger on for long sessions; diagnostics with the ignition on drains the battery." />
+                               Text="• E8x / E9x / E84 use D-CAN: set the cable switch to D-CAN (pins 7 and 8 not bridged). Older cars (E46, E39, E53) need K-line.&#x0a;• Device Manager → Ports → USB Serial Port → Advanced: latency timer 1 ms, and note the COM number (any number works – unlike INPA it need not be COM1).&#x0a;• Keep a battery charger on for long sessions; diagnostics with the ignition on drains the battery." />
                 </StackPanel>
             </Border>
         </StackPanel>

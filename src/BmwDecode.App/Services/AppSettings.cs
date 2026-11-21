@@ -56,6 +56,18 @@ public sealed class SettingsStore
             Current = new AppSettings();
         }
 
+        // JSON nulls overwrite defaults; normalise so the rest of the app can trust these values.
+        Current.Port ??= "COM1";
+        Current.EcuPath ??= string.Empty;
+        Current.DefaultSeries ??= "E84";
+        if (!Enum.IsDefined(Current.Interface))
+        {
+            Current.Interface = InterfaceKind.KDcanSerial;
+        }
+
+        Current.LiveSelections = new Dictionary<string, List<string>>(
+            Current.LiveSelections ?? new Dictionary<string, List<string>>(), StringComparer.OrdinalIgnoreCase);
+
         if (string.IsNullOrWhiteSpace(Current.EcuPath))
         {
             Current.EcuPath = EcuPathLocator.Detect() ?? string.Empty;
@@ -64,10 +76,21 @@ public sealed class SettingsStore
         return Current;
     }
 
-    public void Save()
+    /// <summary>Saves settings; returns false (never throws) if the file cannot be written.</summary>
+    public bool Save()
     {
-        Directory.CreateDirectory(Folder);
-        File.WriteAllText(FilePath, JsonSerializer.Serialize(Current, s_json));
+        try
+        {
+            Directory.CreateDirectory(Folder);
+            var temp = FilePath + ".tmp";
+            File.WriteAllText(temp, JsonSerializer.Serialize(Current, s_json));
+            File.Move(temp, FilePath, overwrite: true);
+            return true;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
     }
 }
 

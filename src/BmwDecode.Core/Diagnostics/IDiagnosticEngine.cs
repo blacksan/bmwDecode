@@ -6,9 +6,6 @@ public enum InterfaceKind
     /// <summary>K+DCAN USB cable through its virtual COM port (INPA style, e.g. COM1).</summary>
     KDcanSerial,
 
-    /// <summary>K+DCAN USB cable through the FTDI D2XX driver (ftd2xx.dll), no COM port needed.</summary>
-    KDcanFtdi,
-
     /// <summary>BMW ENET (Ethernet) cable – F/G/I series, some late E-series.</summary>
     Enet,
 
@@ -21,7 +18,7 @@ public sealed record ConnectionSettings
 {
     public InterfaceKind Kind { get; init; } = InterfaceKind.KDcanSerial;
 
-    /// <summary>COM port (COM1), FTDI device (FTDI0) or ENET host ("auto" or an IP address).</summary>
+    /// <summary>COM port (COM1) or ENET host ("auto" or an IP address).</summary>
     public string Port { get; init; } = "COM1";
 
     /// <summary>EDIABAS ECU folder holding the .prg/.grp SGBD files, e.g. C:\EDIABAS\Ecu.</summary>

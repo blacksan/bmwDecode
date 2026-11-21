@@ -61,12 +61,21 @@ public sealed partial class QuickTestViewModel : PageViewModel
         RowsView = CollectionViewSource.GetDefaultView(Rows);
         RowsView.Filter = o => ShowAll || o is EcuRowViewModel { State: not EcuScanState.NotFitted };
 
-        _session.ConnectionChanged += (_, _) => RefreshCommands();
+        _session.ConnectionChanged += (_, _) =>
+        {
+            if (RunCancelCommand.CanExecute(null))
+            {
+                RunCancelCommand.Execute(null);
+            }
+
+            RefreshCommands();
+        };
         _session.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(SessionService.Series))
             {
                 OnPropertyChanged(nameof(SeriesName));
+                RefreshCommands();
                 if (!IsWorking)
                 {
                     Rows.Clear();
@@ -121,6 +130,7 @@ public sealed partial class QuickTestViewModel : PageViewModel
         var series = _session.Series!;
         var engine = _session.RequireEngine();
         IsWorking = true;
+        _session.IsBusy = true;
         RefreshCommands();
         Rows.Clear();
         var rowByKey = new Dictionary<string, EcuRowViewModel>(StringComparer.OrdinalIgnoreCase);
@@ -181,6 +191,7 @@ public sealed partial class QuickTestViewModel : PageViewModel
         {
             Current = null;
             IsWorking = false;
+            _session.IsBusy = false;
             RefreshCommands();
         }
     }
@@ -252,11 +263,18 @@ public sealed partial class QuickTestViewModel : PageViewModel
             return;
         }
 
-        File.WriteAllText(path, render(report), System.Text.Encoding.UTF8);
-        StatusText = $"Saved {path}";
-        if (extension == "html")
+        try
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path) { UseShellExecute = true });
+            File.WriteAllText(path, render(report), System.Text.Encoding.UTF8);
+            StatusText = $"Saved {path}";
+            if (extension == "html")
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path) { UseShellExecute = true });
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
+        {
+            StatusText = $"Could not save the report: {ex.Message}";
         }
     }
 

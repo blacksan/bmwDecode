@@ -13,7 +13,7 @@ does not need BMW's 32-bit EDIABAS runtime, INPA scripts or any COM-port jugglin
 
 | Page | What it does |
 | --- | --- |
-| **Overview** | Connect (K+DCAN via COM port or FTDI driver, ENET, or the built-in demo car), read VIN and vehicle order (FA → series via `FA.PRG`), battery and ignition via `UTILITY.PRG`, pick the chassis profile. Warns when a swapped module (e.g. an E90 CAS in an E84) reports a different chassis. |
+| **Overview** | Connect (K+DCAN cable via its COM port, ENET, or the built-in demo car), read VIN and vehicle order (FA → series via `FA.PRG`), battery and ignition via `UTILITY.PRG`, pick the chassis profile. Warns when a swapped module (e.g. an E90 CAS in an E84) reports a different chassis. |
 | **Quick test** | Tries every module slot of the chassis (group files `D_MOTOR`, `D_CAS`, `D_DSC`… from the ISTA-derived catalogue), identifies the fitted variant (`D60M57A0`, `CAS`, `DSC_87`…), reads `IDENT` and `FS_LESEN`. Clear all faults, export HTML/CSV report. |
 | **Modules** | Per-module identification, fault memory with environmental conditions (`FS_LESEN_DETAIL`: mileage, frequency, `F_UWn` values), info memory (`IS_LESEN`), clear, and **live data**: tick any argument-free `STATUS_*` jobs and poll them with min/max. |
 | **Job explorer** | Tool32-style: browse all 2,000+ SGBDs offline, read job/argument/result documentation, run any job with arguments. Writing jobs (coding, flashing, actuators, clearing) need explicit confirmation. |
@@ -33,8 +33,8 @@ accent colour, Mica backdrop, per-monitor DPI.
    - Install the FTDI driver that came with the cable (`D-CAN.exe` / `OBDSetup.exe` in the INPA package).
    - E8x / E9x / **E84** use **D-CAN**: set the cable's switch to D-CAN (pins 7 and 8 *not* bridged).
      Older cars (E46, E39, E53, E83 early) use K-line.
-   - Either pick **K+DCAN (COM port)** and select its COM port (Device Manager → Ports → USB Serial Port →
-     Advanced → *Latency timer 1 ms*), or pick **K+DCAN (FTDI driver)** and use `FTDI0` with no COM setup.
+   - Pick **K+DCAN (COM port)** and select the cable's COM port (Device Manager → Ports → USB Serial Port →
+     Advanced → *Latency timer 1 ms*). Any COM number works; it does not have to be COM1 as INPA requires.
 4. Ignition **on**, engine off, battery charger connected for long sessions → **Connect** → **Run quick test**.
 
 No car handy? Choose **Demo vehicle**: a simulated E84 with an M57 diesel (DDE6), an E90 CAS and a RWD conversion,

@@ -19,6 +19,7 @@ public sealed partial class SessionService : ObservableObject
     private readonly SettingsStore _settings;
     private SgbdInspector? _fileInspector;
     private string? _fileInspectorPath;
+    private readonly SimulatedEngine _demoInspector = new(fast: true);
 
     public SessionService(SettingsStore settings)
     {
@@ -77,7 +78,7 @@ public sealed partial class SessionService : ObservableObject
                 return _fileInspector;
             }
 
-            return Engine as ISgbdInspector ?? new SimulatedEngine(fast: true);
+            return Engine as ISgbdInspector ?? _demoInspector;
         }
     }
 

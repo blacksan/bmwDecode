@@ -38,7 +38,17 @@ public sealed partial class LogViewModel : PageViewModel
     private void Clear() => _session.LogEntries.Clear();
 
     [RelayCommand]
-    private void Copy() => Clipboard.SetText(Render());
+    private void Copy()
+    {
+        try
+        {
+            Clipboard.SetText(Render());
+        }
+        catch (System.Runtime.InteropServices.COMException)
+        {
+            StatusText = "Clipboard is busy – try again.";
+        }
+    }
 
     [RelayCommand]
     private void Save()
@@ -46,8 +56,15 @@ public sealed partial class LogViewModel : PageViewModel
         var path = _dialogs.SaveFile("Save session log", $"bmwDecode_{DateTime.Now:yyyyMMdd_HHmm}.log", "Log file|*.log|Text file|*.txt");
         if (path is not null)
         {
-            File.WriteAllText(path, Render(), Encoding.UTF8);
-            StatusText = $"Saved {path}";
+            try
+            {
+                File.WriteAllText(path, Render(), Encoding.UTF8);
+                StatusText = $"Saved {path}";
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                StatusText = $"Could not save: {ex.Message}";
+            }
         }
     }
 
@@ -187,6 +204,9 @@ public sealed partial class SettingsViewModel : PageViewModel
     private void Persist(Action<AppSettings> change)
     {
         change(_store.Current);
-        _store.Save();
+        if (!_store.Save())
+        {
+            StatusText = $"Settings could not be saved to {SettingsStore.Folder}.";
+        }
     }
 }

@@ -28,18 +28,22 @@ public sealed partial class OverviewViewModel : PageViewModel
         Interfaces =
         [
             new(InterfaceKind.KDcanSerial, "K+DCAN USB cable (COM port)", "INPA-style cable. Set the COM port; FTDI latency timer 1 ms. E84/E9x: switch the cable to D-CAN (pins 7-8 open)."),
-            new(InterfaceKind.KDcanFtdi, "K+DCAN USB cable (FTDI driver)", "Uses ftd2xx.dll directly: no COM port setup needed. Device FTDI0 is the first cable."),
             new(InterfaceKind.Enet, "ENET cable (Ethernet)", "For F/G/I series and late E-series with an Ethernet port. 'auto' discovers the car."),
             new(InterfaceKind.Demo, "Demo vehicle (no car needed)", "Simulated E84 X1 with an M57 diesel, E90 CAS and RWD conversion."),
         ];
 
         _selectedInterface = Interfaces.FirstOrDefault(i => i.Kind == settings.Current.Interface) ?? Interfaces[0];
-        _port = settings.Current.Port;
+        _port = settings.Current.Port ?? "COM1";
         SeriesOptions = [.. session.Catalog.ESeries];
         RefreshPorts();
 
         _session.PropertyChanged += (_, e) =>
         {
+            if (e.PropertyName is nameof(SessionService.IsBusy))
+            {
+                DisconnectCommand.NotifyCanExecuteChanged();
+            }
+
             if (e.PropertyName is nameof(SessionService.Engine) or nameof(SessionService.Vehicle) or nameof(SessionService.Supply) or nameof(SessionService.Series))
             {
                 OnPropertyChanged(nameof(IsConnected));
@@ -80,7 +84,6 @@ public sealed partial class OverviewViewModel : PageViewModel
     public string PortLabel => SelectedInterface.Kind switch
     {
         InterfaceKind.Enet => "Vehicle IP (or auto)",
-        InterfaceKind.KDcanFtdi => "FTDI device",
         _ => "COM port",
     };
 
@@ -124,12 +127,7 @@ public sealed partial class OverviewViewModel : PageViewModel
     private void RefreshPorts()
     {
         Ports.Clear();
-        if (SelectedInterface.Kind == InterfaceKind.KDcanFtdi)
-        {
-            Ports.Add("FTDI0");
-            Ports.Add("FTDI1");
-        }
-        else if (SelectedInterface.Kind == InterfaceKind.Enet)
+        if (SelectedInterface.Kind == InterfaceKind.Enet)
         {
             Ports.Add("auto");
             Ports.Add("169.254.1.1");
@@ -157,9 +155,8 @@ public sealed partial class OverviewViewModel : PageViewModel
     {
         Port = value.Kind switch
         {
-            InterfaceKind.KDcanFtdi => "FTDI0",
             InterfaceKind.Enet => "auto",
-            _ => Port.StartsWith("COM", StringComparison.OrdinalIgnoreCase) ? Port : "COM1",
+            _ => (Port ?? string.Empty).StartsWith("COM", StringComparison.OrdinalIgnoreCase) ? Port! : "COM1",
         };
         RefreshPorts();
     }
@@ -196,7 +193,7 @@ public sealed partial class OverviewViewModel : PageViewModel
         });
     }
 
-    private bool CanDisconnect() => IsConnected && !IsWorking;
+    private bool CanDisconnect() => IsConnected && !IsWorking && !_session.IsBusy;
 
     [RelayCommand(CanExecute = nameof(CanDisconnect))]
     private async Task DisconnectAsync()
