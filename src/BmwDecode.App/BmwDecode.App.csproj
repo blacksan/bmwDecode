@@ -7,7 +7,6 @@
     <RootNamespace>BmwDecode.App</RootNamespace>
     <AssemblyName>bmwDecode</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <!-- WPF Fluent theme (ThemeMode) is still flagged experimental in .NET 10. -->
     <NoWarn>$(NoWarn);WPF0001;MVVMTK0045</NoWarn>
     <PublishTrimmed>false</PublishTrimmed>
