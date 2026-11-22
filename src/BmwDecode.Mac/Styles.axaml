@@ -30,7 +30,13 @@
         <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
         <Setter Property="Margin" Value="0,4" />
     </Style>
-    <Style Selector="TextBlock.mono, TextBox.mono">
+    <Style Selector="TextBlock.mono">
+        <Setter Property="FontFamily" Value="Menlo, Monaco, Courier New" />
+    </Style>
+    <Style Selector="TextBox.mono">
+        <Setter Property="FontFamily" Value="Menlo, Monaco, Courier New" />
+    </Style>
+    <Style Selector="SelectableTextBlock.mono">
         <Setter Property="FontFamily" Value="Menlo, Monaco, Courier New" />
     </Style>
 
