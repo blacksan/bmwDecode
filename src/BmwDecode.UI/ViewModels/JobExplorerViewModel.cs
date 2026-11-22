@@ -1,8 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
-using System.Windows;
-using System.Windows.Data;
 using BmwDecode.App.Services;
 using BmwDecode.Core.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -16,26 +14,26 @@ public sealed record ResultRow(int Set, string Name, string Value, string Type);
 public sealed partial class JobExplorerViewModel : PageViewModel
 {
     private readonly SessionService _session;
-    private readonly DialogService _dialogs;
+    private readonly IDialogService _dialogs;
+    private readonly IClipboardService _clipboard;
     private ISgbdInspector? _inspector;
     private CancellationTokenSource? _loadCts;
 
-    public JobExplorerViewModel(SessionService session, DialogService dialogs)
+    public JobExplorerViewModel(SessionService session, IDialogService dialogs, IClipboardService clipboard)
         : base("Job explorer", "")
     {
         _session = session;
         _dialogs = dialogs;
-        FilesView = CollectionViewSource.GetDefaultView(Files);
-        FilesView.Filter = o => o is SgbdFile f && Matches(f.Name, FileFilter);
-        JobsView = CollectionViewSource.GetDefaultView(Jobs);
-        JobsView.Filter = o => o is JobDescription j && (Matches(j.Name, JobFilter) || Matches(j.Comment, JobFilter));
+        _clipboard = clipboard;
+        FilesView = new FilteredList<SgbdFile>(Files, f => Matches(f.Name, FileFilter));
+        JobsView = new FilteredList<JobDescription>(Jobs, j => Matches(j.Name, JobFilter) || Matches(j.Comment, JobFilter));
         _session.ConnectionChanged += (_, _) => RunCommand.NotifyCanExecuteChanged();
     }
 
     public ObservableCollection<SgbdFile> Files { get; } = [];
-    public ICollectionView FilesView { get; }
+    public FilteredList<SgbdFile> FilesView { get; }
     public ObservableCollection<JobDescription> Jobs { get; } = [];
-    public ICollectionView JobsView { get; }
+    public FilteredList<JobDescription> JobsView { get; }
     public ObservableCollection<ResultRow> Results { get; } = [];
 
     [ObservableProperty]
@@ -193,7 +191,7 @@ public sealed partial class JobExplorerViewModel : PageViewModel
     {
         var job = SelectedJob!;
         if (job.IsPotentiallyDestructive &&
-            !_dialogs.Confirm("Run a writing job?",
+            !await _dialogs.ConfirmAsync("Run a writing job?",
                 $"{job.Name} may change the control unit (coding, adaptation, actuator, clearing or flashing).\n\n" +
                 "Only continue if you know exactly what it does. Run it with ignition on and a battery charger connected."))
         {
@@ -235,7 +233,7 @@ public sealed partial class JobExplorerViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private void CopyResults()
+    private async Task CopyResultsAsync()
     {
         var sb = new StringBuilder();
         sb.AppendLine(ResultSummary);
@@ -244,11 +242,7 @@ public sealed partial class JobExplorerViewModel : PageViewModel
             sb.Append(r.Set).Append('\t').Append(r.Name).Append('\t').Append(r.Value).Append('\t').AppendLine(r.Type);
         }
 
-        try
-        {
-            Clipboard.SetText(sb.ToString());
-        }
-        catch (System.Runtime.InteropServices.COMException)
+        if (!await _clipboard.TrySetTextAsync(sb.ToString()))
         {
             ResultSummary = "Clipboard is busy – try again.";
         }

@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Windows.Data;
 using BmwDecode.App.Services;
 using BmwDecode.Core.Catalog;
 using BmwDecode.Core.Diagnostics;
@@ -46,10 +45,10 @@ public sealed partial class QuickTestViewModel : PageViewModel
 {
     private readonly SessionService _session;
     private readonly SettingsStore _settings;
-    private readonly DialogService _dialogs;
+    private readonly IDialogService _dialogs;
     private readonly Navigator _navigator;
 
-    public QuickTestViewModel(SessionService session, SettingsStore settings, DialogService dialogs, Navigator navigator)
+    public QuickTestViewModel(SessionService session, SettingsStore settings, IDialogService dialogs, Navigator navigator)
         : base("Quick test", "")
     {
         _session = session;
@@ -58,8 +57,7 @@ public sealed partial class QuickTestViewModel : PageViewModel
         _navigator = navigator;
         _readIdent = settings.Current.ReadIdentInQuickTest;
 
-        RowsView = CollectionViewSource.GetDefaultView(Rows);
-        RowsView.Filter = o => ShowAll || o is EcuRowViewModel { State: not EcuScanState.NotFitted };
+        RowsView = new FilteredList<EcuRowViewModel>(Rows, r => ShowAll || r.State != EcuScanState.NotFitted);
 
         _session.ConnectionChanged += (_, _) =>
         {
@@ -86,7 +84,7 @@ public sealed partial class QuickTestViewModel : PageViewModel
 
     public ObservableCollection<EcuRowViewModel> Rows { get; } = [];
 
-    public ICollectionView RowsView { get; }
+    public FilteredList<EcuRowViewModel> RowsView { get; }
 
     public string SeriesName => _session.Series?.DisplayName ?? "No chassis selected";
 
@@ -201,7 +199,7 @@ public sealed partial class QuickTestViewModel : PageViewModel
     private async Task ClearAllAsync()
     {
         var withFaults = Rows.Where(r => r.FaultCount > 0 && r.Result is not null).Select(r => r.Result!).ToList();
-        if (!_dialogs.Confirm("Clear all fault memories",
+        if (!await _dialogs.ConfirmAsync("Clear all fault memories",
                 $"Clear the fault memory of {withFaults.Count} module(s)?\n\n" +
                 "Export the report first if you need a record. Faults that are still present will come back.\n" +
                 "Ignition should be on, engine off."))
@@ -236,10 +234,10 @@ public sealed partial class QuickTestViewModel : PageViewModel
     private bool HasReport() => _session.LastReport is not null && !IsWorking;
 
     [RelayCommand(CanExecute = nameof(HasReport))]
-    private void ExportHtml() => Export("HTML report|*.html", "html", ReportExporter.ToHtml);
+    private Task ExportHtmlAsync() => ExportAsync("HTML report|*.html", "html", ReportExporter.ToHtml);
 
     [RelayCommand(CanExecute = nameof(HasReport))]
-    private void ExportCsv() => Export("CSV file|*.csv", "csv", ReportExporter.ToCsv);
+    private Task ExportCsvAsync() => ExportAsync("CSV file|*.csv", "csv", ReportExporter.ToCsv);
 
     [RelayCommand]
     private void OpenModule(EcuRowViewModel? row)
@@ -253,11 +251,11 @@ public sealed partial class QuickTestViewModel : PageViewModel
         _navigator.NavigateTo<ModulesViewModel>().Open(result.Ecu, result.Variant, result.FaultList);
     }
 
-    private void Export(string filter, string extension, Func<QuickTestReport, string> render)
+    private async Task ExportAsync(string filter, string extension, Func<QuickTestReport, string> render)
     {
         var report = _session.LastReport!;
         var name = $"bmwDecode_{report.Vehicle.ShortVin ?? report.Series}_{report.Started:yyyyMMdd_HHmm}.{extension}";
-        var path = _dialogs.SaveFile("Save quick test report", name, filter);
+        var path = await _dialogs.SaveFileAsync("Save quick test report", name, filter);
         if (path is null)
         {
             return;

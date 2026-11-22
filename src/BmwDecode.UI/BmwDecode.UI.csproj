@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Platform-neutral UI layer shared by the Windows (WPF) and macOS (Avalonia) apps: view models, the
+    diagnostic session, settings. Anything a platform must supply (UI thread, dialogs, clipboard, theme, timers)
+    sits behind the interfaces in Services/Platform.cs.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Keep the original namespaces (BmwDecode.App.*) so both front ends bind to the same types. -->
+    <RootNamespace>BmwDecode.App</RootNamespace>
+    <NoWarn>$(NoWarn);MVVMTK0045</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BmwDecode.Core\BmwDecode.Core.csproj" />
+    <ProjectReference Include="..\BmwDecode.Ediabas\BmwDecode.Ediabas.csproj" />
+  </ItemGroup>
+
+</Project>

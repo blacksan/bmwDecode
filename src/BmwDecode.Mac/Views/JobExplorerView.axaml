@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BmwDecode.Mac.Views.JobExplorerView">
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="220,12,300,12,*">
+        <StackPanel Grid.ColumnSpan="5" Margin="0,0,0,12">
+            <TextBlock Text="Job explorer" Classes="pageTitle" />
+            <TextBlock Text="{Binding StatusText}" Classes="pageSubtitle" />
+        </StackPanel>
+
+        <!-- SGBD files -->
+        <DockPanel Grid.Row="1" Grid.Column="0">
+            <TextBox DockPanel.Dock="Top" Margin="0,0,0,8" Text="{Binding FileFilter}" Watermark="Filter (e.g. D60, CAS, DSC)" />
+            <ListBox ItemsSource="{Binding FilesView}" SelectedItem="{Binding SelectedFile}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{Binding Name}" Classes="mono" FontSize="13" />
+                            <TextBlock Text="group" Classes="caption" VerticalAlignment="Center" IsVisible="{Binding IsGroup}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+
+        <!-- Jobs -->
+        <DockPanel Grid.Row="1" Grid.Column="2">
+            <TextBlock DockPanel.Dock="Top" Text="{Binding LoadedName, TargetNullValue='No SGBD loaded'}" Classes="section" FontSize="14" />
+            <TextBox DockPanel.Dock="Top" Margin="0,0,0,8" Text="{Binding JobFilter}" Watermark="Filter jobs by name or comment" />
+            <ProgressBar DockPanel.Dock="Top" IsIndeterminate="True" Height="3" Margin="0,0,0,6" IsVisible="{Binding IsWorking}" />
+            <ListBox ItemsSource="{Binding JobsView}" SelectedItem="{Binding SelectedJob}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,2">
+                            <TextBlock Text="{Binding Name}" Classes="mono" FontSize="12" />
+                            <TextBlock Text="{Binding Comment}" Classes="caption" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="250" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+
+        <!-- Job details + run -->
+        <Grid Grid.Row="1" Grid.Column="4" RowDefinitions="Auto,Auto,*">
+            <Border Classes="card" Padding="14,10">
+                <StackPanel>
+                    <TextBlock Text="{Binding SelectedJob.Name, TargetNullValue='Select a job'}" Classes="section mono" />
+                    <TextBlock Text="{Binding JobDetails.Comment}" Classes="caption" Margin="0,0,0,8" />
+                    <ItemsControl ItemsSource="{Binding JobDetails.Arguments}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,1">
+                                    <TextBlock Text="arg" Classes="caption" Foreground="{DynamicResource AccentTextBrush}" />
+                                    <TextBlock Text="{Binding Name}" Classes="caption" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Type, StringFormat='({0})'}" Classes="caption" />
+                                    <TextBlock Text="{Binding Comment}" Classes="caption" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Expander Header="Results this job returns" Margin="0,6,0,0" HorizontalAlignment="Stretch">
+                        <ItemsControl ItemsSource="{Binding JobDetails.Results}" Margin="0,4,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,1">
+                                        <TextBlock Text="{Binding Name}" Classes="caption" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Type, StringFormat='({0})'}" Classes="caption" />
+                                        <TextBlock Text="{Binding Comment}" Classes="caption" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Expander>
+                </StackPanel>
+            </Border>
+            <DockPanel Grid.Row="1" Margin="0,0,0,8">
+                <Button DockPanel.Dock="Right" Content="Copy" Command="{Binding CopyResultsCommand}" Margin="8,0,0,0" />
+                <Button DockPanel.Dock="Right" Content="Stop" Command="{Binding RunCancelCommand}" Margin="8,0,0,0" IsVisible="{Binding IsWorking}" />
+                <Button DockPanel.Dock="Right" Content="▶ Run job" Classes="accent" Command="{Binding RunCommand}" Margin="8,0,0,0" />
+                <TextBox Text="{Binding Arguments}" Classes="mono" Watermark="Arguments, separated by ';' (e.g. 0x4B93 or 1;2)" />
+            </DockPanel>
+            <DockPanel Grid.Row="2">
+                <TextBlock DockPanel.Dock="Top" Text="{Binding ResultSummary}" Classes="caption" Margin="0,0,0,6"
+                           IsVisible="{Binding ResultSummary, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                <DataGrid ItemsSource="{Binding Results}" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Set" Binding="{Binding Set}" Width="44" />
+                        <DataGridTextColumn Header="Result" Binding="{Binding Name}" Width="*" FontFamily="Menlo, Monaco" />
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="2*" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</UserControl>

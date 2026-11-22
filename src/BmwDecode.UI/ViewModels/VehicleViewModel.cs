@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
-using System.Windows;
 using BmwDecode.App.Services;
 using BmwDecode.Core.Catalog;
 using BmwDecode.Core.Services;
@@ -18,10 +17,13 @@ public sealed partial class VehicleViewModel : PageViewModel
     private readonly NhtsaVinClient _nhtsa = new();
     private string? _lastAutoVin;
 
-    public VehicleViewModel(SessionService session)
+    private readonly IClipboardService _clipboard;
+
+    public VehicleViewModel(SessionService session, IClipboardService clipboard)
         : base("Vehicle / VIN", "")
     {
         _session = session;
+        _clipboard = clipboard;
     }
 
     public ObservableCollection<KeyValuePair<string, string>> VinRows { get; } = [];
@@ -244,18 +246,14 @@ public sealed partial class VehicleViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private void CopyShortVin()
+    private async Task CopyShortVinAsync()
     {
         if (ShortVin is null)
         {
             return;
         }
 
-        try
-        {
-            Clipboard.SetText(ShortVin);
-        }
-        catch (System.Runtime.InteropServices.COMException)
+        if (!await _clipboard.TrySetTextAsync(ShortVin))
         {
             Problems = "Clipboard is busy – try again.";
         }

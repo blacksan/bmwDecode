@@ -1,0 +1,111 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BmwDecode.Mac.Views.OverviewView">
+    <ScrollViewer>
+        <StackPanel MaxWidth="980" HorizontalAlignment="Left">
+            <TextBlock Text="Overview" Classes="pageTitle" />
+            <TextBlock Classes="pageSubtitle" Margin="0,0,0,20"
+                       Text="Connect your K+DCAN cable, switch the ignition on (engine off) and connect. bmwDecode identifies the car and reads every module, like INPA's quick test." />
+
+            <Border Classes="errorBar" IsVisible="{Binding ErrorText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                <TextBlock Text="{Binding ErrorText}" Classes="value" />
+            </Border>
+
+            <!-- Connection -->
+            <Border Classes="card">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                    <TextBlock Grid.ColumnSpan="2" Text="{Binding ConnectionTitle}" Classes="section" Margin="0,0,0,12" />
+
+                    <Grid Grid.Row="1" ColumnDefinitions="2*,16,*,Auto" IsEnabled="{Binding !IsConnected}">
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Interface" Classes="caption" Margin="0,0,0,4" />
+                            <ComboBox ItemsSource="{Binding Interfaces}" SelectedItem="{Binding SelectedInterface}" HorizontalAlignment="Stretch">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate><TextBlock Text="{Binding Label}" /></DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" IsVisible="{Binding NeedsPort}">
+                            <TextBlock Text="{Binding PortLabel}" Classes="caption" Margin="0,0,0,4" />
+                            <AutoCompleteBox ItemsSource="{Binding Ports}" Text="{Binding Port, Mode=TwoWay}" MinimumPrefixLength="0"
+                                             FilterMode="Contains" Watermark="/dev/cu.usbserial-…" />
+                        </StackPanel>
+                        <Button Grid.Column="3" Margin="8,0,0,0" VerticalAlignment="Bottom" Command="{Binding RefreshPortsCommand}"
+                                ToolTip.Tip="Refresh port list" IsVisible="{Binding NeedsPort}" Content="↻" />
+                    </Grid>
+
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="16,0,0,0">
+                        <Button Content="Connect" Classes="accent" MinWidth="110" Command="{Binding ConnectCommand}" IsVisible="{Binding !IsConnected}" />
+                        <Button Content="Cancel" Command="{Binding ConnectCancelCommand}" IsVisible="{Binding IsWorking}" />
+                        <Button Content="Disconnect" Command="{Binding DisconnectCommand}" MinWidth="110" IsVisible="{Binding IsConnected}" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding SelectedInterface.Hint}" Classes="caption" Margin="0,10,0,0" />
+                    <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding EcuPathText}" Classes="caption" Margin="0,10,0,0" />
+                </Grid>
+            </Border>
+
+            <ProgressBar IsIndeterminate="True" Height="4" Margin="0,0,0,12" IsVisible="{Binding IsWorking}" />
+            <TextBlock Text="{Binding StatusText}" Classes="caption" Margin="0,0,0,12"
+                       IsVisible="{Binding StatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+            <!-- Vehicle -->
+            <Border Classes="card">
+                <StackPanel>
+                    <DockPanel Margin="0,0,0,12">
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Button Content="VIN details…" Command="{Binding VehicleDetailsCommand}" />
+                            <Button Content="Identify again" Command="{Binding IdentifyCommand}" />
+                            <Button Content="⚡ Run quick test" Classes="accent" Command="{Binding QuickTestCommand}" Margin="0" />
+                        </StackPanel>
+                        <TextBlock Text="Vehicle" Classes="section" Margin="0" VerticalAlignment="Center" />
+                    </DockPanel>
+
+                    <Grid ColumnDefinitions="170,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                        <TextBlock Grid.Row="0" Text="Chassis profile" Classes="label" VerticalAlignment="Center" />
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,2" Spacing="12">
+                            <ComboBox ItemsSource="{Binding SeriesOptions}" SelectedItem="{Binding SelectedSeries}" MinWidth="260">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate><TextBlock Text="{Binding DisplayName}" /></DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Text="{Binding SelectedSeries.Family, StringFormat='family {0}'}" Classes="label" VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <TextBlock Grid.Row="1" Text="VIN" Classes="label" />
+                        <SelectableTextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Vehicle.Vin, TargetNullValue='—'}" Classes="mono" Margin="0,4" FontSize="14" />
+                        <TextBlock Grid.Row="2" Text="Series reported" Classes="label" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Vehicle.Series, TargetNullValue='—'}" Classes="value" Margin="0,4" />
+                        <TextBlock Grid.Row="3" Text="Read from" Classes="label" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Vehicle.VinSource, TargetNullValue='—'}" Classes="value" Margin="0,4" />
+                        <TextBlock Grid.Row="4" Text="Battery" Classes="label" />
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Supply.BatteryText, TargetNullValue='—'}" Classes="value" Margin="0,4" />
+                        <TextBlock Grid.Row="5" Text="Ignition" Classes="label" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Supply.IgnitionText, TargetNullValue='—'}" Classes="value" Margin="0,4" />
+                        <TextBlock Grid.Row="6" Text="Model" Classes="label" />
+                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Vehicle.Details.Model, TargetNullValue='—'}" Classes="value" Margin="0,4" />
+                        <TextBlock Grid.Row="7" Text="Engine" Classes="label" />
+                        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" Spacing="6" Margin="0,4">
+                            <TextBlock Text="{Binding Vehicle.Details.Engine, TargetNullValue='—'}" Classes="value" />
+                            <TextBlock Text="{Binding Vehicle.Details.EngineEcu, StringFormat='(ECU {0})'}" Classes="label" Margin="0" />
+                        </StackPanel>
+                        <TextBlock Grid.Row="8" Text="Built" Classes="label" />
+                        <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Vehicle.Details.ProductionText, TargetNullValue='—'}" Classes="value" Margin="0,4" />
+                    </Grid>
+
+                    <Border Classes="warningBar" Margin="0,12,0,0" IsVisible="{Binding SeriesMismatch, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <TextBlock Text="{Binding SeriesMismatch}" Classes="value" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="infoBar">
+                <StackPanel>
+                    <TextBlock Text="Cable checklist (Mac)" FontWeight="SemiBold" Margin="0,0,0,4" />
+                    <TextBlock Classes="caption"
+                               Text="• 2007+ cars (E8x, E9x, E84, E6x/E7x LCI) use D-CAN: cable switch to D-CAN. Older cars (E36, E38, E39, E46, E53, E83, E85) use K-line: switch to K-line. Pre-1996 cars with the round 20-pin socket need a 20-pin to OBD adapter.&#x0a;• macOS has the FTDI driver built in: plug the cable in and pick /dev/cu.usbserial-… above (press ↻ if it is missing). Use a USB-C to USB-A adapter on the MacBook.&#x0a;• Copy the Ecu folder (and sgbd.pack) from your Windows PC to ~/Library/Application Support/bmwDecode/ – see Settings.&#x0a;• Keep a battery charger on for long sessions; diagnostics with the ignition on drains the battery." />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

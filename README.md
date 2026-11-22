@@ -118,6 +118,26 @@ SDK and Inno Setup 6). It also carries your SGBD files and the K+DCAN FTDI drive
 
 BMW's SGBD files are BMW's property, so a private installer is for your own machines only. Never publish one.
 
+## macOS (Apple Silicon and Intel)
+
+bmwDecode also runs on a Mac, with the same pages and the same diagnostics engine as the Windows app.
+
+1. **Get the app.** Download `bmwDecode-…-macos-arm64.dmg` (M1/M2/M3/M4) or `…-macos-x64.dmg` (Intel) from the
+   latest build's artifacts or a release, open it and drag **bmwDecode** to Applications.
+2. **First start.** The app is not notarised by Apple, so macOS blocks the first launch. Open it once, then go to
+   **System Settings → Privacy & Security** and click **Open Anyway** (or run
+   `xattr -dr com.apple.quarantine /Applications/bmwDecode.app` in Terminal).
+3. **Copy your BMW files from the Windows PC** (they are not bundled):
+   - `C:\EDIABAS\Ecu` (or the merged Ecu folder) → `~/Library/Application Support/bmwDecode/Ecu`
+   - the data pack `artifacts\data\sgbd.pack` from a private build → `~/Library/Application Support/bmwDecode/Data/sgbd.pack`
+
+   bmwDecode finds both there automatically (Settings shows what it found).
+4. **Cable.** macOS has the FTDI driver built in: plug the K+DCAN cable in (USB-C to USB-A adapter on a MacBook) and
+   choose the `/dev/cu.usbserial-…` port on the Overview page. Same D-CAN / K-line switch rules as on Windows.
+   macOS does not let apps set the FTDI latency timer; if a module times out, scan it again.
+
+To build it yourself on a Mac: install the .NET 10 SDK and run `installer/macos/make-app.sh osx-arm64`.
+
 ## Roadmap: F/G series
 
 The engine (EdiabasLib) already speaks ENET/DoIP, ISTA's Ecu folder contains the F/G SGBDs (`G_ZGW`, `ZGW_01`,

@@ -1,4 +1,3 @@
-using System.Windows.Threading;
 using BmwDecode.App.Services;
 using BmwDecode.Core.Diagnostics;
 using BmwDecode.Core.Services;
@@ -11,7 +10,7 @@ public sealed partial class MainViewModel : ObservableObject
 {
     public MainViewModel(Navigator navigator, SessionService session,
         OverviewViewModel overview, VehicleViewModel vehicle, QuickTestViewModel quickTest, ModulesViewModel modules,
-        JobExplorerViewModel jobs, LogViewModel log, SettingsViewModel settings)
+        JobExplorerViewModel jobs, LogViewModel log, SettingsViewModel settings, IUiTimerFactory timers)
     {
         Navigator = navigator;
         Session = session;
@@ -42,12 +41,12 @@ public sealed partial class MainViewModel : ObservableObject
         };
 
         // Battery and ignition under Settings: refreshed while connected and no scan/live poll is using the bus.
-        _supplyTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+        _supplyTimer = timers.Create(TimeSpan.FromSeconds(5));
         _supplyTimer.Tick += async (_, _) => await RefreshSupplyAsync();
         _supplyTimer.Start();
     }
 
-    private readonly DispatcherTimer _supplyTimer;
+    private readonly IUiTimer _supplyTimer;
     private bool _refreshingSupply;
 
     public string BatteryText => Session.IsConnected ? Session.Supply?.BatteryText ?? "…" : "—";

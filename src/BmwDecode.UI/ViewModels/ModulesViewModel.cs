@@ -24,10 +24,10 @@ public sealed partial class ModulesViewModel : PageViewModel
 {
     private readonly SessionService _session;
     private readonly SettingsStore _settings;
-    private readonly DialogService _dialogs;
+    private readonly IDialogService _dialogs;
     private readonly Dictionary<string, ModuleViewModel> _cache = new(StringComparer.OrdinalIgnoreCase);
 
-    public ModulesViewModel(SessionService session, SettingsStore settings, DialogService dialogs)
+    public ModulesViewModel(SessionService session, SettingsStore settings, IDialogService dialogs)
         : base("Modules", "")
     {
         _session = session;

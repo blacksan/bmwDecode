@@ -2,8 +2,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Windows;
-using System.Windows.Data;
 using BmwDecode.App.Services;
 using BmwDecode.Core.Catalog;
 using BmwDecode.Core.Diagnostics;
@@ -16,18 +14,20 @@ namespace BmwDecode.App.ViewModels;
 public sealed partial class LogViewModel : PageViewModel
 {
     private readonly SessionService _session;
-    private readonly DialogService _dialogs;
+    private readonly IDialogService _dialogs;
+    private readonly IClipboardService _clipboard;
 
-    public LogViewModel(SessionService session, DialogService dialogs)
+    public LogViewModel(SessionService session, IDialogService dialogs, IClipboardService clipboard)
         : base("Log", "\uE81C")
     {
         _session = session;
         _dialogs = dialogs;
-        EntriesView = CollectionViewSource.GetDefaultView(session.LogEntries);
-        EntriesView.Filter = o => ShowDebug || o is DiagnosticLogEntry { Level: not Core.Diagnostics.LogLevel.Debug };
+        _clipboard = clipboard;
+        EntriesView = new FilteredList<DiagnosticLogEntry>(session.LogEntries,
+            e => ShowDebug || e.Level != Core.Diagnostics.LogLevel.Debug);
     }
 
-    public ICollectionView EntriesView { get; }
+    public FilteredList<DiagnosticLogEntry> EntriesView { get; }
 
     [ObservableProperty]
     private bool _showDebug;
@@ -38,22 +38,18 @@ public sealed partial class LogViewModel : PageViewModel
     private void Clear() => _session.LogEntries.Clear();
 
     [RelayCommand]
-    private void Copy()
+    private async Task CopyAsync()
     {
-        try
-        {
-            Clipboard.SetText(Render());
-        }
-        catch (System.Runtime.InteropServices.COMException)
+        if (!await _clipboard.TrySetTextAsync(Render()))
         {
             StatusText = "Clipboard is busy – try again.";
         }
     }
 
     [RelayCommand]
-    private void Save()
+    private async Task SaveAsync()
     {
-        var path = _dialogs.SaveFile("Save session log", $"bmwDecode_{DateTime.Now:yyyyMMdd_HHmm}.log", "Log file|*.log|Text file|*.txt");
+        var path = await _dialogs.SaveFileAsync("Save session log", $"bmwDecode_{DateTime.Now:yyyyMMdd_HHmm}.log", "Log file|*.log|Text file|*.txt");
         if (path is not null)
         {
             try
@@ -85,10 +81,10 @@ public sealed partial class LogViewModel : PageViewModel
 public sealed partial class SettingsViewModel : PageViewModel
 {
     private readonly SettingsStore _store;
-    private readonly DialogService _dialogs;
-    private readonly ThemeService _theme;
+    private readonly IDialogService _dialogs;
+    private readonly IThemeService _theme;
 
-    public SettingsViewModel(SettingsStore store, DialogService dialogs, ThemeService theme)
+    public SettingsViewModel(SettingsStore store, IDialogService dialogs, IThemeService theme)
         : base("Settings", "\uE713")
     {
         _store = store;
@@ -225,9 +221,9 @@ public sealed partial class SettingsViewModel : PageViewModel
     public string SettingsFolder => SettingsStore.Folder;
 
     [RelayCommand]
-    private void Browse()
+    private async Task BrowseAsync()
     {
-        if (_dialogs.PickFolder("Select the EDIABAS Ecu folder (contains *.prg files)", EcuPath) is { } path)
+        if (await _dialogs.PickFolderAsync("Select the EDIABAS Ecu folder (contains *.prg files)", EcuPath) is { } path)
         {
             EcuPath = path;
         }

@@ -21,9 +21,22 @@ public sealed partial class EdiabasEngine
         _ => throw new DiagnosticException($"Interface {settings.Kind} is not handled by EDIABAS.", "BMWDECODE_INTERFACE"),
     };
 
-    private static string NormalizeComPort(string port)
+    /// <summary>"3" or "com3" becomes COM3 on Windows; device paths (/dev/cu.usbserial-…) are kept as typed.</summary>
+    internal static string NormalizeComPort(string port)
     {
-        var p = (port ?? string.Empty).Trim().ToUpperInvariant();
+        var p = (port ?? string.Empty).Trim();
+        if (p.StartsWith('/'))
+        {
+            return p;
+        }
+
+        if (!OperatingSystem.IsWindows())
+        {
+            // A bare device name on macOS / Linux.
+            return p.Length == 0 ? p : "/dev/" + p;
+        }
+
+        p = p.ToUpperInvariant();
         return int.TryParse(p, out var n) ? $"COM{n}" : p;
     }
 
@@ -33,9 +46,21 @@ public sealed partial class EdiabasEngine
         var ports = new List<string>();
         try
         {
-            ports.AddRange(System.IO.Ports.SerialPort.GetPortNames()
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .OrderBy(p => p.Length).ThenBy(p => p, StringComparer.OrdinalIgnoreCase));
+            var names = System.IO.Ports.SerialPort.GetPortNames().Distinct(StringComparer.OrdinalIgnoreCase);
+            if (OperatingSystem.IsMacOS())
+            {
+                // macOS lists each device twice (tty.* and cu.*): cu.* is the one to open for outgoing use.
+                // A K+DCAN cable on Apple's built-in FTDI driver shows up as /dev/cu.usbserial-XXXXXXXX.
+                names = names.Where(n => n.StartsWith("/dev/cu.", StringComparison.Ordinal)
+                                         && !n.Contains("Bluetooth", StringComparison.OrdinalIgnoreCase)
+                                         && !n.Contains("debug-console", StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(n => n.Contains("usbserial", StringComparison.OrdinalIgnoreCase));
+                ports.AddRange(names);
+            }
+            else
+            {
+                ports.AddRange(names.OrderBy(p => p.Length).ThenBy(p => p, StringComparer.OrdinalIgnoreCase));
+            }
         }
         catch (Exception)
         {

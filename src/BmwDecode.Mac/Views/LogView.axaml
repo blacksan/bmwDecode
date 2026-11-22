@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BmwDecode.Mac.Views.LogView">
+    <Grid RowDefinitions="Auto,Auto,*">
+        <StackPanel>
+            <TextBlock Text="Log" Classes="pageTitle" />
+            <TextBlock Text="Every connection, identification and job of this session. Attach it when asking for help." Classes="pageSubtitle" Margin="0,0,0,12" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button Content="Copy" Command="{Binding CopyCommand}" />
+            <Button Content="Save…" Command="{Binding SaveCommand}" />
+            <Button Content="Clear" Command="{Binding ClearCommand}" Margin="0,0,16,0" />
+            <CheckBox Content="Show job details (debug)" IsChecked="{Binding ShowDebug}" VerticalAlignment="Center" Margin="0,0,16,0" />
+            <TextBlock Text="{Binding StatusText}" Classes="caption" VerticalAlignment="Center" />
+        </StackPanel>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding EntriesView}" AutoGenerateColumns="False" GridLinesVisibility="None" RowHeight="26">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat='HH:mm:ss.fff'}" Width="110" />
+                <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="80" />
+                <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

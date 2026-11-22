@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BmwDecode.App.ViewModels"
+        xmlns:views="using:BmwDecode.Mac.Views"
+        x:Class="BmwDecode.Mac.MainWindow"
+        Title="bmwDecode – BMW E-series diagnostics"
+        Width="1280" Height="820" MinWidth="980" MinHeight="620"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource PageBrush}">
+
+    <Window.DataTemplates>
+        <DataTemplate DataType="vm:OverviewViewModel"><views:OverviewView /></DataTemplate>
+        <DataTemplate DataType="vm:VehicleViewModel"><views:VehicleView /></DataTemplate>
+        <DataTemplate DataType="vm:QuickTestViewModel"><views:QuickTestView /></DataTemplate>
+        <DataTemplate DataType="vm:ModulesViewModel"><views:ModulesView /></DataTemplate>
+        <DataTemplate DataType="vm:JobExplorerViewModel"><views:JobExplorerView /></DataTemplate>
+        <DataTemplate DataType="vm:LogViewModel"><views:LogView /></DataTemplate>
+        <DataTemplate DataType="vm:SettingsViewModel"><views:SettingsView /></DataTemplate>
+    </Window.DataTemplates>
+
+    <Window.Resources>
+        <DataTemplate x:Key="NavItem">
+            <StackPanel Orientation="Horizontal" Margin="4,4" Spacing="12">
+                <TextBlock Text="{Binding Title, Converter={StaticResource PageIcon}}" FontSize="15" Width="20" TextAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Title}" FontSize="14" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid ColumnDefinitions="248,*">
+        <!-- Navigation pane -->
+        <Grid Grid.Column="0" Margin="8,12,4,12" RowDefinitions="Auto,*,Auto,Auto">
+            <StackPanel Grid.Row="0" Margin="12,4,12,16">
+                <TextBlock Text="bmwDecode" FontSize="20" FontWeight="SemiBold" />
+                <TextBlock Text="E-series diagnostics" Classes="caption" />
+            </StackPanel>
+
+            <ListBox Grid.Row="1" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage, Mode=TwoWay}"
+                     ItemTemplate="{StaticResource NavItem}" Background="Transparent" />
+
+            <StackPanel Grid.Row="2" Margin="0,8,0,8">
+                <ListBox ItemsSource="{Binding FooterPages}" SelectedItem="{Binding SelectedFooterPage, Mode=TwoWay}"
+                         ItemTemplate="{StaticResource NavItem}" Background="Transparent" />
+
+                <!-- Live supply status from the interface -->
+                <Grid Margin="16,8,12,0" ColumnDefinitions="Auto,*,Auto,*">
+                    <TextBlock Text="🔋" FontSize="13" Margin="0,0,6,0" VerticalAlignment="Center" ToolTip.Tip="Battery voltage (terminal 30)" />
+                    <TextBlock Grid.Column="1" Text="{Binding BatteryText}" Classes="caption" FontSize="13" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="2" Text="🔑" FontSize="13" Margin="8,0,6,0" VerticalAlignment="Center" ToolTip.Tip="Ignition (terminal 15)" />
+                    <TextBlock Grid.Column="3" Text="{Binding IgnitionText}" Classes="caption" FontSize="13" VerticalAlignment="Center"
+                               Foreground="{Binding IgnitionOn, Converter={StaticResource ScanStateToBrush}, ConverterParameter=ignition}" />
+                </Grid>
+            </StackPanel>
+
+            <Border Grid.Row="3" Classes="card" Padding="12,10" Margin="4,0">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Ellipse Classes="dot" Width="8" Height="8"
+                                 Fill="{Binding IsConnected, Converter={StaticResource ScanStateToBrush}, ConverterParameter=connected}" />
+                        <TextBlock Text="{Binding ConnectionText}" Classes="caption" TextTrimming="CharacterEllipsis" MaxWidth="190" />
+                    </StackPanel>
+                    <TextBlock Text="DEMO MODE – simulated vehicle" Classes="caption" FontWeight="SemiBold" Margin="16,4,0,0"
+                               Foreground="{DynamicResource CautionBrush}" IsVisible="{Binding IsDemo}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Content area -->
+        <Grid Grid.Column="1" RowDefinitions="*,Auto">
+            <Border Grid.Row="0" Margin="4,8,8,0" CornerRadius="8,8,0,0" Background="{DynamicResource CardBrush}"
+                    BorderBrush="{DynamicResource CardStrokeBrush}" BorderThickness="1,1,1,0">
+                <ContentControl Content="{Binding Navigator.Current}" Margin="28,20,28,12" />
+            </Border>
+            <Border Grid.Row="1" Margin="4,0,8,8" Padding="16,6" CornerRadius="0,0,8,8" Background="{DynamicResource CardBrush}"
+                    BorderBrush="{DynamicResource CardStrokeBrush}" BorderThickness="1">
+                <TextBlock Text="{Binding VehicleText}" Classes="caption" />
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

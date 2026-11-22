@@ -1,7 +1,7 @@
 <Window x:Class="BmwDecode.App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:BmwDecode.App.ViewModels"
+        xmlns:vm="clr-namespace:BmwDecode.App.ViewModels;assembly=BmwDecode.UI"
         xmlns:views="clr-namespace:BmwDecode.App.Views"
         Title="bmwDecode – BMW E-series diagnostics"
         Width="1280" Height="820" MinWidth="980" MinHeight="620"

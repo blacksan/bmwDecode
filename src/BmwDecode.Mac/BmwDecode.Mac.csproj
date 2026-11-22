@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    macOS front end (Avalonia): the same view models and diagnostic session as the Windows app
+    (BmwDecode.UI), with Mac dialogs, clipboard and theme. Builds osx-arm64 (Apple Silicon) and osx-x64.
+    The K+DCAN cable uses Apple's built-in FTDI driver and appears as /dev/cu.usbserial-XXXXXXXX.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>BmwDecode.Mac</RootNamespace>
+    <AssemblyName>bmwDecode</AssemblyName>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NoWarn>$(NoWarn);MVVMTK0045</NoWarn>
+    <CFBundleName>bmwDecode</CFBundleName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BmwDecode.UI\BmwDecode.UI.csproj" />
+  </ItemGroup>
+
+</Project>
