@@ -6,7 +6,7 @@
     app never needs BMW's 32-bit EDIABAS install: only the SGBD files (C:\EDIABAS\Ecu) are read.
   -->
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>BmwDecode.Ediabas</RootNamespace>
     <!-- EdiabasLib sources predate nullable annotations and rely on explicit usings. -->
     <Nullable>disable</Nullable>

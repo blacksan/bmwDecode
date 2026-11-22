@@ -3,7 +3,7 @@ using System.Windows;
 namespace BmwDecode.App.Services;
 
 /// <summary>Applies the Windows 11 Fluent theme (light / dark / follow Windows) with Mica.</summary>
-public sealed class ThemeService
+public sealed class ThemeService : IThemeService
 {
     public void Apply(AppTheme theme)
     {

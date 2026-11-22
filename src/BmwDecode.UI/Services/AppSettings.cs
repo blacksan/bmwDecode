@@ -12,11 +12,14 @@ public enum AppTheme
     Dark,
 }
 
-/// <summary>User settings, stored as JSON in %LOCALAPPDATA%\bmwDecode\settings.json.</summary>
+/// <summary>
+/// User settings, stored as JSON in %LOCALAPPDATA%\bmwDecode\settings.json (Windows) or
+/// ~/Library/Application Support/bmwDecode/settings.json (macOS).
+/// </summary>
 public sealed class AppSettings
 {
     public InterfaceKind Interface { get; set; } = InterfaceKind.KDcanSerial;
-    public string Port { get; set; } = "COM1";
+    public string Port { get; set; } = OperatingSystem.IsWindows() ? "COM1" : string.Empty;
     public string EcuPath { get; set; } = string.Empty;
     public string DefaultSeries { get; set; } = "E84";
     public AppTheme Theme { get; set; } = AppTheme.System;
@@ -63,7 +66,7 @@ public sealed class SettingsStore
         }
 
         // JSON nulls overwrite defaults; normalise so the rest of the app can trust these values.
-        Current.Port ??= "COM1";
+        Current.Port ??= OperatingSystem.IsWindows() ? "COM1" : string.Empty;
         Current.EcuPath ??= string.Empty;
         Current.DefaultSeries ??= "E84";
         if (!Enum.IsDefined(Current.Interface))
@@ -110,6 +113,8 @@ public static class EcuPathLocator
             // Installed by the bmwDecode setup (bundled or copied from INPA/ISTA): self-contained, preferred.
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "bmwDecode", "Ecu"),
             Path.Combine(AppContext.BaseDirectory, "Ecu"),
+            // macOS: ~/Library/Application Support/bmwDecode/Ecu (copy the Ecu folder there from the Windows PC).
+            Path.Combine(SettingsStore.Folder, "Ecu"),
         };
 
         // EDIABAS sets EDIABAS_PATH / adds its Bin folder to PATH on install.
@@ -126,7 +131,7 @@ public static class EcuPathLocator
             }
         }
 
-        foreach (var drive in new[] { "C:", "D:", "E:" })
+        foreach (var drive in OperatingSystem.IsWindows() ? new[] { "C:", "D:", "E:" } : [])
         {
             candidates.Add($@"{drive}\EDIABAS\Ecu");
             candidates.Add($@"{drive}\EC-Apps\ISTA\Ecu");

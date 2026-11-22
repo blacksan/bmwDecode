@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BmwDecode.Core\BmwDecode.Core.csproj" />
     <ProjectReference Include="..\BmwDecode.Ediabas\BmwDecode.Ediabas.csproj" />
+    <ProjectReference Include="..\BmwDecode.UI\BmwDecode.UI.csproj" />
   </ItemGroup>
 
 </Project>

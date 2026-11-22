@@ -1,6 +1,5 @@
 using BmwDecode.Core.Data;
 using System.Collections.ObjectModel;
-using System.Windows;
 using BmwDecode.Core.Catalog;
 using BmwDecode.Core.Diagnostics;
 using BmwDecode.Core.Services;
@@ -25,9 +24,12 @@ public sealed partial class SessionService : ObservableObject
     private TypeKeyDatabase? _typeKeys;
     private string? _typeKeysStamp;
 
-    public SessionService(SettingsStore settings)
+    private readonly IUiThread _ui;
+
+    public SessionService(SettingsStore settings, IUiThread ui)
     {
         _settings = settings;
+        _ui = ui;
         _series = VehicleCatalog.Default.Find(settings.Current.DefaultSeries) ?? VehicleCatalog.Default.Find("E84");
     }
 
@@ -62,31 +64,31 @@ public sealed partial class SessionService : ObservableObject
     /// </summary>
     public IDisposable BeginBusy()
     {
-        var dispatcher = Application.Current?.Dispatcher;
+        var ui = _ui;
         void Update(int delta)
         {
             _busyCount = Math.Max(0, _busyCount + delta);
             IsBusy = _busyCount > 0;
         }
 
-        if (dispatcher is null || dispatcher.CheckAccess())
+        if (ui.CheckAccess())
         {
             Update(+1);
         }
         else
         {
-            dispatcher.Invoke(() => Update(+1));
+            ui.Invoke(() => Update(+1));
         }
 
         return new BusyScope(() =>
         {
-            if (dispatcher is null || dispatcher.CheckAccess())
+            if (ui.CheckAccess())
             {
                 Update(-1);
             }
             else
             {
-                dispatcher.BeginInvoke(() => Update(-1));
+                ui.Post(() => Update(-1));
             }
         });
     }
@@ -257,14 +259,13 @@ public sealed partial class SessionService : ObservableObject
 
     private void Add(DiagnosticLogEntry entry)
     {
-        var dispatcher = Application.Current?.Dispatcher;
-        if (dispatcher is null || dispatcher.CheckAccess())
+        if (_ui.CheckAccess())
         {
             AddOnUi(entry);
         }
         else
         {
-            dispatcher.BeginInvoke(() => AddOnUi(entry));
+            _ui.Post(() => AddOnUi(entry));
         }
     }
 

@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Windows.Data;
 using BmwDecode.App.Services;
 using BmwDecode.Core.Catalog;
 using BmwDecode.Core.Diagnostics;
@@ -84,11 +83,11 @@ public sealed partial class ModuleViewModel : ObservableObject
 {
     private readonly SessionService _session;
     private readonly SettingsStore _settings;
-    private readonly DialogService _dialogs;
+    private readonly IDialogService _dialogs;
     private readonly Dictionary<string, LiveRow> _liveByKey = new(StringComparer.OrdinalIgnoreCase);
 
     public ModuleViewModel(EcuDefinition ecu, string? variant, IReadOnlyList<FaultEntry>? knownFaults,
-        SessionService session, SettingsStore settings, DialogService dialogs)
+        SessionService session, SettingsStore settings, IDialogService dialogs)
     {
         Ecu = ecu;
         _variant = variant;
@@ -100,18 +99,19 @@ public sealed partial class ModuleViewModel : ObservableObject
             Faults.Add(f);
         }
 
-        ModuleJobsView = CollectionViewSource.GetDefaultView(ModuleJobs);
-        ModuleJobsView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(ModuleJobItem.Category)));
-        ModuleJobsView.SortDescriptions.Add(new SortDescription(nameof(ModuleJobItem.CategoryOrder), ListSortDirection.Ascending));
-        ModuleJobsView.SortDescriptions.Add(new SortDescription(nameof(ModuleJobItem.Name), ListSortDirection.Ascending));
-        ModuleJobsView.Filter = o => o is ModuleJobItem j && (string.IsNullOrWhiteSpace(JobFilter) ||
-            j.Name.Contains(JobFilter, StringComparison.OrdinalIgnoreCase) || j.Comment.Contains(JobFilter, StringComparison.OrdinalIgnoreCase));
+        // Sorted by category then name; each front end shows the Category as group headers.
+        ModuleJobsView = new FilteredList<ModuleJobItem>(ModuleJobs,
+            j => string.IsNullOrWhiteSpace(JobFilter) ||
+                 j.Name.Contains(JobFilter, StringComparison.OrdinalIgnoreCase) || j.Comment.Contains(JobFilter, StringComparison.OrdinalIgnoreCase),
+            Comparer<ModuleJobItem>.Create((a, b) =>
+                a.CategoryOrder != b.CategoryOrder ? a.CategoryOrder.CompareTo(b.CategoryOrder)
+                : string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase)));
     }
 
     // ---------------- Jobs & coding ----------------
 
     public ObservableCollection<ModuleJobItem> ModuleJobs { get; } = [];
-    public ICollectionView ModuleJobsView { get; }
+    public FilteredList<ModuleJobItem> ModuleJobsView { get; }
     public ObservableCollection<ResultRow> ModuleJobResults { get; } = [];
     public ObservableCollection<ParameterDescription> ModuleJobArguments { get; } = [];
 
@@ -186,21 +186,21 @@ public sealed partial class ModuleViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private Task RunModuleJobAsync()
+    private async Task RunModuleJobAsync()
     {
         if (SelectedModuleJob is not { } item)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        if (item.IsWriting && !_dialogs.Confirm($"Run {item.Name} on {Ecu.Abbreviation}?",
+        if (item.IsWriting && !await _dialogs.ConfirmAsync($"Run {item.Name} on {Ecu.Abbreviation}?",
                 $"{item.Name} ({item.Category}) can change this module: coding, adaptations, actuators, resets or flashing.\n\n" +
                 $"{item.Comment}\n\nBack up the coding first (\"Back up coding\"), keep a battery charger connected and only continue if you know what this job does."))
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        return Busy($"Running {item.Name}…", async ct =>
+        await Busy($"Running {item.Name}…", async ct =>
         {
             ModuleJobResults.Clear();
             var r = await RunAsync(item.Name, ModuleJobArgs.Trim(), ct);
@@ -267,7 +267,7 @@ public sealed partial class ModuleViewModel : ObservableObject
             return;
         }
 
-        var path = _dialogs.SaveFile("Save coding backup", $"coding_{Ecu.Abbreviation.Replace('/', '-')}_{Variant}_{DateTime.Now:yyyyMMdd_HHmm}.txt", "Text file|*.txt");
+        var path = await _dialogs.SaveFileAsync("Save coding backup", $"coding_{Ecu.Abbreviation.Replace('/', '-')}_{Variant}_{DateTime.Now:yyyyMMdd_HHmm}.txt", "Text file|*.txt");
         if (path is not null)
         {
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
@@ -347,15 +347,15 @@ public sealed partial class ModuleViewModel : ObservableObject
     private Task ReadInfoAsync() => Busy("Reading info memory…", ReadInfoCoreAsync);
 
     [RelayCommand]
-    private Task ClearFaultsAsync()
+    private async Task ClearFaultsAsync()
     {
-        if (!_dialogs.Confirm($"Clear {Ecu.Abbreviation} fault memory",
+        if (!await _dialogs.ConfirmAsync($"Clear {Ecu.Abbreviation} fault memory",
                 $"Clear all {Faults.Count} fault(s) stored in {Ecu.Abbreviation}?\nFaults that are still present will be stored again."))
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        return Busy("Clearing fault memory…", async ct =>
+        await Busy("Clearing fault memory…", async ct =>
         {
             var r = await RunAsync("FS_LOESCHEN", "", ct);
             StatusText = r.IsOkay ? "Fault memory cleared." : $"FS_LOESCHEN: {r.JobStatus}";
@@ -365,14 +365,14 @@ public sealed partial class ModuleViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private Task ClearInfoAsync()
+    private async Task ClearInfoAsync()
     {
-        if (!_dialogs.Confirm($"Clear {Ecu.Abbreviation} info memory", $"Clear the info (shadow) memory of {Ecu.Abbreviation}?"))
+        if (!await _dialogs.ConfirmAsync($"Clear {Ecu.Abbreviation} info memory", $"Clear the info (shadow) memory of {Ecu.Abbreviation}?"))
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        return Busy("Clearing info memory…", async ct =>
+        await Busy("Clearing info memory…", async ct =>
         {
             var r = await RunAsync("IS_LOESCHEN", "", ct);
             StatusText = r.IsOkay ? "Info memory cleared." : $"IS_LOESCHEN: {r.JobStatus}";

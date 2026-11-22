@@ -4,9 +4,23 @@ using Microsoft.Win32;
 
 namespace BmwDecode.App.Services;
 
-/// <summary>Thin wrapper around WPF dialogs so view models stay testable.</summary>
-public sealed class DialogService
+/// <summary>WPF message boxes and pickers behind <see cref="IDialogService"/> (they complete synchronously).</summary>
+public sealed class DialogService : IDialogService
 {
+    public Task<bool> ConfirmAsync(string title, string message, bool warning = true) =>
+        Task.FromResult(Confirm(title, message, warning));
+
+    public Task ShowErrorAsync(string title, string message)
+    {
+        ShowError(title, message);
+        return Task.CompletedTask;
+    }
+
+    public Task<string?> PickFolderAsync(string title, string? initial) => Task.FromResult(PickFolder(title, initial));
+
+    public Task<string?> SaveFileAsync(string title, string fileName, string filter) =>
+        Task.FromResult(SaveFile(title, fileName, filter));
+
     public bool Confirm(string title, string message, bool warning = true) =>
         Show(message, title, MessageBoxButton.OKCancel, warning ? MessageBoxImage.Warning : MessageBoxImage.Question, MessageBoxResult.Cancel)
             == MessageBoxResult.OK;

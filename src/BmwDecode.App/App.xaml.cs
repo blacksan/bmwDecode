@@ -20,7 +20,12 @@ public partial class App : Application
         var services = new ServiceCollection();
         services.AddSingleton<SettingsStore>();
         services.AddSingleton<ThemeService>();
+        services.AddSingleton<IThemeService>(sp => sp.GetRequiredService<ThemeService>());
         services.AddSingleton<DialogService>();
+        services.AddSingleton<IDialogService>(sp => sp.GetRequiredService<DialogService>());
+        services.AddSingleton<IUiThread, WpfUiThread>();
+        services.AddSingleton<IClipboardService, WpfClipboard>();
+        services.AddSingleton<IUiTimerFactory, WpfTimerFactory>();
         services.AddSingleton<SessionService>();
         services.AddSingleton<Navigator>();
         services.AddSingleton<OverviewViewModel>();
