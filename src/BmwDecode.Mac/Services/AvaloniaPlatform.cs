@@ -101,6 +101,51 @@ public sealed class AvaloniaDialogService : IDialogService
 
     public Task ShowErrorAsync(string title, string message) => ShowAsync(title, message, "⛔", "OK", null);
 
+    public async Task<string?> PromptPasswordAsync(string title, string message)
+    {
+        var owner = Shell.MainWindow;
+        string? result = null;
+        var box = new TextBox { PasswordChar = '•', Watermark = "Password" };
+        var dialog = new Window
+        {
+            Title = title,
+            Width = 460,
+            SizeToContent = SizeToContent.Height,
+            CanResize = false,
+            WindowStartupLocation = owner is null ? WindowStartupLocation.CenterScreen : WindowStartupLocation.CenterOwner,
+        };
+        var ok = new Button { Content = "Download", IsDefault = true, MinWidth = 90, Classes = { "accent" } };
+        ok.Click += (_, _) => { result = box.Text; dialog.Close(); };
+        var cancel = new Button { Content = "Cancel", IsCancel = true, MinWidth = 90 };
+        cancel.Click += (_, _) => dialog.Close();
+        dialog.Content = new StackPanel
+        {
+            Margin = new Thickness(20),
+            Spacing = 14,
+            Children =
+            {
+                new TextBlock { Text = title, FontWeight = Avalonia.Media.FontWeight.SemiBold, FontSize = 15 },
+                new TextBlock { Text = message, TextWrapping = Avalonia.Media.TextWrapping.Wrap },
+                box,
+                new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Spacing = 8, Children = { cancel, ok } },
+            },
+        };
+        dialog.Opened += (_, _) => box.Focus();
+        if (owner is { IsVisible: true })
+        {
+            await dialog.ShowDialog(owner);
+        }
+        else
+        {
+            var closed = new TaskCompletionSource();
+            dialog.Closed += (_, _) => closed.TrySetResult();
+            dialog.Show();
+            await closed.Task;
+        }
+
+        return string.IsNullOrEmpty(result) ? null : result;
+    }
+
     public async Task<string?> PickFolderAsync(string title, string? initial)
     {
         if (Shell.MainWindow?.StorageProvider is not { } storage)

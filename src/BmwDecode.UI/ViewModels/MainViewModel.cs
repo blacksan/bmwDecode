@@ -10,8 +10,9 @@ public sealed partial class MainViewModel : ObservableObject
 {
     public MainViewModel(Navigator navigator, SessionService session,
         OverviewViewModel overview, VehicleViewModel vehicle, QuickTestViewModel quickTest, ModulesViewModel modules,
-        JobExplorerViewModel jobs, LogViewModel log, SettingsViewModel settings, IUiTimerFactory timers)
+        JobExplorerViewModel jobs, LogViewModel log, SettingsViewModel settings, IUiTimerFactory timers, DataService data)
     {
+        Data = data;
         Navigator = navigator;
         Session = session;
         Pages = [overview, vehicle, quickTest, modules, jobs, log];
@@ -81,6 +82,9 @@ public sealed partial class MainViewModel : ObservableObject
     }
 
     public Navigator Navigator { get; }
+
+    /// <summary>BMW data download (shown in the navigation pane while it runs).</summary>
+    public DataService Data { get; }
     public SessionService Session { get; }
     public IReadOnlyList<PageViewModel> Pages { get; }
     public IReadOnlyList<PageViewModel> FooterPages { get; }

@@ -118,6 +118,21 @@ SDK and Inno Setup 6). It also carries your SGBD files and the K+DCAN FTDI drive
 
 BMW's SGBD files are BMW's property, so a private installer is for your own machines only. Never publish one.
 
+## Private data server (no INPA / ISTA on new laptops)
+
+bmwDecode can fetch the BMW data it needs (the Ecu folder and the built-in data pack) from your own password-protected
+server, so a fresh Windows laptop or Mac only needs the app:
+
+1. **Server, once:** on the VPS run `sudo bash installer/server/setup-data-server.sh tinker.ftw.co.ke` and choose the
+   password. It adds an HTTPS site (Caddy, own certificate) serving `/srv/bmwdecode-data` to that password only.
+2. **Upload, from the laptop with INPA/ISTA:** `.\installer\upload-data.ps1` merges the SGBDs, builds the data pack,
+   and copies `ecu.zip`, `sgbd.pack` and `manifest.json` to the server over SSH. Run it again whenever you have newer data.
+3. **Any new install:** on first start bmwDecode asks for the password once, downloads everything into
+   `%LOCALAPPDATA%\bmwDecode\Data` (Mac: `~/Library/Application Support/bmwDecode/Data`) and works offline from then on.
+   Later starts fetch only what changed. Settings → BMW data shows the status and can update on demand.
+
+The password and the data never go into this repository.
+
 ## macOS (Apple Silicon and Intel)
 
 bmwDecode also runs on a Mac, with the same pages and the same diagnostics engine as the Windows app.

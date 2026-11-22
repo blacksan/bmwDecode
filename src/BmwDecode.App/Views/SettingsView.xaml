@@ -8,6 +8,25 @@
 
             <Border Style="{StaticResource Card}">
                 <StackPanel>
+                    <TextBlock Text="BMW data" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,10"
+                               Text="ECU files and the built-in data pack, downloaded from your private data server (password-protected). Only files that changed are downloaded again." />
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="Forget password" Command="{Binding ForgetDataPasswordCommand}" Margin="8,0,0,0"
+                                Visibility="{Binding DataPasswordSaved, Converter={StaticResource BoolToVisibility}}" />
+                        <Button DockPanel.Dock="Right" Content="Download / update" Style="{DynamicResource AccentButtonStyle}"
+                                Command="{Binding DownloadDataCommand}" Margin="8,0,0,0" />
+                        <TextBox Text="{Binding DataServer, UpdateSourceTrigger=LostFocus}" FontFamily="Cascadia Mono, Consolas" />
+                    </DockPanel>
+                    <ProgressBar Value="{Binding Data.Progress, Mode=OneWay}" Maximum="1" Height="4" Margin="0,10,0,0"
+                                 Visibility="{Binding Data.IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                    <TextBlock Text="{Binding Data.Status}" Style="{StaticResource Caption}" Margin="0,6,0,0"
+                               Visibility="{Binding Data.Status, Converter={StaticResource NullToVisibility}}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
                     <TextBlock Text="EDIABAS ECU folder" Style="{StaticResource SectionTitle}" />
                     <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,10"
                                Text="The SGBD files (*.prg, *.grp) from your INPA / EDIABAS install, normally C:\EDIABAS\Ecu. bmwDecode runs them with its own EDIABAS engine – BMW's EDIABAS does not need to be configured, and no BMW files are bundled with the app." />

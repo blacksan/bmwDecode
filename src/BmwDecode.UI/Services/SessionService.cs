@@ -173,7 +173,7 @@ public sealed partial class SessionService : ObservableObject
             : (ISgbdInspector)_demoInspector;
         var csvStamp = System.IO.File.Exists(TypeKeyCsvPath) ? System.IO.File.GetLastWriteTimeUtc(TypeKeyCsvPath).Ticks : 0;
         var istaStamp = IstaStamp();
-        var stamp = $"{_settings.Current.EcuPath}|{inspector.GetType().Name}|{csvStamp}|{istaStamp}|{ReferenceData.Pack?.Path}";
+        var stamp = $"{_settings.Current.EcuPath}|{inspector.GetType().Name}|{csvStamp}|{istaStamp}|{ReferenceData.Pack?.Path}|{ReferenceData.Pack?.Manifest.Built:O}";
         if (_typeKeys is null || _typeKeysStamp != stamp)
         {
             // Cars ISTA identified on this PC (plain XML session files) teach us VINs and type keys.

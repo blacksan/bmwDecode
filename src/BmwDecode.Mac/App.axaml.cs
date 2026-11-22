@@ -26,6 +26,7 @@ public partial class App : Application
         services.AddSingleton<IUiThread, AvaloniaUiThread>();
         services.AddSingleton<IClipboardService, AvaloniaClipboard>();
         services.AddSingleton<IUiTimerFactory, AvaloniaTimerFactory>();
+        services.AddSingleton<DataService>();
         services.AddSingleton<SessionService>();
         services.AddSingleton<Navigator>();
         services.AddSingleton<OverviewViewModel>();
@@ -63,8 +64,14 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow { DataContext = _services.GetRequiredService<MainViewModel>() };
+            var window = new MainWindow { DataContext = _services.GetRequiredService<MainViewModel>() };
+            desktop.MainWindow = window;
             desktop.ShutdownRequested += (_, _) => Shutdown();
+
+            // First start on a clean Mac: download the ECU files and data pack from the private data server.
+            var data = _services.GetRequiredService<DataService>();
+            var packLoad = _packLoad;
+            window.Opened += async (_, _) => await data.StartupAsync(packLoad);
         }
 
         base.OnFrameworkInitializationCompleted();

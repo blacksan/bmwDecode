@@ -32,6 +32,15 @@ public sealed class AppSettings
 
     /// <summary>After connecting: identify the car from its VIN and scan the modules it reports.</summary>
     public bool AutoScanOnConnect { get; set; } = true;
+
+    /// <summary>Private server holding the Ecu folder and data pack (downloaded on first start).</summary>
+    public string DataServer { get; set; } = BmwDecode.Core.Data.DataDownloader.DefaultServer;
+
+    /// <summary>The data server password, kept after the first successful download so updates need no prompt.</summary>
+    public string? DataPassword { get; set; }
+
+    /// <summary>Check the data server for newer data at start-up (only downloads what changed).</summary>
+    public bool DataAutoUpdate { get; set; } = true;
     public Dictionary<string, List<string>> LiveSelections { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 }
 
