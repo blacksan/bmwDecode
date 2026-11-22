@@ -10,12 +10,10 @@
                 <StackPanel>
                     <TextBlock Text="BMW data" Classes="section" />
                     <TextBlock Classes="caption" Margin="0,0,0,10"
-                               Text="ECU files and the built-in data pack, downloaded from your private data server (password-protected). Only files that changed are downloaded again." />
+                               Text="The ECU files and the built-in data pack come in one file, bmwDecode-data.zip, made on the PC that has INPA / ISTA. Import it once; import a newer one to update." />
                     <DockPanel>
-                        <Button DockPanel.Dock="Right" Content="Forget password" Command="{Binding ForgetDataPasswordCommand}" Margin="8,0,0,0"
-                                IsVisible="{Binding DataPasswordSaved}" />
-                        <Button DockPanel.Dock="Right" Content="Download / update" Classes="accent" Command="{Binding DownloadDataCommand}" Margin="8,0,0,0" />
-                        <TextBox Text="{Binding DataServer}" Classes="mono" />
+                        <Button DockPanel.Dock="Right" Content="Import data file…" Classes="accent" Command="{Binding ImportDataCommand}" Margin="8,0,0,0" />
+                        <TextBlock Text="{Binding Data.InstalledText}" Classes="caption" VerticalAlignment="Center" />
                     </DockPanel>
                     <ProgressBar Value="{Binding Data.Progress}" Maximum="1" Height="4" Margin="0,10,0,0" IsVisible="{Binding Data.IsBusy}" />
                     <TextBlock Text="{Binding Data.Status}" Classes="caption" Margin="0,6,0,0"

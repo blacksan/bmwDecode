@@ -83,7 +83,7 @@ public sealed partial class MainViewModel : ObservableObject
 
     public Navigator Navigator { get; }
 
-    /// <summary>BMW data download (shown in the navigation pane while it runs).</summary>
+    /// <summary>BMW data import (shown in the navigation pane while it runs).</summary>
     public DataService Data { get; }
     public SessionService Session { get; }
     public IReadOnlyList<PageViewModel> Pages { get; }

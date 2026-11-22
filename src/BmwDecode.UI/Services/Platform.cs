@@ -9,8 +9,8 @@ public interface IDialogService
 
     Task<string?> PickFolderAsync(string title, string? initial);
 
-    /// <summary>Asks for a password (masked). Null when cancelled.</summary>
-    Task<string?> PromptPasswordAsync(string title, string message);
+    /// <summary>Open-file dialog. <paramref name="filter"/> uses the "Name|*.ext|Name|*.ext" form. Null when cancelled.</summary>
+    Task<string?> OpenFileAsync(string title, string filter);
 
     /// <summary>Save dialog. <paramref name="filter"/> uses the "Name|*.ext|Name|*.ext" form.</summary>
     Task<string?> SaveFileAsync(string title, string fileName, string filter);

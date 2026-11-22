@@ -91,13 +91,11 @@ public sealed partial class SettingsViewModel : PageViewModel
         _dialogs = dialogs;
         _theme = theme;
         Data = data;
-        _dataServer = store.Current.DataServer;
         data.Updated += (_, _) =>
         {
             EcuPath = store.Current.EcuPath;
             OnPropertyChanged(nameof(DataPackInfo));
             OnPropertyChanged(nameof(TranslationInfo));
-            OnPropertyChanged(nameof(DataPasswordSaved));
         };
         var s = store.Current;
         _ecuPath = s.EcuPath;
@@ -112,34 +110,11 @@ public sealed partial class SettingsViewModel : PageViewModel
 
     public IReadOnlyList<AppTheme> Themes { get; } = [AppTheme.System, AppTheme.Light, AppTheme.Dark];
 
-    /// <summary>Download / update of the BMW data from the private data server.</summary>
+    /// <summary>Import of the BMW data file (bmwDecode-data.zip).</summary>
     public DataService Data { get; }
 
-    [ObservableProperty]
-    private string _dataServer;
-
-    partial void OnDataServerChanged(string value)
-    {
-        _store.Current.DataServer = string.IsNullOrWhiteSpace(value) ? Core.Data.DataDownloader.DefaultServer : value.Trim();
-        _store.Save();
-    }
-
-    public bool DataPasswordSaved => !string.IsNullOrEmpty(_store.Current.DataPassword);
-
     [RelayCommand]
-    private async Task DownloadDataAsync()
-    {
-        await Data.DownloadAsync(interactive: true);
-        OnPropertyChanged(nameof(DataPasswordSaved));
-    }
-
-    [RelayCommand]
-    private void ForgetDataPassword()
-    {
-        _store.Current.DataPassword = null;
-        _store.Save();
-        OnPropertyChanged(nameof(DataPasswordSaved));
-    }
+    private Task ImportDataAsync() => Data.ChooseAndImportAsync();
     public IReadOnlyList<string> SeriesOptions { get; }
 
     [ObservableProperty]

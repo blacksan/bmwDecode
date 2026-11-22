@@ -18,40 +18,12 @@ public sealed class DialogService : IDialogService
 
     public Task<string?> PickFolderAsync(string title, string? initial) => Task.FromResult(PickFolder(title, initial));
 
-    public Task<string?> PromptPasswordAsync(string title, string message)
+    public Task<string?> OpenFileAsync(string title, string filter)
     {
+        var dialog = new Microsoft.Win32.OpenFileDialog { Title = title, Filter = filter, CheckFileExists = true };
         var owner = Application.Current?.MainWindow;
-        var box = new System.Windows.Controls.PasswordBox { Margin = new Thickness(0, 12, 0, 16), MinWidth = 300 };
-        var ok = new System.Windows.Controls.Button { Content = "Download", IsDefault = true, MinWidth = 100, Margin = new Thickness(0, 0, 8, 0) };
-        var cancel = new System.Windows.Controls.Button { Content = "Cancel", IsCancel = true, MinWidth = 100 };
-        if (Application.Current?.TryFindResource("AccentButtonStyle") is Style accent)
-        {
-            ok.Style = accent;
-        }
-
-        var buttons = new System.Windows.Controls.StackPanel
-        {
-            Orientation = System.Windows.Controls.Orientation.Horizontal,
-            HorizontalAlignment = HorizontalAlignment.Right,
-        };
-        buttons.Children.Add(ok);
-        buttons.Children.Add(cancel);
-        var panel = new System.Windows.Controls.StackPanel { Margin = new Thickness(24) };
-        panel.Children.Add(new System.Windows.Controls.TextBlock { Text = message, TextWrapping = TextWrapping.Wrap, MaxWidth = 440 });
-        panel.Children.Add(box);
-        panel.Children.Add(buttons);
-        var window = new Window
-        {
-            Title = title,
-            Content = panel,
-            SizeToContent = SizeToContent.WidthAndHeight,
-            ResizeMode = ResizeMode.NoResize,
-            WindowStartupLocation = owner is null ? WindowStartupLocation.CenterScreen : WindowStartupLocation.CenterOwner,
-            Owner = owner is { IsLoaded: true } ? owner : null,
-        };
-        ok.Click += (_, _) => window.DialogResult = true;
-        window.Loaded += (_, _) => box.Focus();
-        return Task.FromResult(window.ShowDialog() == true && box.Password.Length > 0 ? box.Password : null);
+        var ok = owner is { IsLoaded: true } ? dialog.ShowDialog(owner) : dialog.ShowDialog();
+        return Task.FromResult(ok == true ? dialog.FileName : null);
     }
 
     public Task<string?> SaveFileAsync(string title, string fileName, string filter) =>
