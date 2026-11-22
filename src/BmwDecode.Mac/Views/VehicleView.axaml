@@ -31,7 +31,7 @@
                         <Button Content="Online decode (NHTSA)" Command="{Binding OnlineCommand}" ToolTip.Tip="Free decode by the US NHTSA vPIC service (best for US-market cars)" />
                         <Button Content="Copy short VIN" Command="{Binding CopyShortVinCommand}" />
                         <Button Command="{Binding UseSeriesCommand}" ToolTip.Tip="Use this chassis as the diagnosis profile">
-                            <TextBlock Text="{Binding DecodedSeries.Series, StringFormat='Use {0} profile', TargetNullValue='Use profile'}" />
+                            <TextBlock Text="{Binding DecodedSeries.Series, StringFormat='Use {0} profile', TargetNullValue='Use profile', FallbackValue='Use profile'}" />
                         </Button>
                     </WrapPanel>
                 </StackPanel>
