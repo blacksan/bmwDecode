@@ -135,15 +135,44 @@ public sealed partial class SettingsViewModel : PageViewModel
         get
         {
             var t = Core.Translation.Translator.Current;
-            return $"{t.PhraseCount:N0} phrases and {t.WordCount:N0} words built in. Correct any text in translations.tsv " +
+            var exact = t.ExactCount > 0 ? $"{t.ExactCount:N0} SGBD texts pre-translated, " : string.Empty;
+            return $"{exact}{t.PhraseCount:N0} phrases and {t.WordCount:N0} words built in. Correct any text in translations.tsv " +
                    "(German<TAB>English per line) in the settings folder; restart to apply.";
+        }
+    }
+
+    /// <summary>What the built-in data pack holds.</summary>
+    public string DataPackInfo
+    {
+        get
+        {
+            if (Core.Data.ReferenceData.Pack is not { } pack)
+            {
+                return "No data pack installed: job descriptions come from the ECU folder, fault texts are translated.";
+            }
+
+            var m = pack.Manifest;
+            var text = $"{m.SgbdCount:N0} SGBDs, {m.JobCount:N0} jobs, {m.TableCount:N0} tables (built {m.Built:yyyy-MM-dd}).";
+            if (pack.Ista is { } ista)
+            {
+                var i = ista.Manifest;
+                text += $" ISTA {i.DatabaseVersion}: {i.EcuCount:N0} ECU variants with English fault texts, " +
+                        $"{i.TypeKeyCount:N0} type keys, {i.VinRangeCount:N0} VIN ranges.";
+            }
+
+            return text;
         }
     }
 
     [ObservableProperty]
     private string _istaInfo = "Looking for ISTA session files…";
 
-    public override void OnNavigatedTo() => _ = LoadIstaInfoAsync();
+    public override void OnNavigatedTo()
+    {
+        OnPropertyChanged(nameof(DataPackInfo));
+        OnPropertyChanged(nameof(TranslationInfo));
+        _ = LoadIstaInfoAsync();
+    }
 
     private async Task LoadIstaInfoAsync()
     {

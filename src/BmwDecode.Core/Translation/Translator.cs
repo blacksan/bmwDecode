@@ -15,6 +15,7 @@ public sealed partial class Translator
     private readonly Dictionary<string, string> _phrases = new(StringComparer.Ordinal);
     private readonly Dictionary<string, string> _words = new(StringComparer.Ordinal);
     private readonly Dictionary<string, string> _overrides = new(StringComparer.Ordinal);
+    private IReadOnlyDictionary<string, string>? _exact;
     private readonly Dictionary<string, string> _cache = new(StringComparer.Ordinal);
     private readonly object _lock = new();
     private int _maxWordLength;
@@ -28,6 +29,22 @@ public sealed partial class Translator
     public bool Enabled { get; set; } = true;
 
     public int PhraseCount => _phrases.Count;
+
+    /// <summary>Precomputed translations of the SGBD texts from the data pack (exact text match).</summary>
+    public int ExactCount => _exact?.Count ?? 0;
+
+    /// <summary>
+    /// Uses the data pack's precomputed SGBD translations, checked before the phrase table and word glossary.
+    /// The user's override file still wins.
+    /// </summary>
+    public void UseExact(IReadOnlyDictionary<string, string>? exact)
+    {
+        lock (_lock)
+        {
+            _exact = exact;
+            _cache.Clear();
+        }
+    }
     public int WordCount => _words.Count;
 
     /// <summary>Translator with the built-in phrase table and glossary, plus an optional user override file.</summary>
@@ -99,6 +116,11 @@ public sealed partial class Translator
         if (_overrides.TryGetValue(key, out var o))
         {
             return o;
+        }
+
+        if (_exact is not null && _exact.TryGetValue(text, out var exact))
+        {
+            return exact;
         }
 
         if (_phrases.TryGetValue(key, out var p))

@@ -21,7 +21,11 @@ public sealed record IstaVehicleRecord(
     string? MainSgbd,
     string? BusType,
     DateTimeOffset? SeenAt,
-    string SourceFile);
+    string SourceFile)
+{
+    /// <summary>True when this came from BMW's factory VIN ranges in the data pack, not from an ISTA session.</summary>
+    public bool IsFactoryRange => SourceFile == Data.ReferenceData.FactoryRangesSource;
+}
 
 /// <summary>
 /// Reuses what ISTA already decoded: every ISTA session leaves RG_META_*.xml / RG_TRANS_*.xml files (unencrypted)

@@ -63,6 +63,10 @@ Source: "{#EcuDir}\*"; DestDir: "{commonappdata}\bmwDecode\Ecu"; Flags: ignoreve
 #ifdef DriverDir
 Source: "{#DriverDir}\*"; DestDir: "{app}\driver"; Flags: ignoreversion recursesubdirs createallsubdirs
 #endif
+#ifdef DataDir
+; Built-in reference data (BMW-derived, private build only): job/table metadata, English texts, type keys, VIN ranges.
+Source: "{#DataDir}\sgbd.pack"; DestDir: "{app}\Data"; Flags: ignoreversion
+#endif
 
 [Icons]
 Name: "{autoprograms}\bmwDecode"; Filename: "{app}\bmwDecode.exe"

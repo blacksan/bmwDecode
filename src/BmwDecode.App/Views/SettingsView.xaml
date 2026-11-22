@@ -38,6 +38,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.ColumnSpan="2" Text="Preferences" Style="{StaticResource SectionTitle}" />
@@ -58,7 +59,7 @@
                     <TextBlock Grid.Row="5" Text="Translate German texts" Style="{StaticResource Value}" VerticalAlignment="Center" />
                     <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding TranslateTexts}" Margin="0,4"
                               Content="Show fault texts, conditions and job descriptions in English (applies to newly read data)" />
-                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding TranslationInfo, Mode=OneTime}" Style="{StaticResource Caption}" Margin="0,0,0,6" />
+                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding TranslationInfo}" Style="{StaticResource Caption}" Margin="0,0,0,6" />
 
                     <TextBlock Grid.Row="7" Text="Scan on connect" Style="{StaticResource Value}" VerticalAlignment="Center" />
                     <CheckBox Grid.Row="7" Grid.Column="1" IsChecked="{Binding AutoScan}" Margin="0,4"
@@ -66,6 +67,9 @@
 
                     <TextBlock Grid.Row="8" Text="ISTA history" Style="{StaticResource Value}" VerticalAlignment="Top" Margin="0,4" />
                     <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding IstaInfo}" Style="{StaticResource Caption}" Margin="0,4" />
+
+                    <TextBlock Grid.Row="9" Text="Built-in data" Style="{StaticResource Value}" VerticalAlignment="Top" Margin="0,4" />
+                    <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding DataPackInfo}" Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,4" />
                 </Grid>
             </Border>
 
