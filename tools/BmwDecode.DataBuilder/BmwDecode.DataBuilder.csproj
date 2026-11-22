@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Build-time tool: reads every SGBD (.prg/.grp) in the given Ecu folders and writes sgbd.pack, the offline
+    job/table/text database the app ships with. Run by installer/build-private.ps1. The pack is BMW-derived data:
+    it goes into the private installer only, never into git.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>BmwDecode.DataBuilder</RootNamespace>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BmwDecode.Ediabas\BmwDecode.Ediabas.csproj" />
+  </ItemGroup>
+
+</Project>

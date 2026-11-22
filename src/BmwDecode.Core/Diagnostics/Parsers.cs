@@ -108,11 +108,13 @@ public static partial class FaultParser
 
             var tr = Translation.Translator.Current;
             var original = Clean(set.Text("F_ORT_TEXT"));
+            // BMW's own English text for this ECU variant from the data pack, when translations are on.
+            var official = tr.Enabled ? Data.ReferenceData.FaultText(result.Variant, code.Value) : null;
             var symptom = Clean(set.Text("F_SYMPTOM_TEXT"));
             faults.Add(new FaultEntry
             {
                 Code = code.Value,
-                Text = original is null ? "(no description in SGBD)" : tr.Translate(original),
+                Text = official ?? (original is null ? "(no description in SGBD)" : tr.Translate(original)),
                 OriginalText = original,
                 Symptom = symptom is not null ? tr.Translate(symptom) : types.Count > 0 ? string.Join("; ", types.Select(tr.Translate)) : null,
                 FaultTypes = types,

@@ -14,3 +14,11 @@ EDIABAS/
 *.GRP
 *.ipo
 *.IPO
+# Built-in reference data and ECU functions exports are BMW-derived: private build only
+*.pack
+*.pack.tmp
+EcuFunctions/
+EcuFunctions.zip
+faultdata_*.xml
+vinranges*.txt
+typekeyinfo.txt

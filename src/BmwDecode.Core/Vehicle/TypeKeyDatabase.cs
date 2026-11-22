@@ -65,12 +65,18 @@ public sealed class TypeKeyDatabase
         }
 
         var v = vin.Trim();
-        return _byVin.TryGetValue(v, out var r) ? r
+        var seen = _byVin.TryGetValue(v, out var r) ? r
             : v.Length == 7 ? _byVin.Values.FirstOrDefault(x => x.Vin.EndsWith(v, StringComparison.OrdinalIgnoreCase))
             : null;
+
+        // Not seen by ISTA on this PC: BMW's factory VIN ranges from the data pack cover every car built.
+        return seen ?? (UseFactoryRanges ? Data.ReferenceData.FindVin(v) : null);
     }
 
     public int KnownVehicles => _byVin.Count;
+
+    /// <summary>Look VINs up in the data pack's factory ranges when ISTA history has no match (tests turn this off).</summary>
+    public bool UseFactoryRanges { get; init; } = true;
 
     public static async Task<TypeKeyDatabase> LoadAsync(ISgbdInspector? inspector, string? csvPath, CancellationToken cancellationToken = default,
         IReadOnlyList<IstaVehicleRecord>? istaVehicles = null)
@@ -89,6 +95,14 @@ public sealed class TypeKeyDatabase
             {
                 sources.Add($"FZGIDENT.PRG ({entries.Count} type keys)");
             }
+        }
+
+        // ISTA's full type key list from the data pack (E, F, G, I series); more accurate than FZGIDENT.
+        var fromPack = Data.ReferenceData.TypeKeys().ToList();
+        if (fromPack.Count > 0)
+        {
+            entries.AddRange(fromPack);
+            sources.Add($"Data pack ({fromPack.Count} type keys)");
         }
 
         if (istaVehicles is { Count: > 0 })

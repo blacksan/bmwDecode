@@ -40,6 +40,21 @@ public partial class App : Application
             System.IO.Path.Combine(SettingsStore.Folder, "translations.tsv"));
         translator.Enabled = settings.Current.TranslateTexts;
         BmwDecode.Core.Translation.Translator.Current = translator;
+
+        // Built-in reference data (sgbd.pack next to the app): job/table descriptions, precomputed English texts,
+        // BMW's English fault texts, type keys and VIN ranges. Loaded off the UI thread; everything works without it.
+        _ = System.Threading.Tasks.Task.Run(() =>
+        {
+            try
+            {
+                BmwDecode.Core.Data.ReferenceData.Pack = BmwDecode.Core.Data.SgbdPack.TryOpenDefault(
+                    System.IO.Path.Combine(SettingsStore.Folder, "Data"));
+            }
+            catch (Exception ex)
+            {
+                _services?.GetService<SessionService>()?.Error($"Data pack could not be loaded: {ex.Message}");
+            }
+        });
         _services.GetRequiredService<ThemeService>().Apply(settings.Current.Theme);
 
         var window = new MainWindow { DataContext = _services.GetRequiredService<MainViewModel>() };
@@ -61,6 +76,7 @@ public partial class App : Application
         }
 
         _services?.Dispose();
+        BmwDecode.Core.Data.ReferenceData.Pack?.Dispose();
         base.OnExit(e);
     }
 

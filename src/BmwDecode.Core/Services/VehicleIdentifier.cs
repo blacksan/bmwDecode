@@ -275,14 +275,17 @@ public sealed partial class VehicleIdentifier
                 }
 
                 series = vinSeries;
-                seriesSource = vinFromCasOnly ? "VIN (ISTA history, CAS only)" : "VIN (ISTA history)";
+                var origin = seen.SeenAt is null ? "factory VIN ranges" : "ISTA history";
+                seriesSource = vinFromCasOnly ? $"VIN ({origin}, CAS only)" : $"VIN ({origin})";
             }
 
-            sources.Add($"VIN known from ISTA session {seen.SeenAt:yyyy-MM-dd} (factory build: {seen.Model ?? seen.Series}, {seen.EngineCode ?? seen.Engine})");
+            sources.Add(seen.SeenAt is { } seenAt
+                ? $"VIN known from ISTA session {seenAt:yyyy-MM-dd} (factory build: {seen.Model ?? seen.Series}, {seen.EngineCode ?? seen.Engine})"
+                : $"VIN in BMW's factory VIN ranges: type key {seen.TypeKey}, {seen.Model ?? seen.Series}, built {seen.Production:MM/yyyy}");
         }
 
         var typeKeySeries = NormalizeSeries(_typeKeys.Find(vin is { Length: 17 } ? vin[3..7] : null)?.Series);
-        if (typeKeySeries is not null && seriesSource?.StartsWith("VIN (ISTA", StringComparison.Ordinal) != true)
+        if (typeKeySeries is not null && seriesSource?.StartsWith("VIN (", StringComparison.Ordinal) != true)
         {
             series = typeKeySeries;
             seriesSource = vinFromCasOnly ? "VIN type key (CAS only)" : "VIN type key";

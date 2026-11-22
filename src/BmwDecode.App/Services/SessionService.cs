@@ -1,3 +1,4 @@
+using BmwDecode.Core.Data;
 using System.Collections.ObjectModel;
 using System.Windows;
 using BmwDecode.Core.Catalog;
@@ -107,12 +108,16 @@ public sealed partial class SessionService : ObservableObject
     /// <summary>Raised after connect/disconnect so pages can reset state.</summary>
     public event EventHandler? ConnectionChanged;
 
-    /// <summary>Metadata source for the job explorer: the EDIABAS ECU folder if configured, else the demo car.</summary>
+    /// <summary>
+    /// Metadata source for the job explorer and module pages: the built-in data pack (backed by the EDIABAS ECU
+    /// folder for anything newer), else the ECU folder alone, else the demo car.
+    /// </summary>
     public ISgbdInspector FileInspector
     {
         get
         {
             var path = _settings.Current.EcuPath;
+            SgbdInspector? files = null;
             if (EcuPathLocator.IsValid(path))
             {
                 if (_fileInspector is null || !string.Equals(_fileInspectorPath, path, StringComparison.OrdinalIgnoreCase))
@@ -120,14 +125,29 @@ public sealed partial class SessionService : ObservableObject
                     _fileInspector?.Dispose();
                     _fileInspector = new SgbdInspector(path);
                     _fileInspectorPath = path;
+                    _packedInspector = null;
                 }
 
-                return _fileInspector;
+                files = _fileInspector;
             }
 
-            return Engine as ISgbdInspector ?? _demoInspector;
+            if (ReferenceData.Pack is { } pack)
+            {
+                if (_packedInspector is null || !ReferenceEquals(_packedFor, pack))
+                {
+                    _packedInspector = new PackedSgbdInspector(pack, files);
+                    _packedFor = pack;
+                }
+
+                return _packedInspector;
+            }
+
+            return files ?? Engine as ISgbdInspector ?? _demoInspector;
         }
     }
+
+    private PackedSgbdInspector? _packedInspector;
+    private SgbdPack? _packedFor;
 
     /// <summary>Metadata for an ECU's live-data job list: the demo car describes itself, real cars use the SGBD files.</summary>
     public ISgbdInspector InspectorFor(IDiagnosticEngine? engine) =>
@@ -142,10 +162,12 @@ public sealed partial class SessionService : ObservableObject
     /// </summary>
     public async Task<TypeKeyDatabase> GetTypeKeysAsync(CancellationToken cancellationToken = default)
     {
-        var inspector = EcuPathLocator.IsValid(_settings.Current.EcuPath) ? FileInspector : (ISgbdInspector)_demoInspector;
+        var inspector = EcuPathLocator.IsValid(_settings.Current.EcuPath) || ReferenceData.Pack is not null
+            ? FileInspector
+            : (ISgbdInspector)_demoInspector;
         var csvStamp = System.IO.File.Exists(TypeKeyCsvPath) ? System.IO.File.GetLastWriteTimeUtc(TypeKeyCsvPath).Ticks : 0;
         var istaStamp = IstaStamp();
-        var stamp = $"{_settings.Current.EcuPath}|{inspector.GetType().Name}|{csvStamp}|{istaStamp}";
+        var stamp = $"{_settings.Current.EcuPath}|{inspector.GetType().Name}|{csvStamp}|{istaStamp}|{ReferenceData.Pack?.Path}";
         if (_typeKeys is null || _typeKeysStamp != stamp)
         {
             // Cars ISTA identified on this PC (plain XML session files) teach us VINs and type keys.
