@@ -52,7 +52,7 @@
                         </Button>
                         <Button Content="Copy short VIN" Command="{Binding CopyShortVinCommand}" Margin="0,0,8,0" />
                         <Button Command="{Binding UseSeriesCommand}" ToolTip="Use this chassis as the diagnosis profile">
-                            <TextBlock Text="{Binding DecodedSeries.Series, StringFormat='Use {0} profile', TargetNullValue='Use profile'}" />
+                            <TextBlock Text="{Binding DecodedSeries.Series, StringFormat='Use {0} profile', TargetNullValue='Use profile', FallbackValue='Use profile'}" />
                         </Button>
                     </StackPanel>
                 </StackPanel>
