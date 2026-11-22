@@ -84,12 +84,19 @@ public sealed partial class SettingsViewModel : PageViewModel
     private readonly IDialogService _dialogs;
     private readonly IThemeService _theme;
 
-    public SettingsViewModel(SettingsStore store, IDialogService dialogs, IThemeService theme)
+    public SettingsViewModel(SettingsStore store, IDialogService dialogs, IThemeService theme, DataService data)
         : base("Settings", "\uE713")
     {
         _store = store;
         _dialogs = dialogs;
         _theme = theme;
+        Data = data;
+        data.Updated += (_, _) =>
+        {
+            EcuPath = store.Current.EcuPath;
+            OnPropertyChanged(nameof(DataPackInfo));
+            OnPropertyChanged(nameof(TranslationInfo));
+        };
         var s = store.Current;
         _ecuPath = s.EcuPath;
         _selectedTheme = s.Theme;
@@ -102,6 +109,12 @@ public sealed partial class SettingsViewModel : PageViewModel
     }
 
     public IReadOnlyList<AppTheme> Themes { get; } = [AppTheme.System, AppTheme.Light, AppTheme.Dark];
+
+    /// <summary>Import of the BMW data file (bmwDecode-data.zip).</summary>
+    public DataService Data { get; }
+
+    [RelayCommand]
+    private Task ImportDataAsync() => Data.ChooseAndImportAsync();
     public IReadOnlyList<string> SeriesOptions { get; }
 
     [ObservableProperty]

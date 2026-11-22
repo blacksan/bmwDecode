@@ -54,6 +54,10 @@
 
             <Border Grid.Row="3" Classes="card" Padding="12,10" Margin="4,0">
                 <StackPanel>
+                    <StackPanel Margin="0,0,0,8" IsVisible="{Binding Data.IsBusy}">
+                        <TextBlock Text="{Binding Data.Status}" Classes="caption" TextTrimming="CharacterEllipsis" MaxWidth="200" />
+                        <ProgressBar Value="{Binding Data.Progress}" Maximum="1" Height="3" Margin="0,4,0,0" />
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <Ellipse Classes="dot" Width="8" Height="8"
                                  Fill="{Binding IsConnected, Converter={StaticResource ScanStateToBrush}, ConverterParameter=connected}" />

@@ -118,6 +118,20 @@ SDK and Inno Setup 6). It also carries your SGBD files and the K+DCAN FTDI drive
 
 BMW's SGBD files are BMW's property, so a private installer is for your own machines only. Never publish one.
 
+## Data file (no INPA / ISTA on other laptops)
+
+The BMW data bmwDecode needs (the Ecu folder and the built-in data pack) travels as one file, `bmwDecode-data.zip`:
+
+1. **Make it** on the PC that has INPA / ISTA: `.\installer\make-data-zip.ps1` merges the SGBDs (ISTA's copies win),
+   builds the data pack if needed and writes `bmwDecode-data.zip` to the Desktop (about 350 MB).
+2. **Copy it** to the other laptop or Mac (USB stick, cloud drive, …).
+3. **Import it:** on first start bmwDecode finds the file on the Desktop or in Downloads and offers to install it (or
+   lets you pick it). It unpacks into `%LOCALAPPDATA%\bmwDecode\Data` (Mac: `~/Library/Application Support/bmwDecode/Data`),
+   checks every file and points the app at the new Ecu folder. The zip can be deleted afterwards. To update, make a
+   new zip and use Settings → BMW data → Import data file.
+
+The zip holds BMW's files: keep it on your own machines; it is never part of this repository.
+
 ## macOS (Apple Silicon and Intel)
 
 bmwDecode also runs on a Mac, with the same pages and the same diagnostics engine as the Windows app.
@@ -127,11 +141,8 @@ bmwDecode also runs on a Mac, with the same pages and the same diagnostics engin
 2. **First start.** The app is not notarised by Apple, so macOS blocks the first launch. Open it once, then go to
    **System Settings → Privacy & Security** and click **Open Anyway** (or run
    `xattr -dr com.apple.quarantine /Applications/bmwDecode.app` in Terminal).
-3. **Copy your BMW files from the Windows PC** (they are not bundled):
-   - `C:\EDIABAS\Ecu` (or the merged Ecu folder) → `~/Library/Application Support/bmwDecode/Ecu`
-   - the data pack `artifacts\data\sgbd.pack` from a private build → `~/Library/Application Support/bmwDecode/Data/sgbd.pack`
-
-   bmwDecode finds both there automatically (Settings shows what it found).
+3. **BMW data:** copy `bmwDecode-data.zip` from the Windows PC to the Mac's Desktop or Downloads; bmwDecode offers to
+   import it on first start (see "Data file" above).
 4. **Cable.** macOS has the FTDI driver built in: plug the K+DCAN cable in (USB-C to USB-A adapter on a MacBook) and
    choose the `/dev/cu.usbserial-…` port on the Overview page. Same D-CAN / K-line switch rules as on Windows.
    macOS does not let apps set the FTDI latency timer; if a module times out, scan it again.

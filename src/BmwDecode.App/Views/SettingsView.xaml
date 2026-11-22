@@ -8,6 +8,23 @@
 
             <Border Style="{StaticResource Card}">
                 <StackPanel>
+                    <TextBlock Text="BMW data" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,10"
+                               Text="The ECU files and the built-in data pack come in one file, bmwDecode-data.zip, made on the PC that has INPA / ISTA (installer\make-data-zip.ps1). Import it once; import a newer one to update." />
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="Import data file…" Style="{DynamicResource AccentButtonStyle}"
+                                Command="{Binding ImportDataCommand}" Margin="8,0,0,0" />
+                        <TextBlock Text="{Binding Data.InstalledText}" Style="{StaticResource Caption}" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <ProgressBar Value="{Binding Data.Progress, Mode=OneWay}" Maximum="1" Height="4" Margin="0,10,0,0"
+                                 Visibility="{Binding Data.IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                    <TextBlock Text="{Binding Data.Status}" Style="{StaticResource Caption}" Margin="0,6,0,0"
+                               Visibility="{Binding Data.Status, Converter={StaticResource NullToVisibility}}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
                     <TextBlock Text="EDIABAS ECU folder" Style="{StaticResource SectionTitle}" />
                     <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,10"
                                Text="The SGBD files (*.prg, *.grp) from your INPA / EDIABAS install, normally C:\EDIABAS\Ecu. bmwDecode runs them with its own EDIABAS engine – BMW's EDIABAS does not need to be configured, and no BMW files are bundled with the app." />

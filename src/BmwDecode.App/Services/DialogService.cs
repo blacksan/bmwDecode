@@ -18,6 +18,14 @@ public sealed class DialogService : IDialogService
 
     public Task<string?> PickFolderAsync(string title, string? initial) => Task.FromResult(PickFolder(title, initial));
 
+    public Task<string?> OpenFileAsync(string title, string filter)
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog { Title = title, Filter = filter, CheckFileExists = true };
+        var owner = Application.Current?.MainWindow;
+        var ok = owner is { IsLoaded: true } ? dialog.ShowDialog(owner) : dialog.ShowDialog();
+        return Task.FromResult(ok == true ? dialog.FileName : null);
+    }
+
     public Task<string?> SaveFileAsync(string title, string fileName, string filter) =>
         Task.FromResult(SaveFile(title, fileName, filter));
 

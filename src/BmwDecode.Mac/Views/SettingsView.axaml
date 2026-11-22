@@ -8,6 +8,21 @@
 
             <Border Classes="card">
                 <StackPanel>
+                    <TextBlock Text="BMW data" Classes="section" />
+                    <TextBlock Classes="caption" Margin="0,0,0,10"
+                               Text="The ECU files and the built-in data pack come in one file, bmwDecode-data.zip, made on the PC that has INPA / ISTA. Import it once; import a newer one to update." />
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="Import data file…" Classes="accent" Command="{Binding ImportDataCommand}" Margin="8,0,0,0" />
+                        <TextBlock Text="{Binding Data.InstalledText}" Classes="caption" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <ProgressBar Value="{Binding Data.Progress}" Maximum="1" Height="4" Margin="0,10,0,0" IsVisible="{Binding Data.IsBusy}" />
+                    <TextBlock Text="{Binding Data.Status}" Classes="caption" Margin="0,6,0,0"
+                               IsVisible="{Binding Data.Status, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel>
                     <TextBlock Text="EDIABAS ECU folder" Classes="section" />
                     <TextBlock Classes="caption" Margin="0,0,0,10"
                                Text="The SGBD files (*.prg, *.grp) from your INPA / EDIABAS install. On a Mac, copy C:\EDIABAS\Ecu from your Windows PC to ~/Library/Application Support/bmwDecode/Ecu (found automatically) or anywhere you like and browse to it. No BMW files are bundled with the app." />

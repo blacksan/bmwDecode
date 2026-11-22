@@ -26,6 +26,7 @@ public partial class App : Application
         services.AddSingleton<IUiThread, WpfUiThread>();
         services.AddSingleton<IClipboardService, WpfClipboard>();
         services.AddSingleton<IUiTimerFactory, WpfTimerFactory>();
+        services.AddSingleton<DataService>();
         services.AddSingleton<SessionService>();
         services.AddSingleton<Navigator>();
         services.AddSingleton<OverviewViewModel>();
@@ -66,6 +67,11 @@ public partial class App : Application
         var window = new MainWindow { DataContext = _services.GetRequiredService<MainViewModel>() };
         MainWindow = window;
         window.Show();
+
+        // First start on a clean PC: download the ECU files and data pack from the private data server.
+        var data = _services.GetRequiredService<DataService>();
+        var packLoad = _packLoad;
+        window.ContentRendered += async (_, _) => await data.StartupAsync(packLoad);
     }
 
     protected override void OnExit(ExitEventArgs e)

@@ -101,6 +101,22 @@ public sealed class AvaloniaDialogService : IDialogService
 
     public Task ShowErrorAsync(string title, string message) => ShowAsync(title, message, "⛔", "OK", null);
 
+    public async Task<string?> OpenFileAsync(string title, string filter)
+    {
+        if (Shell.MainWindow?.StorageProvider is not { } storage)
+        {
+            return null;
+        }
+
+        var files = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = title,
+            AllowMultiple = false,
+            FileTypeFilter = FileFilter.Parse(filter).Select(f => new FilePickerFileType(f.Name) { Patterns = f.Patterns }).ToList(),
+        });
+        return files.Count > 0 ? files[0].TryGetLocalPath() : null;
+    }
+
     public async Task<string?> PickFolderAsync(string title, string? initial)
     {
         if (Shell.MainWindow?.StorageProvider is not { } storage)
