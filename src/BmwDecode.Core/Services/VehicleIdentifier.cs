@@ -253,7 +253,9 @@ public sealed partial class VehicleIdentifier
 
         // ---- The VIN decides the chassis when we know it (ISTA history or type key): a swapped CAS can carry a
         //      donor's vehicle order, but the VIN is the car's identity ----
-        if (_typeKeys.FindVin(vin) is { } seen)
+        // A factory-range lookup reads a band of the data pack: run it off the caller's (UI) thread.
+        var vinToFind = vin;
+        if (await Task.Run(() => _typeKeys.FindVin(vinToFind), cancellationToken).ConfigureAwait(false) is { } seen)
         {
             details = details with
             {
@@ -275,13 +277,15 @@ public sealed partial class VehicleIdentifier
                 }
 
                 series = vinSeries;
-                var origin = seen.SeenAt is null ? "factory VIN ranges" : "ISTA history";
+                var origin = seen.IsFactoryRange ? "factory VIN ranges" : "ISTA history";
                 seriesSource = vinFromCasOnly ? $"VIN ({origin}, CAS only)" : $"VIN ({origin})";
             }
 
-            sources.Add(seen.SeenAt is { } seenAt
-                ? $"VIN known from ISTA session {seenAt:yyyy-MM-dd} (factory build: {seen.Model ?? seen.Series}, {seen.EngineCode ?? seen.Engine})"
-                : $"VIN in BMW's factory VIN ranges: type key {seen.TypeKey}, {seen.Model ?? seen.Series}, built {seen.Production:MM/yyyy}");
+            sources.Add(seen.IsFactoryRange
+                ? $"VIN in BMW's factory VIN ranges: type key {seen.TypeKey}, {seen.Model ?? seen.Series}" +
+                  (seen.Production is { } built ? $", built {built:MM/yyyy}" : string.Empty)
+                : $"VIN known from ISTA session{(seen.SeenAt is { } at ? $" {at:yyyy-MM-dd}" : string.Empty)} " +
+                  $"(factory build: {seen.Model ?? seen.Series}, {seen.EngineCode ?? seen.Engine})");
         }
 
         var typeKeySeries = NormalizeSeries(_typeKeys.Find(vin is { Length: 17 } ? vin[3..7] : null)?.Series);

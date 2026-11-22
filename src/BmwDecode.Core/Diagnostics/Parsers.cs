@@ -88,6 +88,11 @@ public static partial class FaultParser
     };
 
     /// <summary>Parses FS_LESEN / IS_LESEN output: every set carrying F_ORT_NR is one fault.</summary>
+    /// <summary>Info memory jobs (IS_LESEN...) report codes from the info memory, which has its own texts.</summary>
+    public static bool IsInfoMemoryJob(string? job) =>
+        job is not null && (job.StartsWith("IS_", StringComparison.OrdinalIgnoreCase)
+                            || job.Contains("_IS_", StringComparison.OrdinalIgnoreCase));
+
     public static IReadOnlyList<FaultEntry> ParseFaults(JobResult result)
     {
         var faults = new List<FaultEntry>();
@@ -109,7 +114,9 @@ public static partial class FaultParser
             var tr = Translation.Translator.Current;
             var original = Clean(set.Text("F_ORT_TEXT"));
             // BMW's own English text for this ECU variant from the data pack, when translations are on.
-            var official = tr.Enabled ? Data.ReferenceData.FaultText(result.Variant, code.Value) : null;
+            var official = tr.Enabled
+                ? Data.ReferenceData.FaultText(result.Variant, code.Value, infoMemory: IsInfoMemoryJob(result.Job))
+                : null;
             var symptom = Clean(set.Text("F_SYMPTOM_TEXT"));
             faults.Add(new FaultEntry
             {

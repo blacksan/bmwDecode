@@ -16,7 +16,7 @@ namespace BmwDecode.Core.Data;
 public sealed class IstaData
 {
     private readonly Func<string, Stream?> _open;
-    private readonly ConcurrentDictionary<string, IstaEcu?> _ecus = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, Lazy<IstaEcu?>> _ecus = new(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, IstaLabel>? _labels;
     private Dictionary<string, IReadOnlyDictionary<string, string>>? _typeKeys;
     private readonly object _lock = new();
@@ -31,20 +31,20 @@ public sealed class IstaData
 
     /// <summary>ISTA's data for one ECU variant (the same name as its SGBD, e.g. D60M57A0), or null.</summary>
     public IstaEcu? Ecu(string variant) =>
-        _ecus.GetOrAdd(variant, v =>
+        _ecus.GetOrAdd(variant, v => new Lazy<IstaEcu?>(() =>
         {
             using var s = _open("ista/ecu/" + v.ToUpperInvariant() + ".json");
             return s is null ? null : System.Text.Json.JsonSerializer.Deserialize<IstaEcu>(s, SgbdPack.Json);
-        });
+        })).Value;
 
     public IstaLabel? Label(string? id) =>
         id is not null && Labels.TryGetValue(id, out var l) ? l : null;
 
-    /// <summary>English fault text for a fault code (F_ORT_NR) of an ECU variant, or null.</summary>
-    public string? FaultText(string variant, long code)
+    /// <summary>English text for a fault code (F_ORT_NR) of an ECU variant — fault memory, or info memory — or null.</summary>
+    public string? FaultText(string variant, long code, bool infoMemory = false)
     {
         var ecu = Ecu(variant);
-        var fault = ecu?.FaultByCode(code);
+        var fault = ecu?.FaultByCode(code, infoMemory);
         return Label(fault?.Label)?.Title is { Length: > 0 } t ? t : null;
     }
 
@@ -86,8 +86,39 @@ public sealed class IstaData
             return null;
         }
 
-        using var s = _open("ista/vin/" + char.ToLowerInvariant(vin7[0]) + ".bin");
-        return s is null ? null : VinRangeTable.Find(s, vin7, vinType);
+        var band = Band(char.ToLowerInvariant(vin7[0]));
+        return band is null ? null : VinRangeTable.Find(band, vin7, vinType);
+    }
+
+    // The last band used stays cached (bands are up to ~100 MB raw); the GC may reclaim it under memory pressure.
+    private readonly object _bandLock = new();
+    private char _bandName;
+    private WeakReference<VinRangeTable.Band>? _band;
+
+    private VinRangeTable.Band? Band(char name)
+    {
+        lock (_bandLock)
+        {
+            if (_bandName == name && _band is not null && _band.TryGetTarget(out var cached))
+            {
+                return cached;
+            }
+
+            using var s = _open("ista/vin/" + name + ".bin");
+            if (s is not MemoryStream ms || !ms.TryGetBuffer(out var buffer) || buffer.Array is null)
+            {
+                return null;
+            }
+
+            var band = VinRangeTable.Load(buffer.Array, (int)ms.Length);
+            if (band is not null)
+            {
+                _bandName = name;
+                _band = new WeakReference<VinRangeTable.Band>(band);
+            }
+
+            return band;
+        }
     }
 
     private Dictionary<string, IstaLabel> Labels
@@ -194,16 +225,20 @@ public sealed class IstaEcu
     [JsonPropertyName("f")] public List<IstaFault> Faults { get; set; } = [];
     [JsonPropertyName("fn")] public List<IstaFunction> Functions { get; set; } = [];
 
-    private Dictionary<long, IstaFault>? _byCode;
+    private Dictionary<(bool Info, long Code), IstaFault>? _byCode;
 
-    public IstaFault? FaultByCode(long code)
+    /// <summary>
+    /// The fault for a code in fault memory (data type F) or info memory (I); the same code can mean different
+    /// things in the two, as in EdiabasLib's EcuFunctionReader.
+    /// </summary>
+    public IstaFault? FaultByCode(long code, bool infoMemory = false)
     {
-        _byCode ??= Faults
+        var map = LazyInitializer.EnsureInitialized(ref _byCode, () => Faults
             .Select(f => (Code: long.TryParse(f.Code, out var c) ? c : -1, Fault: f))
             .Where(x => x.Code >= 0)
-            .GroupBy(x => x.Code)
-            .ToDictionary(g => g.Key, g => g.First().Fault);
-        return _byCode.TryGetValue(code, out var f) ? f : null;
+            .GroupBy(x => (Info: x.Fault.DataType.Equals("I", StringComparison.OrdinalIgnoreCase), x.Code))
+            .ToDictionary(g => g.Key, g => g.First().Fault));
+        return map.TryGetValue((infoMemory, code), out var f) ? f : null;
     }
 }
 
@@ -256,17 +291,19 @@ public sealed class IstaResult
 public sealed record VinRange(string From, string To, string VinTypeKey, string TypeKey, int Year, int Month, string GearBox);
 
 /// <summary>
-/// Binary VIN range table for one band (first character of the short VIN), sorted by range start.
-/// Layout: "BVR1", int32 count, string table (int32 n, then n × [uint16 len, UTF-8]), then count records of
-/// 7-byte From, 7-byte To, uint16 vin-type index, uint16 type-key index, uint16 year, byte month, byte gearbox.
+/// Binary VIN range table for one band (first character of the short VIN).
+/// Layout: "BVR2", int32 count, string table (int32 n, then n × [uint16 len, UTF-8]), then count records sorted
+/// (stably) by range start: 7-byte From, 7-byte To, uint16 vin-type index, uint16 type-key index, uint16 year,
+/// byte month, byte gearbox, int32 position in the original vinranges file (EdiabasLib picks by file order).
 /// </summary>
 public static class VinRangeTable
 {
-    public const int RecordSize = 7 + 7 + 2 + 2 + 2 + 1 + 1;
-    private static readonly byte[] s_magic = "BVR1"u8.ToArray();
+    public const int RecordSize = 7 + 7 + 2 + 2 + 2 + 1 + 1 + 4;
+    private static readonly byte[] s_magic = "BVR2"u8.ToArray();
     private static readonly string[] s_gearBoxes = ["", "A", "M", "?"];
 
-    public static void Write(Stream output, IReadOnlyList<VinRange> sorted)
+    /// <summary>Writes ranges given in file order.</summary>
+    public static void Write(Stream output, IReadOnlyList<VinRange> fileOrder)
     {
         var strings = new List<string>();
         var index = new Dictionary<string, ushort>(StringComparer.Ordinal);
@@ -282,15 +319,20 @@ public static class VinRangeTable
             return i;
         }
 
-        foreach (var r in sorted)
+        foreach (var r in fileOrder)
         {
             Id(r.VinTypeKey);
             Id(r.TypeKey);
         }
 
+        // OrderBy is stable: equal starts keep file order.
+        var sorted = Enumerable.Range(0, fileOrder.Count)
+            .OrderBy(i => fileOrder[i].From, StringComparer.Ordinal)
+            .ToList();
+
         using var w = new BinaryWriter(output, Encoding.UTF8, leaveOpen: true);
         w.Write(s_magic);
-        w.Write(sorted.Count);
+        w.Write(fileOrder.Count);
         w.Write(strings.Count);
         foreach (var s in strings)
         {
@@ -300,8 +342,9 @@ public static class VinRangeTable
         }
 
         Span<byte> rec = stackalloc byte[RecordSize];
-        foreach (var r in sorted)
+        foreach (var i in sorted)
         {
+            var r = fileOrder[i];
             rec.Clear();
             Encoding.ASCII.GetBytes(r.From.PadRight(7).AsSpan(0, 7), rec[..7]);
             Encoding.ASCII.GetBytes(r.To.PadRight(7).AsSpan(0, 7), rec[7..14]);
@@ -310,38 +353,106 @@ public static class VinRangeTable
             BitConverter.TryWriteBytes(rec[18..20], (ushort)Math.Clamp(r.Year, 0, ushort.MaxValue));
             rec[20] = (byte)Math.Clamp(r.Month, 0, 255);
             rec[21] = (byte)(r.GearBox switch { "A" => 1, "M" => 2, "" => 0, _ => 3 });
+            BitConverter.TryWriteBytes(rec[22..26], i);
             w.Write(rec);
         }
     }
 
-    /// <summary>
-    /// Same matching rules as EdiabasLib: the short VIN must lie inside the range in both ASCII and EBCDIC
-    /// order, and the VIN's own positions 4–7 must match the range's VIN type when known.
-    /// </summary>
+    /// <summary>A loaded band: raw records plus, per record, the index of the latest-ending range so far.</summary>
+    public sealed class Band
+    {
+        internal Band(byte[] data, int recordsOffset, int count, string[] strings)
+        {
+            Data = data;
+            RecordsOffset = recordsOffset;
+            Count = count;
+            Strings = strings;
+            MaxToUpTo = new int[count];
+            var best = -1;
+            for (var i = 0; i < count; i++)
+            {
+                if (best < 0 || To(i).SequenceCompareTo(To(best)) > 0)
+                {
+                    best = i;
+                }
+
+                MaxToUpTo[i] = best;
+            }
+        }
+
+        internal byte[] Data { get; }
+        internal int RecordsOffset { get; }
+        public int Count { get; }
+        internal string[] Strings { get; }
+
+        /// <summary>MaxToUpTo[i] = record among 0..i with the highest To: lets the scan stop exactly.</summary>
+        internal int[] MaxToUpTo { get; }
+
+        internal ReadOnlySpan<byte> Record(int i) => Data.AsSpan(RecordsOffset + i * RecordSize, RecordSize);
+
+        internal ReadOnlySpan<byte> From(int i) => Record(i)[..7];
+
+        internal ReadOnlySpan<byte> To(int i) => Record(i)[7..14];
+    }
+
+    /// <summary>Parses a band file; null when it is not a valid BVR2 table.</summary>
+    public static Band? Load(byte[] data, int length)
+    {
+        try
+        {
+            if (length < 12 || !data.AsSpan(0, 4).SequenceEqual(s_magic))
+            {
+                return null;
+            }
+
+            var count = BitConverter.ToInt32(data, 4);
+            var n = BitConverter.ToInt32(data, 8);
+            if (count < 0 || n < 0 || n > ushort.MaxValue + 1)
+            {
+                return null;
+            }
+
+            var pos = 12;
+            var strings = new string[n];
+            for (var i = 0; i < n; i++)
+            {
+                var len = BitConverter.ToUInt16(data, pos);
+                pos += 2;
+                if (pos + len > length)
+                {
+                    return null;
+                }
+
+                strings[i] = Encoding.UTF8.GetString(data, pos, len);
+                pos += len;
+            }
+
+            return length - pos < (long)count * RecordSize ? null : new Band(data, pos, count, strings);
+        }
+        catch (ArgumentException)
+        {
+            return null;
+        }
+    }
+
     public static VinRange? Find(Stream input, string vin7, string? vinType)
     {
         using var ms = new MemoryStream();
         input.CopyTo(ms);
-        var data = ms.GetBuffer().AsSpan(0, (int)ms.Length);
-        if (data.Length < 12 || !data[..4].SequenceEqual(s_magic))
-        {
-            return null;
-        }
+        var band = Load(ms.GetBuffer(), (int)ms.Length);
+        return band is null ? null : Find(band, vin7, vinType);
+    }
 
-        var count = BitConverter.ToInt32(data[4..8]);
-        var n = BitConverter.ToInt32(data[8..12]);
-        var pos = 12;
-        var strings = new string[n];
-        for (var i = 0; i < n; i++)
-        {
-            var len = BitConverter.ToUInt16(data[pos..(pos + 2)]);
-            pos += 2;
-            strings[i] = Encoding.UTF8.GetString(data.Slice(pos, len));
-            pos += len;
-        }
-
-        var records = data[pos..];
-        if (records.Length < (long)count * RecordSize)
+    /// <summary>
+    /// EdiabasLib's rules (VehicleInfoBmw.GetRangeInfoFromVin): a range matches when the short VIN lies inside it in
+    /// both ASCII and EBCDIC order and, for a full VIN, the range's VIN type equals VIN positions 4–7. An exact
+    /// single-VIN range wins outright. Otherwise several matches with a known VIN type are ambiguous (null); with
+    /// only a short VIN the first match in file order is used, without VIN type and gearbox.
+    /// </summary>
+    public static VinRange? Find(Band band, string vin7, string? vinType)
+    {
+        vin7 = vin7.ToUpperInvariant();
+        if (vin7.Length != 7)
         {
             return null;
         }
@@ -349,12 +460,12 @@ public static class VinRangeTable
         Span<byte> key = stackalloc byte[7];
         Encoding.ASCII.GetBytes(vin7, key);
 
-        // Last record whose From <= vin7 (ASCII order).
-        int lo = 0, hi = count - 1, last = -1;
+        // Last record whose From <= vin7.
+        int lo = 0, hi = band.Count - 1, last = -1;
         while (lo <= hi)
         {
             var mid = (lo + hi) >>> 1;
-            if (records.Slice(mid * RecordSize, 7).SequenceCompareTo(key) <= 0)
+            if (band.From(mid).SequenceCompareTo(key) <= 0)
             {
                 last = mid;
                 lo = mid + 1;
@@ -365,44 +476,69 @@ public static class VinRangeTable
             }
         }
 
-        // Ranges can overlap: walk back over every earlier start, newest first. The From/To fields are
-        // fixed-width so a long range is found as long as it starts within the scan window.
-        VinRange? fallback = null;
-        for (var i = last; i >= 0 && last - i < 200_000; i--)
+        var matches = new List<(int Order, VinRange Range)>();
+        for (var i = last; i >= 0; i--)
         {
-            var rec = records.Slice(i * RecordSize, RecordSize);
-            if (rec[7..14].SequenceCompareTo(key) < 0)
+            // Nothing at or before i ends at or after the VIN: no earlier range can contain it.
+            if (band.To(band.MaxToUpTo[i]).SequenceCompareTo(key) < 0)
+            {
+                break;
+            }
+
+            if (band.To(i).SequenceCompareTo(key) < 0)
             {
                 continue;
             }
 
-            var from = Encoding.ASCII.GetString(rec[..7]);
-            var to = Encoding.ASCII.GetString(rec[7..14]);
-            if (Ebcdic(from, vin7) > 0 || Ebcdic(to, vin7) < 0)
+            var range = Read(band, i, out var order);
+            if (vinType is not null && !range.VinTypeKey.Equals(vinType, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
 
-            var range = new VinRange(
-                from, to,
-                strings[BitConverter.ToUInt16(rec[14..16])],
-                strings[BitConverter.ToUInt16(rec[16..18])],
-                BitConverter.ToUInt16(rec[18..20]),
-                rec[20],
-                s_gearBoxes[Math.Min((int)rec[21], 3)]);
-
-            if (vinType is null || range.VinTypeKey.Equals(vinType, StringComparison.OrdinalIgnoreCase))
+            if (Ebcdic(range.From, vin7) > 0 || Ebcdic(range.To, vin7) < 0)
             {
-                return range;
+                continue;
             }
 
-            fallback ??= range;
+            matches.Add((order, range));
         }
 
-        return vinType is null ? fallback : null;
+        if (matches.Count == 0)
+        {
+            return null;
+        }
+
+        matches.Sort((a, b) => a.Order.CompareTo(b.Order));
+        var exact = matches.FirstOrDefault(m => m.Range.From == vin7 && m.Range.To == vin7);
+        if (exact.Range is not null)
+        {
+            return exact.Range;
+        }
+
+        if (matches.Count == 1)
+        {
+            return matches[0].Range;
+        }
+
+        return vinType is not null ? null : matches[0].Range with { VinTypeKey = string.Empty, GearBox = string.Empty };
     }
 
-    /// <summary>EBCDIC collation for VIN characters: letters sort before digits.</summary>
+    private static VinRange Read(Band band, int i, out int order)
+    {
+        var rec = band.Record(i);
+        order = BitConverter.ToInt32(rec[22..26]);
+        return new VinRange(
+            Encoding.ASCII.GetString(rec[..7]),
+            Encoding.ASCII.GetString(rec[7..14]),
+            band.Strings[BitConverter.ToUInt16(rec[14..16])],
+            band.Strings[BitConverter.ToUInt16(rec[16..18])],
+            BitConverter.ToUInt16(rec[18..20]),
+            rec[20],
+            s_gearBoxes[Math.Min((int)rec[21], 3)]);
+    }
+
+    /// <summary>EdiabasLib's EbcdicVIN7Comparer for VIN characters: letters sort before digits.</summary>
     internal static int Ebcdic(string a, string b)
     {
         for (var i = 0; i < Math.Min(a.Length, b.Length); i++)
@@ -416,12 +552,7 @@ public static class VinRangeTable
 
         return a.Length - b.Length;
 
-        static int Rank(char c) => c switch
-        {
-            >= 'a' and <= 'z' => c - 'a',
-            >= 'A' and <= 'Z' => 100 + (c - 'A'),
-            >= '0' and <= '9' => 200 + (c - '0'),
-            _ => c,
-        };
+        // Digits sort after everything else; other characters by code (EdiabasLib's EbcdicVIN7Comparer).
+        static int Rank(char c) => char.IsDigit(c) ? 0x10000 + c : c;
     }
 }

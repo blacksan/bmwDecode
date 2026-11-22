@@ -106,9 +106,26 @@ public sealed class SgbdPack : IDisposable
     }
 
     /// <summary>ISTA-derived texts, live values, type keys and VIN ranges; null when the pack was built without them.</summary>
-    public IstaData? Ista => _ista ??= LoadIsta();
+    public IstaData? Ista
+    {
+        get
+        {
+            lock (_initLock)
+            {
+                if (!_istaLoaded)
+                {
+                    _ista = LoadIsta();
+                    _istaLoaded = true;
+                }
 
+                return _ista;
+            }
+        }
+    }
+
+    private readonly object _initLock = new();
     private IstaData? _ista;
+    private bool _istaLoaded;
 
     private IstaData? LoadIsta()
     {
@@ -121,6 +138,11 @@ public sealed class SgbdPack : IDisposable
     {
         lock (_zipLock)
         {
+            if (IsDisposed)
+            {
+                return null;
+            }
+
             var e = _zip.GetEntry(entry);
             if (e is null)
             {
@@ -144,7 +166,16 @@ public sealed class SgbdPack : IDisposable
         _cache.GetOrAdd(sgbd, name => _index.TryGetValue(name, out var e) ? Read<PackedSgbd>(EntryName(e.Name)) : null);
 
     /// <summary>German to English for every SGBD text whose translation differs from the original.</summary>
-    public IReadOnlyDictionary<string, string> Translations => _translations ??= LoadTranslations();
+    public IReadOnlyDictionary<string, string> Translations
+    {
+        get
+        {
+            lock (_initLock)
+            {
+                return _translations ??= LoadTranslations();
+            }
+        }
+    }
 
     /// <summary>English text of an SGBD string, or the original when the pack has no translation for it.</summary>
     public string English(string? text)
@@ -157,7 +188,17 @@ public sealed class SgbdPack : IDisposable
         return Translations.TryGetValue(text.Trim(), out var en) ? en : text;
     }
 
-    public void Dispose() => _zip.Dispose();
+    /// <summary>True once disposed; lookups then return nothing instead of throwing.</summary>
+    public bool IsDisposed { get; private set; }
+
+    public void Dispose()
+    {
+        lock (_zipLock)
+        {
+            IsDisposed = true;
+            _zip.Dispose();
+        }
+    }
 
     internal static string EntryName(string sgbd) => "sgbd/" + sgbd.ToUpperInvariant() + ".json";
 
@@ -165,6 +206,11 @@ public sealed class SgbdPack : IDisposable
     {
         lock (_zipLock)
         {
+            if (IsDisposed)
+            {
+                return default;
+            }
+
             var e = _zip.GetEntry(entry);
             if (e is null)
             {
@@ -181,6 +227,11 @@ public sealed class SgbdPack : IDisposable
         var map = new Dictionary<string, string>(StringComparer.Ordinal);
         lock (_zipLock)
         {
+            if (IsDisposed)
+            {
+                return map;
+            }
+
             var e = _zip.GetEntry("translations.tsv");
             if (e is null)
             {

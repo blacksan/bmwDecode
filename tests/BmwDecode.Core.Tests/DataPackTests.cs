@@ -40,6 +40,7 @@ public class DataPackTests
             {
                 var b = Encoding.UTF8.GetBytes(
                     "C\t100\t17192\tP0600\tMessage (torque) incorrect\t\t\n" +
+                    "C\t101\t17192\t\tInfo: torque request logged\t\t\n" +
                     "M\t200\t1\t\tFault currently present\t\t\n" +
                     "E\t300\t0\t\tBattery voltage\tV\tF_UBATT\n");
                 s.Write(b);
@@ -48,7 +49,11 @@ public class DataPackTests
             {
                 Name = "TESTDDE",
                 Title = "Digital Diesel Electronics",
-                Faults = { new IstaFault { Code = "17192", Label = "100", Modes = { "200" }, Environment = { "300" } } },
+                Faults =
+                {
+                    new IstaFault { Code = "17192", DataType = "F", Label = "100", Modes = { "200" }, Environment = { "300" } },
+                    new IstaFault { Code = "17192", DataType = "I", Label = "101" },
+                },
                 Functions =
                 {
                     new IstaFunction
@@ -149,6 +154,7 @@ public class DataPackTests
             var ista = pack.Ista!;
             Assert.Equal("Message (torque) incorrect", ista.FaultText("TESTDDE", 0x4328));
             Assert.Null(ista.FaultText("TESTDDE", 0x1234));
+            Assert.Equal("Info: torque request logged", ista.FaultText("TESTDDE", 0x4328, infoMemory: true));
             var fault = ista.Ecu("testdde")!.FaultByCode(17192)!;
             Assert.Equal("Fault currently present", ista.Label(fault.Modes[0])!.Title);
             Assert.Equal("V", ista.Label(fault.Environment[0])!.Unit);
@@ -162,6 +168,10 @@ public class DataPackTests
             Assert.Equal((2010, 3, "M"), (r.Year, r.Month, r.GearBox));
             Assert.Equal("ZZ98", ista.FindVin("WBAZZ98000T000055")!.TypeKey);
             Assert.Equal("ZZ99", ista.FindVin("T000200")!.TypeKey);
+
+            // Short VIN inside two ranges: first in file order, without VIN type and gearbox (EdiabasLib rule).
+            var shortVin = ista.FindVin("T000055")!;
+            Assert.Equal(("ZZ98", "", ""), (shortVin.TypeKey, shortVin.VinTypeKey, shortVin.GearBox));
             Assert.Null(ista.FindVin("WBAZZ99000T000150"));
             Assert.Null(ista.FindVin("WBAZZ99000X000001")); // no band file
         }
@@ -210,5 +220,82 @@ public class DataPackTests
         Assert.True(VinRangeTable.Ebcdic("A", "1") < 0);
         Assert.True(string.CompareOrdinal("A", "1") > 0);
         Assert.Equal(0, VinRangeTable.Ebcdic("VL53148", "VL53148"));
+    }
+
+    private static VinRangeTable.Band Band(IReadOnlyList<VinRange> fileOrder)
+    {
+        var ms = new MemoryStream();
+        VinRangeTable.Write(ms, fileOrder);
+        return VinRangeTable.Load(ms.ToArray(), (int)ms.Length)!;
+    }
+
+    [Fact]
+    public void VinMatchingFollowsEdiabasLibRules()
+    {
+        var band = Band(
+        [
+            new VinRange("A000040", "A000070", "ZZ99", "ZZ99", 2010, 1, "M"),
+            new VinRange("A000050", "A000060", "ZZ99", "ZZ97", 2010, 2, "A"),
+            new VinRange("A000055", "A000055", "ZZ99", "ZZ96", 2010, 3, "A"),
+        ]);
+
+        // An exact single-VIN range wins.
+        Assert.Equal("ZZ96", VinRangeTable.Find(band, "A000055", "ZZ99")!.TypeKey);
+        // Two ranges of the same VIN type: ambiguous with a full VIN.
+        Assert.Null(VinRangeTable.Find(band, "A000052", "ZZ99"));
+        // Short VIN only: first in file order, gearbox unknown.
+        var r = VinRangeTable.Find(band, "A000052", null)!;
+        Assert.Equal(("ZZ99", ""), (r.TypeKey, r.GearBox));
+        // Unsorted files: file order, not start order, decides.
+        var unsorted = Band(
+        [
+            new VinRange("B000050", "B000060", "ZZ01", "ZZ01", 2011, 1, "M"),
+            new VinRange("B000010", "B000090", "ZZ02", "ZZ02", 2011, 2, "M"),
+        ]);
+        Assert.Equal("ZZ01", VinRangeTable.Find(unsorted, "B000055", null)!.TypeKey);
+    }
+
+    [Fact]
+    public void LongRangesStartingFarBackAreFound()
+    {
+        var ranges = new List<VinRange> { new("C000000", "C999999", "ZZ50", "ZZ50", 2012, 6, "A") };
+        for (var i = 1; i < 300_000; i++)
+        {
+            var v = "C" + i.ToString("000000", System.Globalization.CultureInfo.InvariantCulture);
+            ranges.Add(new VinRange(v, v, "ZZ51", "ZZ51", 2012, 7, "M"));
+        }
+
+        var band = Band(ranges);
+        Assert.Equal("ZZ50", VinRangeTable.Find(band, "C999990", "ZZ50")!.TypeKey);
+        Assert.Equal("ZZ51", VinRangeTable.Find(band, "C123456", "ZZ51")!.TypeKey);
+        Assert.Null(VinRangeTable.Find(band, "D000001", null));
+        Assert.Null(VinRangeTable.Load([1, 2, 3], 3));
+    }
+
+    [Fact]
+    public void DisposedPackReturnsNothing()
+    {
+        var path = BuildPack();
+        try
+        {
+            var pack = SgbdPack.Open(path);
+            var ista = pack.Ista!;
+            pack.Dispose();
+            Assert.True(pack.IsDisposed);
+            Assert.Null(pack.Get("TESTDDE"));
+            Assert.Null(ista.FindVin("WBAZZ99000T000055"));
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void InfoMemoryJobsAreRecognised()
+    {
+        Assert.True(FaultParser.IsInfoMemoryJob("IS_LESEN"));
+        Assert.True(FaultParser.IsInfoMemoryJob("IS_LESEN_DETAIL"));
+        Assert.False(FaultParser.IsInfoMemoryJob("FS_LESEN"));
     }
 }

@@ -119,7 +119,9 @@ public sealed partial class VehicleViewModel : PageViewModel
 
         // Model: car data (when this is the connected car) + type key database.
         var details = isConnectedCar ? car.Details : VehicleDetails.Empty;
-        var seen = typeKeys.FindVin(d.Vin ?? d.ShortVin);
+        // Factory VIN range lookups read a band of the data pack: keep them off the UI thread.
+        var vinToFind = d.Vin ?? d.ShortVin;
+        var seen = await Task.Run(() => typeKeys.FindVin(vinToFind));
         if (seen is not null)
         {
             details = details with
@@ -179,7 +181,9 @@ public sealed partial class VehicleViewModel : PageViewModel
 
         if (seen is not null)
         {
-            Sources.Insert(0, $"VIN identified by ISTA on this PC ({seen.SeenAt:yyyy-MM-dd}) – factory specification");
+            Sources.Insert(0, seen.IsFactoryRange
+                ? $"VIN found in BMW's factory VIN ranges (built-in data){(seen.Production is { } built ? $", built {built:MM/yyyy}" : string.Empty)}"
+                : $"VIN identified by ISTA on this PC{(seen.SeenAt is { } at ? $" ({at:yyyy-MM-dd})" : string.Empty)} – factory specification");
         }
 
         if (tk is not null && !Sources.Any(s => s.Contains(tk.Source, StringComparison.OrdinalIgnoreCase)))

@@ -10,6 +10,7 @@ namespace BmwDecode.App;
 public partial class App : Application
 {
     private ServiceProvider? _services;
+    private System.Threading.Tasks.Task? _packLoad;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -43,7 +44,7 @@ public partial class App : Application
 
         // Built-in reference data (sgbd.pack next to the app): job/table descriptions, precomputed English texts,
         // BMW's English fault texts, type keys and VIN ranges. Loaded off the UI thread; everything works without it.
-        _ = System.Threading.Tasks.Task.Run(() =>
+        _packLoad = System.Threading.Tasks.Task.Run(() =>
         {
             try
             {
@@ -76,7 +77,18 @@ public partial class App : Application
         }
 
         _services?.Dispose();
-        BmwDecode.Core.Data.ReferenceData.Pack?.Dispose();
+        // Let a still-running load finish, unpublish the pack, then close it; lookups after that return nothing.
+        try
+        {
+            _packLoad?.Wait(TimeSpan.FromSeconds(5));
+        }
+        catch (AggregateException)
+        {
+        }
+
+        var pack = BmwDecode.Core.Data.ReferenceData.Pack;
+        BmwDecode.Core.Data.ReferenceData.Pack = null;
+        pack?.Dispose();
         base.OnExit(e);
     }
 

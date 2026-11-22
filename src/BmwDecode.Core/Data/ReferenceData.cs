@@ -21,10 +21,18 @@ public static class ReferenceData
         }
     }
 
-    public static IstaData? Ista => s_pack?.Ista;
+    public static IstaData? Ista => s_pack is { IsDisposed: false } p ? p.Ista : null;
 
-    /// <summary>BMW's English fault text for a fault code of an ECU variant, or null.</summary>
-    public static string? FaultText(string? variant, long code)
+    /// <summary>SourceFile of a vehicle record that came from the factory VIN ranges, not from ISTA history.</summary>
+    public const string FactoryRangesSource = "factory VIN ranges";
+
+    /// <summary>A damaged or closed pack must never break diagnostics: lookups just return nothing.</summary>
+    private static bool IsDataError(Exception ex) =>
+        ex is IOException or InvalidDataException or System.Text.Json.JsonException or ObjectDisposedException
+            or ArgumentException or IndexOutOfRangeException or NotSupportedException or FormatException;
+
+    /// <summary>BMW's English text for a fault (or, with <paramref name="infoMemory"/>, info memory) code of an ECU variant.</summary>
+    public static string? FaultText(string? variant, long code, bool infoMemory = false)
     {
         if (Ista is not { } ista || string.IsNullOrWhiteSpace(variant))
         {
@@ -33,28 +41,26 @@ public static class ReferenceData
 
         try
         {
-            return ista.FaultText(variant, code);
+            return ista.FaultText(variant, code, infoMemory);
         }
-        catch (Exception ex) when (ex is IOException or InvalidDataException or System.Text.Json.JsonException)
+        catch (Exception ex) when (IsDataError(ex))
         {
             return null;
         }
     }
 
     /// <summary>Every type key in the pack, in bmwDecode's shape.</summary>
-    public static IEnumerable<TypeKeyInfo> TypeKeys()
+    public static IReadOnlyList<TypeKeyInfo> TypeKeys()
     {
-        if (Ista is not { } ista)
+        try
         {
-            yield break;
+            return Ista is { } ista
+                ? ista.TypeKeys.Where(kv => kv.Key.Length == 4).Select(kv => ToTypeKeyInfo(kv.Key, kv.Value)).ToList()
+                : [];
         }
-
-        foreach (var (key, row) in ista.TypeKeys)
+        catch (Exception ex) when (IsDataError(ex))
         {
-            if (key.Length == 4)
-            {
-                yield return ToTypeKeyInfo(key, row);
-            }
+            return [];
         }
     }
 
@@ -74,7 +80,7 @@ public static class ReferenceData
         {
             range = ista.FindVin(vin);
         }
-        catch (Exception ex) when (ex is IOException or InvalidDataException)
+        catch (Exception ex) when (IsDataError(ex))
         {
             return null;
         }
@@ -90,7 +96,7 @@ public static class ReferenceData
             vin.Trim().ToUpperInvariant(), range.TypeKey, info?.Series, info?.Model, info?.Engine, info?.Engine,
             info?.Displacement, gearbox, info?.Drive, info?.Body, info?.Market, info?.Steering,
             range.Year > 1980 && range.Month is >= 1 and <= 12 ? new DateOnly(range.Year, range.Month, 1) : null,
-            null, null, null, "factory VIN ranges");
+            null, null, null, FactoryRangesSource);
     }
 
     internal static TypeKeyInfo ToTypeKeyInfo(string key, IReadOnlyDictionary<string, string> row)

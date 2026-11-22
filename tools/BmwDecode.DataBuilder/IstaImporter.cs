@@ -213,7 +213,7 @@ public sealed class IstaImporter : IDisposable
                 }
             }
 
-            ranges.Sort((a, b) => string.CompareOrdinal(a.From, b.From));
+            // Kept in file order: the table records it, and sorts stably for lookup.
             writer.AddEntry("ista/vin/" + band + ".bin", s => VinRangeTable.Write(s, ranges), CompressionLevel.SmallestSize);
             manifest.VinRangeCount += ranges.Count;
         }

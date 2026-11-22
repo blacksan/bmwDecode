@@ -131,23 +131,27 @@ public sealed partial class SessionService : ObservableObject
                 files = _fileInspector;
             }
 
-            if (ReferenceData.Pack is { } pack)
+            // Without an ECU folder the pack falls back to the connected engine or the demo car, as before.
+            var fallback = files ?? Engine as ISgbdInspector ?? _demoInspector;
+            if (ReferenceData.Pack is { IsDisposed: false } pack)
             {
-                if (_packedInspector is null || !ReferenceEquals(_packedFor, pack))
+                if (_packedInspector is null || !ReferenceEquals(_packedFor, pack) || !ReferenceEquals(_packedFallback, fallback))
                 {
-                    _packedInspector = new PackedSgbdInspector(pack, files);
+                    _packedInspector = new PackedSgbdInspector(pack, fallback);
                     _packedFor = pack;
+                    _packedFallback = fallback;
                 }
 
                 return _packedInspector;
             }
 
-            return files ?? Engine as ISgbdInspector ?? _demoInspector;
+            return fallback;
         }
     }
 
     private PackedSgbdInspector? _packedInspector;
     private SgbdPack? _packedFor;
+    private ISgbdInspector? _packedFallback;
 
     /// <summary>Metadata for an ECU's live-data job list: the demo car describes itself, real cars use the SGBD files.</summary>
     public ISgbdInspector InspectorFor(IDiagnosticEngine? engine) =>
