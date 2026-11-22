@@ -66,7 +66,6 @@ public sealed class PageIconConverter : IValueConverter
         "Vehicle / VIN" => "🚗",
         "Quick test" => "⚡",
         "Modules" => "▦",
-        "Job explorer" => "⌘",
         "Log" => "☰",
         "Settings" => "⚙",
         _ => "•",

@@ -41,3 +41,44 @@ public class TranslatorTests
         Assert.Equal("Short circuit to ground", t.Translate("Kurzschluss nach Masse"));
     }
 }
+
+public class JobNameTests
+{
+    private static Translation.Translator Tr() => Translation.Translator.FromTables(
+        [new("raildruck", "rail pressure"), new("lüfter", "fan"), new("prüfstempel", "test stamp"), new("motordrehzahl", "engine speed")], []);
+
+    [Fact]
+    public void JobNamesReadAsEnglish()
+    {
+        var t = Tr();
+        Assert.Equal("Status rail pressure actual", t.TranslateIdentifier("STATUS_RAILDRUCK_IST"));
+        Assert.Equal("Control electric fan", t.TranslateIdentifier("STEUERN_E_LUEFTER"));
+        Assert.Equal("Fault memory read", t.TranslateIdentifier("FS_LESEN"));
+        Assert.Equal("Coding read", t.TranslateIdentifier("C_C_LESEN"));
+        Assert.Equal("Test stamp read", t.TranslateIdentifier("PRUEFSTEMPEL_LESEN"));
+        Assert.Equal("Status DME 2", t.TranslateIdentifier("STATUS_DME_2"));
+    }
+
+    [Fact]
+    public void ResultNamesDropStatAndWert()
+    {
+        var previous = Translation.Translator.Current;
+        try
+        {
+            Translation.Translator.Current = Tr();
+            Assert.Equal("Engine speed", Translation.JobNames.Result(null, "STATUS_MOTORDREHZAHL", "STAT_MOTORDREHZAHL_WERT"));
+        }
+        finally
+        {
+            Translation.Translator.Current = previous;
+        }
+    }
+
+    [Fact]
+    public void DisabledTranslatorKeepsNames()
+    {
+        var t = Tr();
+        t.Enabled = false;
+        Assert.Equal("STATUS_RAILDRUCK_IST", t.TranslateIdentifier("STATUS_RAILDRUCK_IST"));
+    }
+}

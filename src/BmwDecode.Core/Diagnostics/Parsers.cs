@@ -249,7 +249,9 @@ public static partial class FaultParser
                 values.Add(new LiveValue(
                     result.Job,
                     key,
-                    Translation.Translator.Current.Translate(Humanize(stem)),
+                    Translation.Translator.Current.Enabled
+                        ? Translation.JobNames.Result(result.Variant, result.Job, key)
+                        : Humanize(stem),
                     value.Display,
                     unit is "-" ? null : unit,
                     value.Kind is ResultKind.Integer or ResultKind.Real ? value.AsDouble : null));

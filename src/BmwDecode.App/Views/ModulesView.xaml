@@ -50,7 +50,7 @@
 
         <!-- Empty state -->
         <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"
-                   Text="Select a module on the left.">
+                   Text="{Binding Placeholder}">
             <TextBlock.Style>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource PageSubtitle}">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -74,6 +74,13 @@
 
             <DockPanel Grid.Row="0" Margin="0,0,0,8">
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
+                    <Button Command="{Binding ShowProgrammingCommand}" Margin="0,0,8,0" Style="{DynamicResource AccentButtonStyle}"
+                            ToolTip="Every job of this module: coding, adaptations, actuator tests, programming">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource Icon}" Text="&#xE90F;" FontSize="14" Margin="0,0,8,0" />
+                            <TextBlock Text="Programming" />
+                        </StackPanel>
+                    </Button>
                     <Button Command="{Binding RefreshAllCommand}" ToolTip="Read identification, fault and info memory">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource Icon}" Text="&#xE72C;" FontSize="14" Margin="0,0,8,0" />
@@ -93,7 +100,7 @@
                            Visibility="{Binding StatusText, Converter={StaticResource NullToVisibility}}" />
             </StackPanel>
 
-            <TabControl Grid.Row="2">
+            <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}">
                 <!-- Faults -->
                 <TabItem Header="Fault memory">
                     <Grid Margin="0,12,0,0">
@@ -196,7 +203,7 @@
                 </TabItem>
 
                 <!-- Jobs & coding -->
-                <TabItem Header="Jobs &amp; coding">
+                <TabItem Header="Programming">
                     <Grid Margin="0,12,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="330" />
@@ -241,12 +248,13 @@
                             </ListBox.GroupStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="0,1">
+                                    <StackPanel Margin="0,2" ToolTip="{Binding Comment}">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Name}" FontFamily="Cascadia Mono, Consolas" FontSize="12" />
+                                            <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" MaxWidth="250" />
                                             <TextBlock Text="  writes" FontSize="11" Foreground="{DynamicResource SystemFillColorCautionBrush}"
                                                        Visibility="{Binding IsWriting, Converter={StaticResource BoolToVisibility}}" />
                                         </StackPanel>
+                                        <TextBlock Text="{Binding Name}" FontFamily="Cascadia Mono, Consolas" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
                                         <TextBlock Text="{Binding Comment}" Style="{StaticResource Caption}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="290" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -261,7 +269,8 @@
                             </Grid.RowDefinitions>
                             <Border Style="{StaticResource Card}" Padding="14,10">
                                 <StackPanel>
-                                    <TextBlock Text="{Binding SelectedModuleJob.Name, TargetNullValue='Select a job'}" Style="{StaticResource SectionTitle}" FontFamily="Cascadia Mono, Consolas" />
+                                    <TextBlock Text="{Binding SelectedModuleJob.DisplayName, TargetNullValue='Select a job'}" Style="{StaticResource SectionTitle}" />
+                                    <TextBlock Text="{Binding SelectedModuleJob.Name}" FontFamily="Cascadia Mono, Consolas" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                     <TextBlock Text="{Binding SelectedModuleJob.Category}" Style="{StaticResource Caption}" />
                                     <TextBlock Text="{Binding ModuleJobComment}" Style="{StaticResource Value}" Margin="0,6,0,6" />
                                     <ItemsControl ItemsSource="{Binding ModuleJobArguments}">
@@ -292,8 +301,9 @@
                                       HeadersVisibility="Column" GridLinesVisibility="Horizontal">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Set" Binding="{Binding Set}" Width="44" />
-                                    <DataGridTextColumn Header="Result" Binding="{Binding Name}" Width="*" FontFamily="Cascadia Mono, Consolas" />
+                                    <DataGridTextColumn Header="Result" Binding="{Binding Label}" Width="1.4*" />
                                     <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="2*" />
+                                    <DataGridTextColumn Header="EDIABAS name" Binding="{Binding Name}" Width="*" FontFamily="Cascadia Mono, Consolas" />
                                     <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60" />
                                 </DataGrid.Columns>
                             </DataGrid>
@@ -338,9 +348,9 @@
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsSelected}" ToolTip="{Binding Comment}">
+                                    <CheckBox IsChecked="{Binding IsSelected}" ToolTip="{Binding Name}">
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Name}" FontSize="12" />
+                                            <TextBlock Text="{Binding DisplayName}" FontSize="12" />
                                             <TextBlock Text="{Binding Comment}" Style="{StaticResource Caption}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="220" />
                                         </StackPanel>
                                     </CheckBox>

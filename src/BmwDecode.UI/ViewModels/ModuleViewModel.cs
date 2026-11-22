@@ -14,14 +14,19 @@ namespace BmwDecode.App.ViewModels;
 
 public sealed partial class LiveJobOption : ObservableObject
 {
-    public LiveJobOption(string name, string comment, bool selected)
+    public LiveJobOption(string name, string comment, bool selected, string? displayName = null)
     {
         Name = name;
         Comment = comment;
+        DisplayName = displayName ?? name;
         _isSelected = selected;
     }
 
+    /// <summary>The EDIABAS job that is run.</summary>
     public string Name { get; }
+
+    /// <summary>Its English name.</summary>
+    public string DisplayName { get; }
     public string Comment { get; }
 
     [ObservableProperty]
@@ -71,12 +76,15 @@ public sealed partial class LiveRow : ObservableObject
     }
 }
 
-/// <summary>A job of this module, with its category and translated description.</summary>
-public sealed record ModuleJobItem(string Category, int CategoryOrder, JobDescription Job, string Comment)
+/// <summary>A job of this module, with its category, English name and translated description.</summary>
+public sealed record ModuleJobItem(string Category, int CategoryOrder, JobDescription Job, string Comment, string DisplayName)
 {
     public string Name => Job.Name;
     public bool IsWriting => Job.IsPotentiallyDestructive;
 }
+
+/// <summary>One result value of a job run; Label is its English name.</summary>
+public sealed record ResultRow(int Set, string Name, string Value, string Type, string Label = "");
 
 /// <summary>Everything about one control unit: identification, fault and info memory, live values.</summary>
 public sealed partial class ModuleViewModel : ObservableObject
@@ -132,6 +140,31 @@ public sealed partial class ModuleViewModel : ObservableObject
 
     partial void OnJobFilterChanged(string value) => ModuleJobsView.Refresh();
 
+    /// <summary>Index of the Programming tab (fault memory, identification, info memory, programming, live data).</summary>
+    public const int ProgrammingTab = 3;
+
+    [ObservableProperty]
+    private int _selectedTab;
+
+    /// <summary>The module's Programming button: open its jobs (coding, adaptations, actuators, programming…).</summary>
+    [RelayCommand]
+    private async Task ShowProgrammingAsync()
+    {
+        SelectedTab = ProgrammingTab;
+        if (ModuleJobs.Count == 0)
+        {
+            await LoadJobsAsync();
+        }
+    }
+
+    partial void OnSelectedTabChanged(int value)
+    {
+        if (value == ProgrammingTab && ModuleJobs.Count == 0 && !IsBusy)
+        {
+            _ = LoadJobsAsync();
+        }
+    }
+
     [RelayCommand]
     private Task LoadJobsAsync() => Busy("Loading the module's jobs…", async ct =>
     {
@@ -143,7 +176,8 @@ public sealed partial class ModuleViewModel : ObservableObject
         foreach (var job in description.Jobs)
         {
             var category = JobCategories.Of(job.Name);
-            ModuleJobs.Add(new ModuleJobItem(category, Array.IndexOf(JobCategories.Order, category), job, tr.Translate(job.Comment)));
+            ModuleJobs.Add(new ModuleJobItem(category, Array.IndexOf(JobCategories.Order, category), job, tr.Translate(job.Comment),
+                Core.Translation.JobNames.Job(Variant, job.Name)));
         }
 
         var coding = ModuleJobs.Count(j => j.Category == JobCategories.Coding);
@@ -210,7 +244,8 @@ public sealed partial class ModuleViewModel : ObservableObject
                 foreach (var v in r.Sets[i].Ordered)
                 {
                     var display = v.Kind == ResultKind.Text ? tr.Translate(v.Display) : v.Display;
-                    ModuleJobResults.Add(new ResultRow(i + 1, v.Name, display, v.KindLabel));
+                    ModuleJobResults.Add(new ResultRow(i + 1, v.Name, display, v.KindLabel,
+                        Core.Translation.JobNames.Result(Variant, item.Name, v.Name)));
                 }
             }
 
@@ -283,7 +318,8 @@ public sealed partial class ModuleViewModel : ObservableObject
         foreach (var job in description.Jobs)
         {
             var category = JobCategories.Of(job.Name);
-            ModuleJobs.Add(new ModuleJobItem(category, Array.IndexOf(JobCategories.Order, category), job, tr.Translate(job.Comment)));
+            ModuleJobs.Add(new ModuleJobItem(category, Array.IndexOf(JobCategories.Order, category), job, tr.Translate(job.Comment),
+                Core.Translation.JobNames.Job(Variant, job.Name)));
         }
     }
 
@@ -494,7 +530,7 @@ public sealed partial class ModuleViewModel : ObservableObject
             }
 
             LiveJobs.Add(new LiveJobOption(job.Name, Core.Translation.Translator.Current.Translate(job.Comment),
-                saved?.Contains(job.Name, StringComparer.OrdinalIgnoreCase) == true));
+                saved?.Contains(job.Name, StringComparer.OrdinalIgnoreCase) == true, Core.Translation.JobNames.Job(Variant, job.Name)));
         }
 
         LiveStatus = LiveJobs.Count == 0 ? "This SGBD has no argument-free STATUS jobs." : $"{LiveJobs.Count} live-data jobs. Tick the ones to watch, then Start.";
