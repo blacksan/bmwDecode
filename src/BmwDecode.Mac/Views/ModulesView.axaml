@@ -32,14 +32,18 @@
         </ListBox>
 
         <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Classes="pageSubtitle"
-                   Text="Select a module on the left." IsVisible="{Binding Module, Converter={x:Static ObjectConverters.IsNull}}" />
+                   Text="{Binding Placeholder}" IsVisible="{Binding Module, Converter={x:Static ObjectConverters.IsNull}}" />
 
         <!-- Module detail -->
         <Grid Grid.Row="1" Grid.Column="2" DataContext="{Binding Module}" RowDefinitions="Auto,Auto,*"
               IsVisible="{Binding $parent[UserControl].DataContext.Module, Converter={x:Static ObjectConverters.IsNotNull}}">
             <DockPanel Grid.Row="0" Margin="0,0,0,8">
-                <Button DockPanel.Dock="Right" Content="↻ Read all" Command="{Binding RefreshAllCommand}" VerticalAlignment="Top" Margin="0"
-                        ToolTip.Tip="Read identification, fault and info memory" />
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
+                    <Button Content="Programming" Classes="accent" Command="{Binding ShowProgrammingCommand}"
+                            ToolTip.Tip="Every job of this module: coding, adaptations, actuator tests, programming" />
+                    <Button Content="↻ Read all" Command="{Binding RefreshAllCommand}" Margin="0"
+                            ToolTip.Tip="Read identification, fault and info memory" />
+                </StackPanel>
                 <StackPanel>
                     <TextBlock Text="{Binding Title}" Classes="section" FontSize="20" Margin="0" />
                     <TextBlock Text="{Binding Subtitle}" Classes="caption" />
@@ -51,7 +55,7 @@
                            IsVisible="{Binding StatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
             </StackPanel>
 
-            <TabControl Grid.Row="2">
+            <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}">
                 <!-- Faults -->
                 <TabItem Header="Fault memory">
                     <Grid RowDefinitions="Auto,2*,12,*" Margin="0,12,0,0">
@@ -134,7 +138,7 @@
                 </TabItem>
 
                 <!-- Jobs & coding -->
-                <TabItem Header="Jobs &amp; coding">
+                <TabItem Header="Programming">
                     <Grid ColumnDefinitions="330,12,*" RowDefinitions="Auto,*" Margin="0,12,0,0">
                         <StackPanel Grid.ColumnSpan="3" Margin="0,0,0,8">
                             <StackPanel Orientation="Horizontal">
@@ -149,11 +153,12 @@
                         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ModuleJobsView}" SelectedItem="{Binding SelectedModuleJob}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="0,1">
+                                    <StackPanel Margin="0,2" ToolTip.Tip="{Binding Comment}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <TextBlock Text="{Binding Name}" Classes="mono" FontSize="12" />
+                                            <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" MaxWidth="250" />
                                             <TextBlock Text="writes" FontSize="11" Foreground="{DynamicResource CautionBrush}" IsVisible="{Binding IsWriting}" />
                                         </StackPanel>
+                                        <TextBlock Text="{Binding Name}" Classes="mono" FontSize="11" Foreground="{DynamicResource TertiaryTextBrush}" />
                                         <StackPanel Orientation="Horizontal" Spacing="6">
                                             <TextBlock Text="{Binding Category}" FontSize="11" Foreground="{DynamicResource AccentTextBrush}" />
                                             <TextBlock Text="{Binding Comment}" Classes="caption" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="230" />
@@ -165,7 +170,8 @@
                         <Grid Grid.Row="1" Grid.Column="2" RowDefinitions="Auto,Auto,*">
                             <Border Classes="card" Padding="14,10">
                                 <StackPanel>
-                                    <TextBlock Text="{Binding SelectedModuleJob.Name, TargetNullValue='Select a job'}" Classes="section mono" />
+                                    <TextBlock Text="{Binding SelectedModuleJob.DisplayName, TargetNullValue='Select a job'}" Classes="section" />
+                                    <TextBlock Text="{Binding SelectedModuleJob.Name}" Classes="mono" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" />
                                     <TextBlock Text="{Binding SelectedModuleJob.Category}" Classes="caption" />
                                     <TextBlock Text="{Binding ModuleJobComment}" Classes="value" Margin="0,6,0,6" />
                                     <ItemsControl ItemsSource="{Binding ModuleJobArguments}">
@@ -189,8 +195,9 @@
                             <DataGrid Grid.Row="2" ItemsSource="{Binding ModuleJobResults}" AutoGenerateColumns="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Set" Binding="{Binding Set}" Width="44" />
-                                    <DataGridTextColumn Header="Result" Binding="{Binding Name}" Width="*" FontFamily="Menlo, Monaco" />
+                                    <DataGridTextColumn Header="Result" Binding="{Binding Label}" Width="1.4*" />
                                     <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="2*" />
+                                    <DataGridTextColumn Header="EDIABAS name" Binding="{Binding Name}" Width="*" FontFamily="Menlo, Monaco" />
                                     <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60" />
                                 </DataGrid.Columns>
                             </DataGrid>
@@ -211,9 +218,9 @@
                         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding LiveJobs}" IsEnabled="{Binding !IsLive}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsSelected}" ToolTip.Tip="{Binding Comment}">
+                                    <CheckBox IsChecked="{Binding IsSelected}" ToolTip.Tip="{Binding Name}">
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Name}" FontSize="12" />
+                                            <TextBlock Text="{Binding DisplayName}" FontSize="12" />
                                             <TextBlock Text="{Binding Comment}" Classes="caption" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="220" />
                                         </StackPanel>
                                     </CheckBox>

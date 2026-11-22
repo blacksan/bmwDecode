@@ -10,12 +10,12 @@ public sealed partial class MainViewModel : ObservableObject
 {
     public MainViewModel(Navigator navigator, SessionService session,
         OverviewViewModel overview, VehicleViewModel vehicle, QuickTestViewModel quickTest, ModulesViewModel modules,
-        JobExplorerViewModel jobs, LogViewModel log, SettingsViewModel settings, IUiTimerFactory timers, DataService data)
+        LogViewModel log, SettingsViewModel settings, IUiTimerFactory timers, DataService data)
     {
         Data = data;
         Navigator = navigator;
         Session = session;
-        Pages = [overview, vehicle, quickTest, modules, jobs, log];
+        Pages = [overview, vehicle, quickTest, modules, log];
         FooterPages = [settings];
         foreach (var page in Pages.Concat(FooterPages))
         {

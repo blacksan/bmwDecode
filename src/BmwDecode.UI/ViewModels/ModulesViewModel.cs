@@ -19,7 +19,7 @@ public sealed record ModuleListItem(EcuDefinition Ecu, string? Variant, EcuScanS
     };
 }
 
-/// <summary>Master/detail list of modules. Uses the last quick test when available, else the whole chassis.</summary>
+/// <summary>Master/detail list of the modules the car reported in the last scan, ranked by importance.</summary>
 public sealed partial class ModulesViewModel : PageViewModel
 {
     private readonly SessionService _session;
@@ -55,6 +55,10 @@ public sealed partial class ModulesViewModel : PageViewModel
 
     [ObservableProperty]
     private string? _hint;
+
+    public bool IsEmpty => Items.Count == 0;
+
+    public string Placeholder => IsEmpty ? "No modules scanned yet." : "Select a module on the left.";
 
     public override void OnNavigatedTo() => Rebuild();
 
@@ -125,16 +129,16 @@ public sealed partial class ModulesViewModel : PageViewModel
 
             Hint = $"{Items.Count} modules – {report.DiscoveryNote ?? "from the last quick test"}. Ranked by importance.";
         }
-        else if (_session.Series is { } series)
+        else
         {
-            foreach (var e in series.Ecus.GroupBy(e => e.PrimaryGroup).Select(g => g.First()).OrderBy(e => e.Priority).ThenBy(e => e.Address))
-            {
-                Items.Add(new ModuleListItem(e, null, EcuScanState.Pending, 0));
-            }
-
-            Hint = $"Not scanned yet – showing all {Items.Count} possible modules of the {series.Series}. Connect and the list fills with what the car reports.";
+            // Only modules the car actually answered for are listed: nothing until it has been scanned.
+            Hint = _session.Engine is null
+                ? "No modules yet. Connect to the car on the Overview page; the modules it reports are listed here after the scan."
+                : "No modules yet. Run the quick test (or Identify on the Overview page) and the modules the car reports appear here.";
         }
 
+        OnPropertyChanged(nameof(IsEmpty));
+        OnPropertyChanged(nameof(Placeholder));
         SelectedItem = Items.FirstOrDefault(i => i.Ecu.Key == selectedKey);
     }
 }

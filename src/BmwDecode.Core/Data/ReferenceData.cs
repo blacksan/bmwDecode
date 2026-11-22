@@ -18,6 +18,7 @@ public static class ReferenceData
         {
             s_pack = value;
             Translation.Translator.Current.UseExact(value?.Translations);
+            Translation.JobNames.Reset();
         }
     }
 

@@ -110,6 +110,78 @@ public sealed partial class Translator
     /// <summary>Translates when needed and returns null for null input (convenient for optional fields).</summary>
     public string? TranslateOrNull(string? text) => text is null ? null : Translate(text);
 
+    /// <summary>EDIABAS naming conventions that are not ordinary German words.</summary>
+    private static readonly Dictionary<string, string> s_jobTerms = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["status"] = "status", ["stat"] = "status", ["steuern"] = "control", ["ansteuern"] = "activate",
+        ["lesen"] = "read", ["schreiben"] = "write", ["loeschen"] = "clear", ["löschen"] = "clear",
+        ["ist"] = "actual", ["soll"] = "target", ["wert"] = "value", ["werte"] = "values", ["einh"] = "unit",
+        ["fs"] = "fault memory", ["is"] = "info memory", ["hs"] = "history memory", ["c"] = "coding",
+        ["sg"] = "ECU", ["nr"] = "no.", ["anz"] = "count", ["ende"] = "end", ["start"] = "start", ["stop"] = "stop",
+        ["reset"] = "reset", ["ident"] = "identification", ["info"] = "info", ["text"] = "text", ["vorgabe"] = "preset",
+        ["adaption"] = "adaptation", ["adaptionen"] = "adaptations", ["abgleich"] = "calibration", ["zustand"] = "state",
+        ["fa"] = "vehicle order", ["zcs"] = "ZCS", ["fg"] = "VIN", ["aif"] = "programming record", ["prog"] = "programming",
+        ["ein"] = "on", ["aus"] = "off", ["an"] = "on", ["akt"] = "current", ["min"] = "min", ["max"] = "max",
+        ["e"] = "electric", ["v"] = "V", ["temp"] = "temperature", ["ubatt"] = "battery voltage", ["kl"] = "terminal",
+        ["daten"] = "data", ["lang"] = "long", ["kurz"] = "short", ["detail"] = "details", ["funktional"] = "functional",
+        ["programmieren"] = "program", ["auftrag"] = "job", ["ruecksetzen"] = "reset", ["lernwerte"] = "learned values",
+        ["messemode"] = "showroom mode", ["pruefstempel"] = "test stamp", ["luftemperatur"] = "air temperature",
+        ["setzen"] = "set", ["quittieren"] = "acknowledge", ["freigabe"] = "enable", ["sperren"] = "lock",
+        ["entsperren"] = "unlock", ["anlernen"] = "teach in", ["kalibrieren"] = "calibrate", ["pruefen"] = "check",
+        ["test"] = "test", ["selbsttest"] = "self-test", ["energiesparmode"] = "energy-saving mode", ["fertigungsmode"] = "production mode",
+        ["transportmode"] = "transport mode", ["flashmode"] = "flash mode", ["diagnosemode"] = "diagnostic mode",
+    };
+
+    /// <summary>EDIABAS names spell umlauts as ae / oe / ue; the glossary uses the real letters.</summary>
+    private string? TranslateIdentifierWord(string lower)
+    {
+        var word = TranslateWord(lower);
+        if (!string.IsNullOrEmpty(word) || !(lower.Contains("ae") || lower.Contains("oe") || lower.Contains("ue")))
+        {
+            return word;
+        }
+
+        var unfolded = lower.Replace("ae", "ä", StringComparison.Ordinal).Replace("oe", "ö", StringComparison.Ordinal)
+            .Replace("ue", "ü", StringComparison.Ordinal);
+        return TranslateWord(unfolded);
+    }
+
+    /// <summary>
+    /// Readable English for an EDIABAS job or result name: STATUS_RAILDRUCK_IST → "Status rail pressure actual",
+    /// STEUERN_E_LUEFTER → "Control electric fan". Abbreviations it does not know stay as they are.
+    /// </summary>
+    public string TranslateIdentifier(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name) || !Enabled)
+        {
+            return name ?? string.Empty;
+        }
+
+        var words = new List<string>();
+        foreach (var raw in name.Trim('_').Split('_', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var lower = raw.ToLowerInvariant();
+            if (s_jobTerms.TryGetValue(lower, out var term))
+            {
+                words.Add(term);
+                continue;
+            }
+
+            if (raw.All(char.IsDigit) || (raw.Length <= 3 && raw.Any(char.IsLetter)))
+            {
+                words.Add(raw); // numbers and short codes (DME, CAN, AGR, 0x12)
+                continue;
+            }
+
+            var word = TranslateIdentifierWord(lower);
+            words.Add(string.IsNullOrEmpty(word) ? raw : word);
+        }
+
+        // C_C_LESEN would read "coding coding read": drop a word that repeats the one before it.
+        var text = string.Join(' ', words.Where((w, i) => w.Length > 0 && (i == 0 || !w.Equals(words[i - 1], StringComparison.OrdinalIgnoreCase))));
+        return text.Length == 0 ? name : char.ToUpperInvariant(text[0]) + text[1..];
+    }
+
     private string TranslateCore(string text)
     {
         var key = NormalizePhrase(text);

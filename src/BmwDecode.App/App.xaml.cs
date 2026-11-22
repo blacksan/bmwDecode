@@ -33,7 +33,6 @@ public partial class App : Application
         services.AddSingleton<VehicleViewModel>();
         services.AddSingleton<QuickTestViewModel>();
         services.AddSingleton<ModulesViewModel>();
-        services.AddSingleton<JobExplorerViewModel>();
         services.AddSingleton<LogViewModel>();
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<MainViewModel>();

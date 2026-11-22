@@ -13,7 +13,6 @@
         <DataTemplate DataType="vm:VehicleViewModel"><views:VehicleView /></DataTemplate>
         <DataTemplate DataType="vm:QuickTestViewModel"><views:QuickTestView /></DataTemplate>
         <DataTemplate DataType="vm:ModulesViewModel"><views:ModulesView /></DataTemplate>
-        <DataTemplate DataType="vm:JobExplorerViewModel"><views:JobExplorerView /></DataTemplate>
         <DataTemplate DataType="vm:LogViewModel"><views:LogView /></DataTemplate>
         <DataTemplate DataType="vm:SettingsViewModel"><views:SettingsView /></DataTemplate>
     </Window.DataTemplates>
@@ -44,7 +43,10 @@
 
                 <!-- Live supply status from the interface -->
                 <Grid Margin="16,8,12,0" ColumnDefinitions="Auto,*,Auto,*">
-                    <TextBlock Text="🔋" FontSize="13" Margin="0,0,6,0" VerticalAlignment="Center" ToolTip.Tip="Battery voltage (terminal 30)" />
+                    <!-- Car battery (12 V block with + and - terminals) -->
+                    <Path Data="M2,6 L22,6 L22,21 L2,21 Z M4.5,3 L8.5,3 L8.5,6 L4.5,6 Z M15.5,3 L19.5,3 L19.5,6 L15.5,6 Z M4.5,13.5 L8.5,13.5 M6.5,11.5 L6.5,15.5 M15.5,13.5 L19.5,13.5" Width="16" Height="13" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"
+                          Stroke="{DynamicResource SystemControlForegroundBaseHighBrush}" StrokeThickness="1.6" StrokeJoin="Round"
+                          ToolTip.Tip="Battery voltage (terminal 30)" />
                     <TextBlock Grid.Column="1" Text="{Binding BatteryText}" Classes="caption" FontSize="13" VerticalAlignment="Center" />
                     <TextBlock Grid.Column="2" Text="🔑" FontSize="13" Margin="8,0,6,0" VerticalAlignment="Center" ToolTip.Tip="Ignition (terminal 15)" />
                     <TextBlock Grid.Column="3" Text="{Binding IgnitionText}" Classes="caption" FontSize="13" VerticalAlignment="Center"
