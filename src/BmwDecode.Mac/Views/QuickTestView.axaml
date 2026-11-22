@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BmwDecode.Mac.Views.QuickTestView">
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Quick test" Classes="pageTitle" />
+            <TextBlock Classes="pageSubtitle" Margin="0,0,0,16"
+                       Text="{Binding SeriesName, StringFormat='Identifies every module of the {0} profile and reads its fault memory. Double-click a module to open it.'}" />
+        </StackPanel>
+
+        <WrapPanel Grid.Row="1" Margin="0,0,0,12">
+            <Button Content="▶ Start" Classes="accent" Command="{Binding RunCommand}" IsVisible="{Binding !IsWorking}" />
+            <Button Content="■ Stop" Command="{Binding RunCancelCommand}" IsVisible="{Binding IsWorking}" />
+            <Button Content="Clear all faults" Command="{Binding ClearAllCommand}" />
+            <Button Content="Report" Command="{Binding ExportHtmlCommand}" />
+            <Button Content="CSV" Command="{Binding ExportCsvCommand}" Margin="0,0,16,0" />
+            <CheckBox Content="Read identification" IsChecked="{Binding ReadIdent}" VerticalAlignment="Center" Margin="0,0,16,0" IsEnabled="{Binding !IsWorking}" />
+            <CheckBox Content="Show modules that did not answer" IsChecked="{Binding ShowAll}" VerticalAlignment="Center" />
+        </WrapPanel>
+
+        <Border Grid.Row="2" Classes="card" Padding="16,12">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <ProgressBar Maximum="{Binding Total}" Value="{Binding Done}" Height="4" Margin="0,0,0,8" />
+                    <TextBlock Text="{Binding Current}" Classes="caption" IsVisible="{Binding Current, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    <TextBlock Text="{Binding StatusText}" Classes="caption" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="24,0,0,0">
+                    <TextBlock Text="{Binding Found}" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                    <TextBlock Text="modules" Classes="caption" HorizontalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Margin="24,0,0,0">
+                    <TextBlock Text="{Binding FaultTotal}" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{DynamicResource CriticalBrush}" />
+                    <TextBlock Text="faults" Classes="caption" HorizontalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Grid.Column="3" Margin="24,0,8,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Done}" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryTextBrush}" />
+                        <TextBlock Text="/" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryTextBrush}" />
+                        <TextBlock Text="{Binding Total}" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryTextBrush}" />
+                    </StackPanel>
+                    <TextBlock Text="scanned" Classes="caption" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <DataGrid x:Name="Rows" Grid.Row="3" ItemsSource="{Binding RowsView}" SelectedItem="{Binding SelectedRow}"
+                  AutoGenerateColumns="False" SelectionMode="Single" RowHeight="36" DoubleTapped="OnRowDoubleTapped">
+            <DataGrid.KeyBindings>
+                <KeyBinding Gesture="Enter" Command="{Binding OpenModuleCommand}" CommandParameter="{Binding SelectedRow}" />
+            </DataGrid.KeyBindings>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" Width="32">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Ellipse Classes="dot" HorizontalAlignment="Center" Fill="{Binding State, Converter={StaticResource ScanStateToBrush}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Addr" Binding="{Binding Ecu.AddressHex}" Width="64" />
+                <DataGridTextColumn Header="Module" Binding="{Binding Ecu.Abbreviation}" Width="100" />
+                <DataGridTextColumn Header="Description" Binding="{Binding Ecu.Description}" Width="2*" />
+                <DataGridTextColumn Header="SGBD" Binding="{Binding Variant}" Width="*" />
+                <DataGridTextColumn Header="Part no." Binding="{Binding PartNumber}" Width="*" />
+                <DataGridTextColumn Header="Status" Binding="{Binding StatusText}" Width="1.4*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="4" Classes="caption" Margin="0,8,0,0"
+                   Text="Clearing faults: ignition on, engine off. Present faults come straight back – fix the cause first." />
+    </Grid>
+</UserControl>

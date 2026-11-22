@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BmwDecode.Mac.Views.SettingsView">
+    <ScrollViewer>
+        <StackPanel MaxWidth="900" HorizontalAlignment="Left">
+            <TextBlock Text="Settings" Classes="pageTitle" />
+            <TextBlock Text="Changes are saved automatically." Classes="pageSubtitle" Margin="0,0,0,20" />
+
+            <Border Classes="card">
+                <StackPanel>
+                    <TextBlock Text="EDIABAS ECU folder" Classes="section" />
+                    <TextBlock Classes="caption" Margin="0,0,0,10"
+                               Text="The SGBD files (*.prg, *.grp) from your INPA / EDIABAS install. On a Mac, copy C:\EDIABAS\Ecu from your Windows PC to ~/Library/Application Support/bmwDecode/Ecu (found automatically) or anywhere you like and browse to it. No BMW files are bundled with the app." />
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="Detect" Command="{Binding DetectCommand}" Margin="8,0,0,0" />
+                        <Button DockPanel.Dock="Right" Content="Browse…" Command="{Binding BrowseCommand}" Margin="8,0,0,0" />
+                        <TextBox Text="{Binding EcuPath}" Classes="mono" />
+                    </DockPanel>
+                    <TextBlock Text="{Binding EcuStatus}" Classes="caption" Margin="0,8,0,0" />
+                    <TextBlock Text="{Binding StatusText}" Classes="caption" Margin="0,4,0,0"
+                               IsVisible="{Binding StatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <Grid ColumnDefinitions="260,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                    <TextBlock Grid.ColumnSpan="2" Text="Preferences" Classes="section" />
+                    <TextBlock Grid.Row="1" Text="Theme" Classes="value" VerticalAlignment="Center" />
+                    <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" Width="200" Margin="0,4" />
+                    <TextBlock Grid.Row="2" Text="Default chassis profile" Classes="value" VerticalAlignment="Center" />
+                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding SeriesOptions}" SelectedItem="{Binding DefaultSeries}" Width="200" Margin="0,4" />
+                    <TextBlock Grid.Row="3" Text="Live data interval (ms)" Classes="value" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding LiveIntervalMs}" Width="200" HorizontalAlignment="Left" Margin="0,4" />
+                    <TextBlock Grid.Row="4" Text="EDIABAS interface trace" Classes="value" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding EdiabasTrace}" Margin="0,4"
+                              Content="Write ifh.trc / api.trc to the temp folder (applies on next connect)" />
+                    <TextBlock Grid.Row="5" Text="Translate German texts" Classes="value" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding TranslateTexts}" Margin="0,4"
+                              Content="Show fault texts, conditions and job descriptions in English (applies to newly read data)" />
+                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding TranslationInfo}" Classes="caption" Margin="0,0,0,6" />
+                    <TextBlock Grid.Row="7" Text="Scan on connect" Classes="value" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="7" Grid.Column="1" IsChecked="{Binding AutoScan}" Margin="0,4"
+                              Content="Identify the car from its VIN and list the modules it reports straight after connecting" />
+                    <TextBlock Grid.Row="8" Text="ISTA history" Classes="value" VerticalAlignment="Top" Margin="0,4" />
+                    <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding IstaInfo}" Classes="caption" Margin="0,4" />
+                    <TextBlock Grid.Row="9" Text="Built-in data" Classes="value" VerticalAlignment="Top" Margin="0,4" />
+                    <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding DataPackInfo}" Classes="caption" Margin="0,4" />
+                </Grid>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel>
+                    <TextBlock Text="About" Classes="section" />
+                    <TextBlock Text="{Binding Version, StringFormat='bmwDecode {0} for macOS'}" Classes="value" FontWeight="SemiBold" />
+                    <TextBlock Classes="caption" Margin="0,6,0,0"
+                               Text="Free software under the GNU GPL v3. Diagnostics run on EdiabasLib by Ulrich Holeschak (GPLv3), and the chassis catalogue comes from the same project. BMW, INPA, EDIABAS and ISTA are trademarks of BMW AG; this project is not affiliated with BMW." />
+                    <TextBlock Classes="caption" Margin="0,6,0,0"
+                               Text="Use at your own risk. Clearing fault memory and running writing jobs can change vehicle behaviour; keep a charger connected and know what a job does before you run it." />
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Spacing="12">
+                        <Button Content="Open settings folder" Command="{Binding OpenSettingsFolderCommand}" Margin="0" />
+                        <TextBlock Text="{Binding SettingsFolder}" Classes="caption" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

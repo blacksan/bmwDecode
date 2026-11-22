@@ -1,0 +1,246 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BmwDecode.Mac.Views.ModulesView">
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="280,16,*">
+        <StackPanel Grid.ColumnSpan="3" Margin="0,0,0,12">
+            <TextBlock Text="Modules" Classes="pageTitle" />
+            <TextBlock Text="{Binding Hint}" Classes="pageSubtitle" />
+        </StackPanel>
+
+        <!-- Module list, ranked by importance -->
+        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="2,4">
+                        <Ellipse Classes="dot" Margin="0,0,10,0" Fill="{Binding State, Converter={StaticResource ScanStateToBrush}}" />
+                        <StackPanel Grid.Column="1">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding Caption}" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Ecu.AddressHex}" FontSize="12" Foreground="{DynamicResource TertiaryTextBrush}" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Text="{Binding Detail}" Classes="caption" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+                            <TextBlock Text="{Binding Category}" FontSize="11" Foreground="{DynamicResource TertiaryTextBrush}" />
+                        </StackPanel>
+                        <Border Grid.Column="2" CornerRadius="9" MinWidth="18" Padding="6,1" VerticalAlignment="Center"
+                                Background="{DynamicResource CriticalBrush}"
+                                IsVisible="{Binding Badge, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                            <TextBlock Text="{Binding Badge}" FontSize="11" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Classes="pageSubtitle"
+                   Text="Select a module on the left." IsVisible="{Binding Module, Converter={x:Static ObjectConverters.IsNull}}" />
+
+        <!-- Module detail -->
+        <Grid Grid.Row="1" Grid.Column="2" DataContext="{Binding Module}" RowDefinitions="Auto,Auto,*"
+              IsVisible="{Binding $parent[UserControl].DataContext.Module, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                <Button DockPanel.Dock="Right" Content="↻ Read all" Command="{Binding RefreshAllCommand}" VerticalAlignment="Top" Margin="0"
+                        ToolTip.Tip="Read identification, fault and info memory" />
+                <StackPanel>
+                    <TextBlock Text="{Binding Title}" Classes="section" FontSize="20" Margin="0" />
+                    <TextBlock Text="{Binding Subtitle}" Classes="caption" />
+                </StackPanel>
+            </DockPanel>
+            <StackPanel Grid.Row="1" Margin="0,0,0,8">
+                <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding IsBusy}" />
+                <TextBlock Text="{Binding StatusText}" Classes="caption" Margin="0,4,0,0"
+                           IsVisible="{Binding StatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            </StackPanel>
+
+            <TabControl Grid.Row="2">
+                <!-- Faults -->
+                <TabItem Header="Fault memory">
+                    <Grid RowDefinitions="Auto,2*,12,*" Margin="0,12,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <Button Content="Read" Command="{Binding ReadFaultsCommand}" />
+                            <Button Content="Clear fault memory" Command="{Binding ClearFaultsCommand}" />
+                        </StackPanel>
+                        <DataGrid Grid.Row="1" ItemsSource="{Binding Faults}" SelectedItem="{Binding SelectedFault}" AutoGenerateColumns="False" SelectionMode="Single">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="" Width="28">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Ellipse Classes="dot" HorizontalAlignment="Center" Fill="{Binding IsPresent, Converter={StaticResource ScanStateToBrush}}"
+                                                     ToolTip.Tip="Red: currently present · grey: stored only" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Code" Binding="{Binding CodeHex}" Width="70" FontFamily="Menlo, Monaco" />
+                                <DataGridTextColumn Header="Description" Binding="{Binding Text}" Width="3*" />
+                                <DataGridTextColumn Header="Type" Binding="{Binding Symptom}" Width="1.5*" />
+                                <DataGridTextColumn Header="Count" Binding="{Binding Frequency}" Width="60" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock Grid.Row="1" Text="No faults stored." Classes="pageSubtitle" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   IsVisible="{Binding Faults.Count, Converter={StaticResource IsZero}}" IsHitTestVisible="False" />
+                        <!-- Freeze frame -->
+                        <Border Grid.Row="3" Classes="card" Margin="0" Padding="14,10">
+                            <Grid RowDefinitions="Auto,*">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding SelectedFault.Text, TargetNullValue='Select a fault to see its environmental conditions'}" Classes="section" FontSize="14" />
+                                    <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,0,0,6">
+                                        <TextBlock Text="{Binding SelectedFault.PresentDisplay}" Classes="caption" />
+                                        <TextBlock Text="{Binding SelectedFault.WarningDisplay}" Classes="caption" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding DetailSummary}" Classes="caption" Margin="0,0,0,6"
+                                               IsVisible="{Binding DetailSummary, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                </StackPanel>
+                                <DataGrid Grid.Row="1" ItemsSource="{Binding DetailConditions}" AutoGenerateColumns="False" GridLinesVisibility="None">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Condition" Binding="{Binding Name}" Width="2*" />
+                                        <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*" />
+                                        <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" Width="80" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- Identification -->
+                <TabItem Header="Identification">
+                    <DataGrid Margin="0,12,0,0" ItemsSource="{Binding Ident}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Item" Binding="{Binding Label}" Width="*" />
+                            <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="2*" />
+                            <DataGridTextColumn Header="Result" Binding="{Binding Key}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <!-- Info memory -->
+                <TabItem Header="Info memory">
+                    <Grid RowDefinitions="Auto,*" Margin="0,12,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <Button Content="Read" Command="{Binding ReadInfoCommand}" />
+                            <Button Content="Clear info memory" Command="{Binding ClearInfoCommand}" />
+                        </StackPanel>
+                        <DataGrid Grid.Row="1" ItemsSource="{Binding InfoEntries}" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Code" Binding="{Binding CodeHex}" Width="70" FontFamily="Menlo, Monaco" />
+                                <DataGridTextColumn Header="Description" Binding="{Binding Text}" Width="3*" />
+                                <DataGridTextColumn Header="Type" Binding="{Binding Symptom}" Width="1.5*" />
+                                <DataGridTextColumn Header="Count" Binding="{Binding Frequency}" Width="60" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock Grid.Row="1" Text="Info memory is empty or not supported by this module." Classes="pageSubtitle"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"
+                                   IsVisible="{Binding InfoEntries.Count, Converter={StaticResource IsZero}}" />
+                    </Grid>
+                </TabItem>
+
+                <!-- Jobs & coding -->
+                <TabItem Header="Jobs &amp; coding">
+                    <Grid ColumnDefinitions="330,12,*" RowDefinitions="Auto,*" Margin="0,12,0,0">
+                        <StackPanel Grid.ColumnSpan="3" Margin="0,0,0,8">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Load jobs" Command="{Binding LoadJobsCommand}" />
+                                <Button Content="Back up coding" Command="{Binding BackupCodingCommand}"
+                                        ToolTip.Tip="Runs every coding read job (C_*_LESEN) and saves the results to a file" />
+                                <TextBox Text="{Binding JobFilter}" Width="200" Watermark="Filter jobs" />
+                            </StackPanel>
+                            <TextBlock Text="{Binding ModuleJobStatus}" Classes="caption" Margin="0,6,0,0"
+                                       IsVisible="{Binding ModuleJobStatus, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        </StackPanel>
+                        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ModuleJobsView}" SelectedItem="{Binding SelectedModuleJob}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,1">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="{Binding Name}" Classes="mono" FontSize="12" />
+                                            <TextBlock Text="writes" FontSize="11" Foreground="{DynamicResource CautionBrush}" IsVisible="{Binding IsWriting}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Text="{Binding Category}" FontSize="11" Foreground="{DynamicResource AccentTextBrush}" />
+                                            <TextBlock Text="{Binding Comment}" Classes="caption" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="230" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Grid Grid.Row="1" Grid.Column="2" RowDefinitions="Auto,Auto,*">
+                            <Border Classes="card" Padding="14,10">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding SelectedModuleJob.Name, TargetNullValue='Select a job'}" Classes="section mono" />
+                                    <TextBlock Text="{Binding SelectedModuleJob.Category}" Classes="caption" />
+                                    <TextBlock Text="{Binding ModuleJobComment}" Classes="value" Margin="0,6,0,6" />
+                                    <ItemsControl ItemsSource="{Binding ModuleJobArguments}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,1">
+                                                    <TextBlock Text="arg" Classes="caption" Foreground="{DynamicResource AccentTextBrush}" />
+                                                    <TextBlock Text="{Binding Name}" Classes="caption" FontWeight="SemiBold" />
+                                                    <TextBlock Text="{Binding Type, StringFormat='({0})'}" Classes="caption" />
+                                                    <TextBlock Text="{Binding Comment}" Classes="caption" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                            <DockPanel Grid.Row="1" Margin="0,0,0,8">
+                                <Button DockPanel.Dock="Right" Content="▶ Run" Classes="accent" Command="{Binding RunModuleJobCommand}" Margin="8,0,0,0" />
+                                <TextBox Text="{Binding ModuleJobArgs}" Classes="mono" Watermark="Arguments separated by ';'" />
+                            </DockPanel>
+                            <DataGrid Grid.Row="2" ItemsSource="{Binding ModuleJobResults}" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Set" Binding="{Binding Set}" Width="44" />
+                                    <DataGridTextColumn Header="Result" Binding="{Binding Name}" Width="*" FontFamily="Menlo, Monaco" />
+                                    <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="2*" />
+                                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+
+                <!-- Live data -->
+                <TabItem Header="Live data">
+                    <Grid ColumnDefinitions="300,12,*" RowDefinitions="Auto,*" Margin="0,12,0,0">
+                        <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,0,0,8">
+                            <Button Content="Load jobs" Command="{Binding LoadLiveJobsCommand}" />
+                            <Button Content="▶ Start" Classes="accent" Command="{Binding StartLiveCommand}" IsVisible="{Binding !IsLive}" />
+                            <Button Content="■ Stop" Command="{Binding StartLiveCancelCommand}" IsVisible="{Binding IsLive}" />
+                            <Button Content="Untick all" Command="{Binding ClearLiveSelectionCommand}" Margin="0,0,12,0" />
+                            <TextBlock Text="{Binding LiveStatus}" Classes="caption" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding LiveJobs}" IsEnabled="{Binding !IsLive}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected}" ToolTip.Tip="{Binding Comment}">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" FontSize="12" />
+                                            <TextBlock Text="{Binding Comment}" Classes="caption" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="220" />
+                                        </StackPanel>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <DataGrid Grid.Row="1" Grid.Column="2" ItemsSource="{Binding LiveRows}" AutoGenerateColumns="False" RowHeight="34">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Value" Binding="{Binding Label}" Width="2*" />
+                                <DataGridTemplateColumn Header="Reading" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" Margin="8,0">
+                                                <TextBlock Text="{Binding Value}" FontSize="16" FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding Unit}" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Bottom" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Min" Binding="{Binding Min}" Width="70" />
+                                <DataGridTextColumn Header="Max" Binding="{Binding Max}" Width="70" />
+                                <DataGridTextColumn Header="Job" Binding="{Binding Job}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</UserControl>
